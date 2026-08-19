@@ -27,11 +27,11 @@ Every architectural decision is documented in a *what* file, with the reasoning 
 
 | Area | What | Why |
 |---|---|---|
-| Product | [PRD.md](PRD.md) | — |
-| Frontend | [FRONTEND_ARCHITECTURE.md](FRONTEND_ARCHITECTURE.md) | [essentials](FRONTEND_ARCHITECTURE_ESSENTIALS.md) |
-| Backend | [BACKEND_ARCHITECTURE.md](BACKEND_ARCHITECTURE.md) | [essentials](BACKEND_ARCHITECTURE_ESSENTIALS.md) |
-| Design | [DESIGN_ARCHITECTURE.md](DESIGN_ARCHITECTURE.md) | [essentials](DESIGN_ARCHITECTURE_ESSENTIALS.md) |
-| System | [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) | [essentials](SYSTEM_ARCHITECTURE_ESSENTIALS.md) |
+| Product | [PRD.md](docs/PRD.md) | — |
+| Frontend | [FRONTEND_ARCHITECTURE.md](docs/FRONTEND_ARCHITECTURE.md) | [essentials](docs/FRONTEND_ARCHITECTURE_ESSENTIALS.md) |
+| Backend | [BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md) | [essentials](docs/BACKEND_ARCHITECTURE_ESSENTIALS.md) |
+| Design | [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) | [essentials](docs/DESIGN_ARCHITECTURE_ESSENTIALS.md) |
+| System | [SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) | [essentials](docs/SYSTEM_ARCHITECTURE_ESSENTIALS.md) |
 
 ## Status
 
