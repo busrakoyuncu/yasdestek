@@ -103,5 +103,5 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 **Plain English. No em dashes.**
 
 - Use simple, direct English in all output: responses, comments, docs, commit messages.
-- Do not use em dashes (—). Use a comma, period, or parentheses instead.
+- Do not use em dashes ( - ). Use a comma, period, or parentheses instead.
 - Prefer short sentences and common words over clever phrasing.

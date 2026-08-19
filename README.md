@@ -1,12 +1,12 @@
 # Yasdestek
 
-An online grief-support platform that digitalizes a thesis-validated grief intervention program. Bereaved users work through structured, narrative-based modules — writing, recording audio, and sharing media — in small groups guided by a psychologist, witnessing and supporting each other in module forums.
+An online grief-support platform that digitalizes a thesis-validated grief intervention program. Bereaved users work through structured, narrative-based modules - writing, recording audio, and sharing media - in small groups guided by a psychologist, witnessing and supporting each other in module forums.
 
-The intervention behind the platform was tested in a randomized controlled study and showed significant reductions in PTSD and depression symptoms and increased meaning reconstruction. Its core mechanism — **social witnessing** — shapes the product: forums and commenting are the heart of the platform, not extras.
+The intervention behind the platform was tested in a randomized controlled study and showed significant reductions in PTSD and depression symptoms and increased meaning reconstruction. Its core mechanism - **social witnessing** - shapes the product: forums and commenting are the heart of the platform, not extras.
 
 ## How it works
 
-- **Three roles, provisioned top-down:** admins create and activate psychologists; psychologists create and activate their users, organize them into small groups (~5–6), and guide them through modules. No self-registration, no emails stored.
+- **Three roles, provisioned top-down:** admins create and activate psychologists; psychologists create and activate their users, organize them into small groups (~5-6), and guide them through modules. No self-registration, no emails stored.
 - **Modules:** six base modules from the thesis ship seeded (loss narrative, ambivalent feelings, letter writing, coping, continuing bonds, future orientation). Admins can add global modules; psychologists can add modules for their own users. Every module has a title, description, rules, and guided questions.
 - **Responses & forums:** each user writes one response per module (text, voice recording, images), published to their group's forum where group-mates comment. Psychologists moderate; deleted comments leave a visible placeholder.
 - **Messaging:** users can privately message their psychologist ("danışman"), who replies from an inbox.
@@ -27,7 +27,7 @@ Every architectural decision is documented in a *what* file, with the reasoning 
 
 | Area | What | Why |
 |---|---|---|
-| Product | [PRD.md](docs/PRD.md) | — |
+| Product | [PRD.md](docs/PRD.md) | - |
 | Frontend | [FRONTEND_ARCHITECTURE.md](docs/FRONTEND_ARCHITECTURE.md) | [essentials](docs/FRONTEND_ARCHITECTURE_ESSENTIALS.md) |
 | Backend | [BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md) | [essentials](docs/BACKEND_ARCHITECTURE_ESSENTIALS.md) |
 | Design | [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) | [essentials](docs/DESIGN_ARCHITECTURE_ESSENTIALS.md) |
