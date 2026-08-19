@@ -1,6 +1,6 @@
-# Yasdestek — Backend Architecture
+# Yasdestek - Backend Architecture
 
-The backend is a single REST API in `apps/api`, serving all three roles. It owns every security decision — the frontend's guards are UX only.
+The backend is a single REST API in `apps/api`, serving all three roles. It owns every security decision - the frontend's guards are UX only.
 
 ## 1. Stack
 
@@ -42,16 +42,16 @@ apps/api/src/
 
 One `User` table for all roles.
 
-- **User** — `role` (`admin` | `psychologist` | `user`), `username` (unique), `passwordHash`, `active` (default false), `mustChangePassword`, `psychologistId?` (owner, for participants), `groupId?` (for participants).
-- **Group** — name, `psychologistId`.
-- **Module** — title, `description` (welcome/purpose text), `rules` (module-specific expectations — required at creation), `questions` (ordered list of guided questions), order, `isBase`, `createdById`; scope derives from creator: base/admin → global, psychologist → visible only to their own users.
-- **ContentPage** — slug + content for editable platform pages; seeded with `general-rules` ("Genel Kurallar"), admin-editable, readable by all roles.
-- **GroupModule** — assignment of a module to a group (modules are assigned group-level, not per user).
-- **Response** — one per user per module: text, published state, timestamps, `deletedAt?`.
-- **MediaFile** — MinIO storage key, mime, size, `responseId`, `uploaderId`.
-- **Comment** — text, `authorId`, `responseId`, `deletedAt?`, `deletedById?`. Comments attach to responses only — single-level threading, no comments on comments. The forum feed is the group's responses each with its comments nested beneath.
-- **Message** — `senderId`, `recipientId`, body, `readAt?`, timestamps. Private user↔psychologist messaging: one continuous thread per pair; a user may only message their own psychologist and vice versa (ownership enforced like everything else).
-- **Session** — id, `userId`, expiry.
+- **User** - `role` (`admin` | `psychologist` | `user`), `username` (unique), `passwordHash`, `active` (default false), `mustChangePassword`, `psychologistId?` (owner, for participants), `groupId?` (for participants).
+- **Group** - name, `psychologistId`.
+- **Module** - title, `description` (welcome/purpose text), `rules` (module-specific expectations - required at creation), `questions` (ordered list of guided questions), order, `isBase`, `createdById`; scope derives from creator: base/admin → global, psychologist → visible only to their own users.
+- **ContentPage** - slug + content for editable platform pages; seeded with `general-rules` ("Genel Kurallar"), admin-editable, readable by all roles.
+- **GroupModule** - assignment of a module to a group (modules are assigned group-level, not per user).
+- **Response** - one per user per module: text, published state, timestamps, `deletedAt?`.
+- **MediaFile** - MinIO storage key, mime, size, `responseId`, `uploaderId`.
+- **Comment** - text, `authorId`, `responseId`, `deletedAt?`, `deletedById?`. Comments attach to responses only - single-level threading, no comments on comments. The forum feed is the group's responses each with its comments nested beneath.
+- **Message** - `senderId`, `recipientId`, body, `readAt?`, timestamps. Private user↔psychologist messaging: one continuous thread per pair; a user may only message their own psychologist and vice versa (ownership enforced like everything else).
+- **Session** - id, `userId`, expiry.
 
 ### Soft delete
 
@@ -67,7 +67,7 @@ Moderated comments and removed responses keep their rows (`deletedAt`, `deletedB
   - **No email in the system.** Forgotten passwords flow up the hierarchy: psychologist resets their users, admin resets psychologists, admin recovery via server-side command.
 - **Login rate limiting** per IP via the NestJS throttler.
 
-## 5. Authorization — three layers
+## 5. Authorization - three layers
 
 1. **Session guard (global):** valid session + `active` user, else 401.
 2. **Roles guard (per endpoint):** declarative `@Roles(...)` metadata; wrong role → 403.
@@ -108,9 +108,9 @@ POST   /messages                  # send within an allowed pair; marks read via 
 
 ## 7. File Handling
 
-- **Upload:** browser → API (`multipart`), API checks permissions and limits, streams to MinIO, writes `MediaFile` row. Limits: images ≤ 10MB (jpeg/png/webp/heic), audio ≤ 50MB (webm/opus, mp4/aac — Safari records aac).
+- **Upload:** browser → API (`multipart`), API checks permissions and limits, streams to MinIO, writes `MediaFile` row. Limits: images ≤ 10MB (jpeg/png/webp/heic), audio ≤ 50MB (webm/opus, mp4/aac - Safari records aac).
 - **Download:** browser → `GET /files/:id` → API runs the ownership/group check → streams from MinIO. Range requests supported for audio scrubbing.
-- **MinIO is never exposed publicly** — only the API talks to it. No presigned URLs in v1.
+- **MinIO is never exposed publicly** - only the API talks to it. No presigned URLs in v1.
 
 ## 8. Seeding
 
@@ -123,11 +123,11 @@ POST   /messages                  # send within an allowed pair; marks read via 
 ## 9. Operations Notes
 
 - Runs on the existing DigitalOcean droplet alongside Postgres and MinIO (deployment details in the system-design doc).
-- **Nightly backup cron:** `pg_dump` + MinIO data directory into a dated archive; offsite copy (free tier object storage or manual pull) strongly recommended — media and narratives are irreplaceable.
+- **Nightly backup cron:** `pg_dump` + MinIO data directory into a dated archive; offsite copy (free tier object storage or manual pull) strongly recommended - media and narratives are irreplaceable.
 - Config via env vars only; no secrets in the repo.
 
 ## 10. Testing Strategy
 
-- **Unit (Vitest):** service logic — activation chain, password flows, module scoping.
+- **Unit (Vitest):** service logic - activation chain, password flows, module scoping.
 - **Endpoint (supertest):** highest-value tests are adversarial permission tests: wrong role on every endpoint, cross-psychologist ownership attempts, deactivated-session rejection, inactive-user login.
 - Seeded test database per run; tests cover the soft-delete placeholder behavior.
