@@ -33,6 +33,25 @@ Every architectural decision is documented in a *what* file, with the reasoning 
 | Design | [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) | [essentials](docs/DESIGN_ARCHITECTURE_ESSENTIALS.md) |
 | System | [SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) | [essentials](docs/SYSTEM_ARCHITECTURE_ESSENTIALS.md) |
 
+## Development
+
+Prerequisites: [Docker Desktop](https://www.docker.com/products/docker-desktop/), Node 22+, [pnpm](https://pnpm.io) (both pinned via Volta in `package.json`).
+
+```sh
+pnpm install          # install workspace dependencies
+docker compose up -d  # start local infrastructure (Postgres + MinIO)
+docker compose ps     # check that both containers are up
+docker compose down   # stop them (data survives in volumes)
+```
+
+Local services:
+
+| Service | Address | Credentials (dev only) |
+|---|---|---|
+| PostgreSQL | `localhost:5432` | `yasdestek` / `yasdestek-dev`, db `yasdestek` |
+| MinIO S3 API | `localhost:9000` | `yasdestek` / `yasdestek-dev` |
+| MinIO console | http://localhost:9001 | same as above |
+
 ## Status
 
-Documentation phase complete; scaffolding is next. Setup and development instructions will land here once the workspace exists.
+Walking-skeleton phase: workspace and local infrastructure are in place; `apps/api`, `apps/web`, and `packages/shared` land next.
