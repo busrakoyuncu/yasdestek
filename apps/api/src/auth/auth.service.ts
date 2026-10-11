@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import type { ChangePasswordInput, LoginInput } from '@yasdestek/shared';
 import * as argon2 from 'argon2';
+import { CurrentUser } from '../common/current-user';
 import { PrismaService } from '../prisma/prisma.service';
 import { SESSION_TTL_MS } from './auth.constants';
 
@@ -12,8 +13,11 @@ import { SESSION_TTL_MS } from './auth.constants';
 export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Verifies the credentials and opens a session. Returns the session id.
-  async login({ username, password }: LoginInput): Promise<string> {
+  // Verifies the credentials and opens a session.
+  async login({
+    username,
+    password,
+  }: LoginInput): Promise<{ sessionId: string; user: CurrentUser }> {
     const user = await this.prisma.user.findUnique({ where: { username } });
     if (!user || !(await argon2.verify(user.passwordHash, password))) {
       throw new UnauthorizedException({
@@ -32,8 +36,9 @@ export class AuthService {
         userId: user.id,
         expiresAt: new Date(Date.now() + SESSION_TTL_MS),
       },
+      include: { user: { omit: { passwordHash: true } } },
     });
-    return session.id;
+    return { sessionId: session.id, user: session.user };
   }
 
   async logout(sessionId: string): Promise<void> {

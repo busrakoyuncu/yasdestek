@@ -31,15 +31,16 @@ describe('AuthService', () => {
   }
 
   describe('login', () => {
-    it('opens a session for valid credentials', async () => {
+    it('opens a session and returns the user without the hash', async () => {
       prisma.user.findUnique.mockResolvedValue({ ...user, passwordHash });
-      prisma.session.create.mockResolvedValue({ id: 's1' });
+      prisma.session.create.mockResolvedValue({ id: 's1', user });
 
       await expect(
         service.login({ username: 'elif', password: 'correct-horse' }),
-      ).resolves.toBe('s1');
+      ).resolves.toEqual({ sessionId: 's1', user });
       expect(prisma.session.create).toHaveBeenCalledWith({
         data: { userId: 'u1', expiresAt: expect.any(Date) as Date },
+        include: { user: { omit: { passwordHash: true } } },
       });
     });
 

@@ -1,3 +1,5 @@
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { Request } from 'express';
 import type { User } from '../generated/prisma/client';
 
 // The authenticated user, attached to the request by the session guard.
@@ -12,3 +14,9 @@ declare global {
     }
   }
 }
+
+// Controller parameter: the authenticated user. Only valid behind the session guard.
+export const CurrentUser = createParamDecorator(
+  (_data: unknown, context: ExecutionContext) =>
+    context.switchToHttp().getRequest<Request>().user,
+);
