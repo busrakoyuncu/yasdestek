@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { RolesGuard } from './common/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
@@ -13,7 +15,13 @@ import { PrismaModule } from './prisma/prisma.module';
   providers: [
     AppService,
     { provide: APP_FILTER, useClass: AppExceptionFilter },
+    // Guards run in this order: session first, then roles.
+    { provide: APP_GUARD, useClass: SessionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(cookieParser()).forRoutes('*');
+  }
+}
