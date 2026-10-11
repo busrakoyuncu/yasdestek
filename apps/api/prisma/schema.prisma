@@ -1,0 +1,170 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "cjs"
+  // bare relative imports so tsc, jest, and node resolve the same files
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PSYCHOLOGIST
+  USER
+}
+
+// One table for all three roles. psychologistId and groupId are set only for participants.
+model User {
+  id                 String   @id @default(uuid(7))
+  role               Role
+  username           String   @unique
+  passwordHash       String
+  active             Boolean  @default(false)
+  mustChangePassword Boolean  @default(true)
+  psychologistId     String?
+  groupId            String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  psychologist     User?       @relation("PsychologistUsers", fields: [psychologistId], references: [id])
+  users            User[]      @relation("PsychologistUsers")
+  group            Group?      @relation(fields: [groupId], references: [id])
+  groups           Group[]     @relation("PsychologistGroups")
+  createdModules   Module[]
+  responses        Response[]
+  uploads          MediaFile[]
+  comments         Comment[]
+  deletedComments  Comment[]   @relation("CommentDeletedBy")
+  sentMessages     Message[]   @relation("MessageSender")
+  receivedMessages Message[]   @relation("MessageRecipient")
+  sessions         Session[]
+}
+
+model Group {
+  id             String   @id @default(uuid(7))
+  name           String
+  psychologistId String
+  createdAt      DateTime @default(now())
+
+  psychologist User          @relation("PsychologistGroups", fields: [psychologistId], references: [id])
+  members      User[]
+  modules      GroupModule[]
+}
+
+// Scope derives from the creator: base or admin-created modules are global,
+// psychologist-created modules are visible only to that psychologist's users.
+model Module {
+  id          String   @id @default(uuid(7))
+  title       String
+  description String
+  rules       String
+  questions   String[]
+  order       Int
+  isBase      Boolean  @default(false)
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User?         @relation(fields: [createdById], references: [id])
+  groups    GroupModule[]
+  responses Response[]
+}
+
+// Editable platform pages, e.g. slug "general-rules".
+model ContentPage {
+  id        String   @id @default(uuid(7))
+  slug      String   @unique
+  content   String
+  updatedAt DateTime @updatedAt
+}
+
+// A module assigned to a group. All members receive it together.
+model GroupModule {
+  groupId    String
+  moduleId   String
+  assignedAt DateTime @default(now())
+
+  group  Group  @relation(fields: [groupId], references: [id])
+  module Module @relation(fields: [moduleId], references: [id])
+
+  @@id([groupId, moduleId])
+}
+
+// One response per user per module. Media attaches through MediaFile.
+model Response {
+  id        String    @id @default(uuid(7))
+  userId    String
+  moduleId  String
+  text      String    @default("")
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user     User        @relation(fields: [userId], references: [id])
+  module   Module      @relation(fields: [moduleId], references: [id])
+  files    MediaFile[]
+  comments Comment[]
+
+  @@unique([userId, moduleId])
+}
+
+model MediaFile {
+  id         String   @id @default(uuid(7))
+  storageKey String   @unique
+  mimeType   String
+  size       Int
+  responseId String
+  uploaderId String
+  createdAt  DateTime @default(now())
+
+  response Response @relation(fields: [responseId], references: [id])
+  uploader User     @relation(fields: [uploaderId], references: [id])
+}
+
+// Comments attach to responses only. Soft delete keeps the row and shows a placeholder.
+model Comment {
+  id          String    @id @default(uuid(7))
+  text        String
+  authorId    String
+  responseId  String
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  deletedById String?
+
+  author    User     @relation(fields: [authorId], references: [id])
+  response  Response @relation(fields: [responseId], references: [id])
+  deletedBy User?    @relation("CommentDeletedBy", fields: [deletedById], references: [id])
+
+  @@index([responseId])
+}
+
+// Private thread between a user and their psychologist.
+model Message {
+  id          String    @id @default(uuid(7))
+  senderId    String
+  recipientId String
+  body        String
+  readAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  sender    User @relation("MessageSender", fields: [senderId], references: [id])
+  recipient User @relation("MessageRecipient", fields: [recipientId], references: [id])
+
+  @@index([senderId, recipientId])
+}
+
+// Cookie sessions. The cookie carries only the session id.
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

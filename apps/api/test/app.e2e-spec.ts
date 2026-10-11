@@ -23,6 +23,13 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
+  it('answers unknown routes with { code, message }', () => {
+    return request(app.getHttpServer())
+      .get('/does-not-exist')
+      .expect(404)
+      .expect({ code: 'NOT_FOUND', message: 'Cannot GET /does-not-exist' });
+  });
+
   afterEach(async () => {
     await app.close();
   });
