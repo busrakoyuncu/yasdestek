@@ -106,7 +106,7 @@ A user's response to a module can include:
 
 ## 8. Language & Platform
 
-- The interface ships in **Turkish (default) and English**. Module content authored by admins/psychologists is data and displays exactly as written.
+- The interface ships in **Turkish (default), English, and German**. Module content authored by admins/psychologists is data and displays exactly as written.
 - The site is installable to the phone home screen (web manifest, opens full-screen like an app). No offline mode in v1 - using the app requires connectivity.
 - The participant area is mobile-first responsive; admin/psychologist areas are desktop-first.
 

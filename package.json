@@ -1,6 +1,9 @@
 {
   "name": "yasdestek",
   "private": true,
+  "scripts": {
+    "dev": "pnpm --filter api start:dev"
+  },
   "engines": {
     "node": ">=22"
   },
