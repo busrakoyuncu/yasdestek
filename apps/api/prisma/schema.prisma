@@ -1,7 +1,9 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "cjs"
+  // bare relative imports so tsc, jest, and node resolve the same files
+  importFileExtension = ""
 }
 
 datasource db {
