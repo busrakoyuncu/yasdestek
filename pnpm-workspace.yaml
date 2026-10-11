@@ -1,3 +1,8 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# install-time build scripts are blocked by default (supply-chain safety);
+# each package that needs one must be explicitly allowed here
+allowBuilds:
+  unrs-resolver: true
