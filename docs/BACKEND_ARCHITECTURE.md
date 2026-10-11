@@ -15,7 +15,7 @@ The backend is a single REST API in `apps/api`, serving all three roles. It owns
 | Password hashing | argon2 |
 | Validation | zod schemas shared with the frontend via `packages/shared` |
 | Rate limiting | NestJS throttler (login endpoint) |
-| Tests | Vitest (unit) + supertest (endpoint/permission tests) |
+| Tests | Jest (unit) + supertest (endpoint/permission tests) |
 | Logging | NestJS logger, structured request/error logs |
 
 Rationale and rejected alternatives: see `BACKEND_ARCHITECTURE_ESSENTIALS.md`.
@@ -128,6 +128,6 @@ POST   /messages                  # send within an allowed pair; marks read via 
 
 ## 10. Testing Strategy
 
-- **Unit (Vitest):** service logic - activation chain, password flows, module scoping.
+- **Unit (Jest):** service logic - activation chain, password flows, module scoping.
 - **Endpoint (supertest):** highest-value tests are adversarial permission tests: wrong role on every endpoint, cross-psychologist ownership attempts, deactivated-session rejection, inactive-user login.
 - Seeded test database per run; tests cover the soft-delete placeholder behavior.

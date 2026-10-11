@@ -99,3 +99,11 @@ Companion to `BACKEND_ARCHITECTURE.md`. For each decision: what we picked, why, 
 **Chosen:** moderated comments/responses keep their rows (`deletedAt`, `deletedById`); the UI shows "Bu yorum psikolog tarafından silindi". Hard delete is a separate explicit admin action for privacy requests.
 
 **Why:** moderation disputes need the record; accidental deletes need undo; and the visible placeholder keeps group trust - content vanishing silently breeds suspicion in a therapeutic group. True erasure stays available for "delete my data" requests, where it is the correct behavior.
+
+## Jest, not Vitest
+
+**Chosen:** Jest for unit tests, supertest for endpoint tests.
+
+**Why:** NestJS ships with Jest configured, and its decorators and dependency injection work with it out of the box. Most NestJS docs, tutorials, and job posts assume Jest. The frontend uses Vitest because it reuses the Vite config; the backend has no Vite config, so that reason does not carry over.
+
+**Why not Vitest:** it needs an extra SWC plugin before Nest decorators and dependency injection work. Faster runs do not matter at this test suite's size. The syntax is nearly identical, so moving later stays cheap if a reason appears.
