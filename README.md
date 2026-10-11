@@ -10,7 +10,7 @@ The intervention behind the platform was tested in a randomized controlled study
 - **Modules:** six base modules from the thesis ship seeded (loss narrative, ambivalent feelings, letter writing, coping, continuing bonds, future orientation). Admins can add global modules; psychologists can add modules for their own users. Every module has a title, description, rules, and guided questions.
 - **Responses & forums:** each user writes one response per module (text, voice recording, images), published to their group's forum where group-mates comment. Psychologists moderate; deleted comments leave a visible placeholder.
 - **Messaging:** users can privately message their psychologist ("danışman"), who replies from an inbox.
-- **Languages:** Turkish and English. Installable to the phone home screen.
+- **Languages:** Turkish, English, and German. Installable to the phone home screen.
 
 ## Stack
 

@@ -48,7 +48,7 @@ Companion to `FRONTEND_ARCHITECTURE.md`. For each decision: what we picked, why,
 
 ## react-i18next from day one
 
-**Chosen:** react-i18next, Turkish default + English.
+**Chosen:** react-i18next, Turkish default + English + German.
 
 **Why:** the product will ship both languages, and retrofitting i18n means touching every component - the single most expensive thing to add late. Strings live in translation files from the first component.
 
@@ -98,7 +98,7 @@ Companion to `FRONTEND_ARCHITECTURE.md`. For each decision: what we picked, why,
 
 **Chosen:** date-fns, UTC from the API, formatted per active locale.
 
-**Why:** tree-shakeable (bundles only used functions), first-class TR/EN locales, plays well with i18n.
+**Why:** tree-shakeable (bundles only used functions), first-class TR/EN/DE locales, plays well with i18n.
 
 **Why not moment:** legacy, huge, mutable API - its own maintainers point elsewhere. Why not day.js: fine, but date-fns' per-function imports fit better with bundling.
 

@@ -13,11 +13,11 @@ The frontend is a single-page application serving all three roles (admin, psycho
 | Client state | React `useState` + context (Zustand only if a real need appears) |
 | Styling | Tailwind CSS + shadcn/ui, custom theme |
 | Forms | react-hook-form + zod |
-| i18n | react-i18next - Turkish (default) and English |
+| i18n | react-i18next - Turkish (default), English, and German |
 | Audio recording | Browser MediaRecorder API (no library) |
 | Home-screen install | Web manifest, `display: "standalone"` |
 | HTTP | Small typed `fetch` wrapper (no axios) |
-| Dates | date-fns with TR/EN locales; API timestamps are UTC |
+| Dates | date-fns with TR/EN/DE locales; API timestamps are UTC |
 | Unit/component tests | Vitest + React Testing Library |
 | E2E tests | Playwright - added once real end-to-end flows exist |
 | Lint / format | ESLint + Prettier |
@@ -81,7 +81,7 @@ Two kinds of state, handled differently:
 
 ## 7. Internationalization
 
-- react-i18next with Turkish as default and English as second language.
+- react-i18next with Turkish as default, plus English and German.
 - All UI strings live in translation files from day one - no hardcoded user-facing text in components.
 - Module *content* (prompts written by admins/psychologists) is data, not UI - it is stored and displayed as authored, not translated by the app.
 - Date formatting follows the active locale via date-fns.
