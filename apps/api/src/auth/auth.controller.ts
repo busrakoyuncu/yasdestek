@@ -1,5 +1,14 @@
-import { Body, Controller, Get, HttpCode, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import {
   changePasswordSchema,
   loginSchema,
@@ -34,6 +43,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(ThrottlerGuard)
   @Post('login')
   @HttpCode(200)
   async login(
