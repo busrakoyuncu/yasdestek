@@ -11,6 +11,7 @@ import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { RolesGuard } from './common/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ThrottlerModule.forRoot([LOGIN_RATE_LIMIT]),
     PrismaModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

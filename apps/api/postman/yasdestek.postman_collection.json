@@ -1,0 +1,165 @@
+{
+  "info": {
+    "name": "Yasdestek API",
+    "description": "Local api on {{baseUrl}}. Postman keeps the session cookie after login, so the other requests work without extra setup.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "username",
+      "value": "admin"
+    },
+    {
+      "key": "password",
+      "value": "change-me"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/"
+      }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "description": "Sets the sid cookie. 401 INVALID_CREDENTIALS or ACCOUNT_INACTIVE, 429 after 10 attempts per minute."
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "description": "Current user from the session cookie. 401 without a valid session."
+          }
+        },
+        {
+          "name": "Change password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/change-password",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{password}}\",\n  \"newPassword\": \"a-new-password\"\n}"
+            },
+            "description": "204 on success and ends every other session. 400 WRONG_PASSWORD. Note: the seed does not reset the admin password afterwards."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "description": "204, clears the cookie."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "Admin and psychologist only. Psychologists see and manage their own participants.",
+      "item": [
+        {
+          "name": "Create psychologist (admin)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"PSYCHOLOGIST\",\n  \"username\": \"dr.ayse\"\n}"
+            },
+            "description": "201 with the account and its temporary password, shown once. 409 USERNAME_TAKEN."
+          }
+        },
+        {
+          "name": "Create participant",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"USER\",\n  \"username\": \"elif\",\n  \"psychologistId\": \"{{userId}}\"\n}"
+            },
+            "description": "As a psychologist, psychologistId is ignored and set to yourself. As admin it is required: 400 PSYCHOLOGIST_REQUIRED."
+          }
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users",
+            "description": "Admin: every non-admin account. Psychologist: own participants."
+          }
+        },
+        {
+          "name": "Activate",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/{{userId}}/activate",
+            "description": "204. 404 when the account is not yours."
+          }
+        },
+        {
+          "name": "Deactivate",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/{{userId}}/deactivate",
+            "description": "204 and ends the account's sessions immediately."
+          }
+        },
+        {
+          "name": "Reset password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/{{userId}}/reset-password",
+            "description": "201 with a new temporary password. The owner must change it at next login."
+          }
+        }
+      ]
+    }
+  ]
+}
