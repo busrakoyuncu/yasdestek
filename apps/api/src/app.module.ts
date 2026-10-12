@@ -15,6 +15,7 @@ import { ModulesModule } from './modules/modules.module';
 import { PagesModule } from './pages/pages.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ResponsesModule } from './responses/responses.module';
+import { StorageModule } from './storage/storage.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     // Not a global guard: only routes marked @UseGuards(ThrottlerGuard) are limited.
     ThrottlerModule.forRoot([LOGIN_RATE_LIMIT]),
     PrismaModule,
+    StorageModule,
     AuthModule,
     UsersModule,
     GroupsModule,
