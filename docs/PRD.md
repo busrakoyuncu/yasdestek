@@ -125,8 +125,15 @@ A user's response to a module can include:
 - Media limits: images ≤ 10MB (jpeg/png/webp/heic), audio ≤ 50MB (webm/opus, mp4/aac).
 - Deployment target: existing DigitalOcean server; zero-cost constraint on services (no paid storage/SaaS).
 
-## 11. Open Questions
+## 11. Decisions and Open Questions
 
-- Can a user be reassigned to another psychologist or group, and what happens to their existing forum content (do old posts/comments move, stay, or hide)?
-- Group lifecycle: what happens when a group finishes the program - archived (read-only), deleted, or kept open?
-- Data retention: how long are narratives/recordings kept after a user leaves the program?
+Decided:
+
+- **Group change (2026-10-12):** a participant's responses follow them to the new group, because a forum shows the current members' published responses for a module. Comments they wrote on other people's responses stay where they were written. Nothing is hidden or deleted.
+- **Group lifecycle (2026-10-12):** the owning psychologist or an admin can delete a group at any time. Deleting removes the group and its module assignments. Members keep their accounts and content and simply have no group until placed in another one.
+- **Reassignment (2026-10-12):** a participant is not moved between psychologists. The new psychologist creates a new account and the old psychologist deactivates the old one. The old account's content stays with it.
+- **Data retention (2026-10-12):** nothing is deleted automatically. A deactivated account keeps its narratives and recordings. Erasure happens only through the explicit admin hard delete for privacy requests.
+
+Open:
+
+- None at the moment.
