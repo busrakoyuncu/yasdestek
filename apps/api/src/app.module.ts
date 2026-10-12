@@ -11,6 +11,7 @@ import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
+import { ModulesModule } from './modules/modules.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     GroupsModule,
+    ModulesModule,
   ],
   controllers: [AppController],
   providers: [

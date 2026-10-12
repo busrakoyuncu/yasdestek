@@ -24,6 +24,10 @@
     {
       "key": "groupId",
       "value": ""
+    },
+    {
+      "key": "moduleId",
+      "value": ""
     }
   ],
   "item": [
@@ -253,6 +257,98 @@
             "method": "DELETE",
             "url": "{{baseUrl}}/groups/{{groupId}}/members/{{userId}}",
             "description": "204. 404 when not a member of your group."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modules",
+      "description": "Admins create global modules, psychologists private ones. Participants see what is assigned to their group.",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/modules",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Modül 7 - Örnek\",\n  \"description\": \"Bu modülde ...\",\n  \"rules\": \"Kurallar ...\",\n  \"questions\": [\n    \"Soru 1\",\n    \"Soru 2\"\n  ]\n}"
+            },
+            "description": "Admin or psychologist. rules and at least one question are required. order defaults to the end."
+          }
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/modules",
+            "description": "Visible modules in order. Participants: their group's assigned modules."
+          }
+        },
+        {
+          "name": "Get",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/modules/{{moduleId}}",
+            "description": "404 when not visible to you."
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/modules/{{moduleId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Yeni başlık\"\n}"
+            },
+            "description": "Partial. Admin: global modules. Psychologist: own. 204."
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/modules/{{moduleId}}",
+            "description": "204. 403 BASE_MODULE for base modules, 409 MODULE_IN_USE once responses exist."
+          }
+        },
+        {
+          "name": "Assign to group (psychologist)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/groups/{{groupId}}/modules",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"moduleId\": \"{{moduleId}}\"\n}"
+            },
+            "description": "204. Own group, visible module. Assigning twice is harmless."
+          }
+        },
+        {
+          "name": "Unassign from group (psychologist)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/{{groupId}}/modules/{{moduleId}}",
+            "description": "204. 404 when it was not assigned."
           }
         }
       ]
