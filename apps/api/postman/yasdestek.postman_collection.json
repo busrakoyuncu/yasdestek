@@ -20,6 +20,10 @@
     {
       "key": "userId",
       "value": ""
+    },
+    {
+      "key": "groupId",
+      "value": ""
     }
   ],
   "item": [
@@ -157,6 +161,98 @@
             "method": "POST",
             "url": "{{baseUrl}}/users/{{userId}}/reset-password",
             "description": "201 with a new temporary password. The owner must change it at next login."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Groups",
+      "description": "Psychologists organise their own groups. Admins read all groups and may delete one.",
+      "item": [
+        {
+          "name": "Create (psychologist)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/groups",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Salı grubu\"\n}"
+            },
+            "description": "201 with the group and its members."
+          }
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups",
+            "description": "Own groups for a psychologist, every group for an admin. Members included."
+          }
+        },
+        {
+          "name": "Get",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/{{groupId}}",
+            "description": "404 when the group is not yours."
+          }
+        },
+        {
+          "name": "Rename (psychologist)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/groups/{{groupId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Salı akşam grubu\"\n}"
+            },
+            "description": "204."
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/{{groupId}}",
+            "description": "204. Members keep their accounts and content, module assignments are dropped."
+          }
+        },
+        {
+          "name": "Add member (psychologist)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/groups/{{groupId}}/members",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "description": "204. Only your own participants; a participant in another of your groups moves."
+          }
+        },
+        {
+          "name": "Remove member (psychologist)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/{{groupId}}/members/{{userId}}",
+            "description": "204. 404 when not a member of your group."
           }
         }
       ]
