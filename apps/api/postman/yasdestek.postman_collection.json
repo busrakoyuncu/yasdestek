@@ -384,6 +384,38 @@
           }
         }
       ]
+    },
+    {
+      "name": "Responses",
+      "description": "Participants only. One response per module, created on the first save.",
+      "item": [
+        {
+          "name": "Get my response",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/modules/{{moduleId}}/response",
+            "description": "404 until the first save."
+          }
+        },
+        {
+          "name": "Save my response",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/modules/{{moduleId}}/response",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Haberi annemden aldım...\",\n  \"published\": false\n}"
+            },
+            "description": "Creates or updates. Both fields optional: text defaults to empty, published to false. 404 when the module is not assigned to your group."
+          }
+        }
+      ]
     }
   ]
 }

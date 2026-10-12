@@ -14,6 +14,7 @@ import { GroupsModule } from './groups/groups.module';
 import { ModulesModule } from './modules/modules.module';
 import { PagesModule } from './pages/pages.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ResponsesModule } from './responses/responses.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { UsersModule } from './users/users.module';
     GroupsModule,
     ModulesModule,
     PagesModule,
+    ResponsesModule,
   ],
   controllers: [AppController],
   providers: [
