@@ -352,6 +352,38 @@
           }
         }
       ]
+    },
+    {
+      "name": "Pages",
+      "description": "Editable platform pages. Seeded: general-rules.",
+      "item": [
+        {
+          "name": "Get general rules",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pages/general-rules",
+            "description": "Any role."
+          }
+        },
+        {
+          "name": "Update general rules (admin)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pages/general-rules",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Genel Kurallar\\n\\n- ...\"\n}"
+            },
+            "description": "204. 404 for a slug that was not seeded."
+          }
+        }
+      ]
     }
   ]
 }

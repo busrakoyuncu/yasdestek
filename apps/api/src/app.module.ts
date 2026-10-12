@@ -12,6 +12,7 @@ import { AppExceptionFilter } from './common/app-exception.filter';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
 import { ModulesModule } from './modules/modules.module';
+import { PagesModule } from './pages/pages.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     GroupsModule,
     ModulesModule,
+    PagesModule,
   ],
   controllers: [AppController],
   providers: [
