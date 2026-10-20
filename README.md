@@ -44,6 +44,17 @@ docker compose ps     # check that both containers are up
 docker compose down   # stop them (data survives in volumes)
 ```
 
+Everyday commands, all from the repo root:
+
+```sh
+pnpm dev              # api in watch mode on http://localhost:3000
+pnpm test             # api unit tests
+pnpm test:e2e         # api end-to-end tests (needs the containers; uses a throwaway <db>_test database)
+pnpm lint             # eslint
+pnpm typecheck        # tsc for every package
+pnpm build            # shared package, then api
+```
+
 Local services:
 
 | Service | Address | Credentials (dev only) |
