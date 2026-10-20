@@ -9,12 +9,14 @@ import { LOGIN_RATE_LIMIT } from './auth/auth.constants';
 import { AuthModule } from './auth/auth.module';
 import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
+import { FilesModule } from './files/files.module';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
 import { ModulesModule } from './modules/modules.module';
 import { PagesModule } from './pages/pages.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ResponsesModule } from './responses/responses.module';
+import { StorageModule } from './storage/storage.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -23,12 +25,14 @@ import { UsersModule } from './users/users.module';
     // Not a global guard: only routes marked @UseGuards(ThrottlerGuard) are limited.
     ThrottlerModule.forRoot([LOGIN_RATE_LIMIT]),
     PrismaModule,
+    StorageModule,
     AuthModule,
     UsersModule,
     GroupsModule,
     ModulesModule,
     PagesModule,
     ResponsesModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [

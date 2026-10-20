@@ -28,6 +28,10 @@
     {
       "key": "moduleId",
       "value": ""
+    },
+    {
+      "key": "fileId",
+      "value": ""
     }
   ],
   "item": [
@@ -413,6 +417,65 @@
               "raw": "{\n  \"text\": \"Haberi annemden aldım...\",\n  \"published\": false\n}"
             },
             "description": "Creates or updates. Both fields optional: text defaults to empty, published to false. 404 when the module is not assigned to your group."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "description": "Media attached to a response. Images up to 10MB (jpeg/png/webp/heic), audio up to 50MB (webm/mp4/aac).",
+      "item": [
+        {
+          "name": "Upload (participant)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/files",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "moduleId",
+                  "value": "{{moduleId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "description": "multipart/form-data. Creates your draft response for the module if you have none. 400 UNSUPPORTED_FILE_TYPE / FILE_TOO_LARGE / FILE_REQUIRED, 404 when the module is not assigned to your group."
+          }
+        },
+        {
+          "name": "Download",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/files/{{fileId}}",
+            "description": "Uploader, their psychologist, admin, or group mates once published. Streams the bytes."
+          }
+        },
+        {
+          "name": "Download range",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/files/{{fileId}}",
+            "header": [
+              {
+                "key": "Range",
+                "value": "bytes=0-1023"
+              }
+            ],
+            "description": "206 with Content-Range. 416 when the start is past the end."
+          }
+        },
+        {
+          "name": "Delete (uploader)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/files/{{fileId}}",
+            "description": "204. 404 for files you did not upload."
           }
         }
       ]
