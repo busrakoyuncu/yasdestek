@@ -26,11 +26,13 @@ Companion to `BACKEND_ARCHITECTURE.md`. For each decision: what we picked, why, 
 
 **Why not Drizzle:** solid, but assumes more SQL fluency; fine choice, just not the learning-curve-optimal one. **Why not TypeORM:** what old NestJS tutorials use - aging, quirky, weaker type safety. Beware when googling.
 
-## MinIO, not paid object storage / plain disk / DB blobs
+## Garage (S3-compatible), not paid object storage / plain disk / DB blobs
 
-**Chosen:** MinIO in Docker (dev and prod), files never in Postgres.
+**Chosen:** Garage in Docker (dev and prod), spoken to through the AWS SDK S3 client, files never in Postgres.
 
-**Why:** zero cost was a hard constraint. MinIO speaks the same S3 API as every cloud storage service, so the code is written once - outgrowing the droplet later means changing env vars, not code. The database stores only metadata + storage keys.
+**History:** the first choice was MinIO. Its maintainers archived the server in April 2026 and removed the Docker Hub images in September 2026, so fresh machines could no longer pull it. Garage replaced it in October 2026: same S3 protocol, maintained by a nonprofit since 2020, built for exactly this shape (one small self-hosted node). The api side changed from the MinIO client library to the vendor-neutral AWS SDK at the same time, so the server can be swapped again without touching the code.
+
+**Why:** zero cost was a hard constraint. Garage speaks the same S3 API as every cloud storage service, so the code is written once - outgrowing the droplet later means changing env vars, not code. The database stores only metadata + storage keys.
 
 **Why not DO Spaces:** the better managed option (~$5/mo, durability handled) but violates the no-cost constraint. **Why not plain disk folders:** works, but no S3 API - migrating later means rewriting file code. **Why not DB blobs:** bloats and slows the database; nobody does this deliberately.
 
@@ -74,11 +76,11 @@ Companion to `BACKEND_ARCHITECTURE.md`. For each decision: what we picked, why, 
 
 **Why:** one source of truth for "what is valid data" - client and server cannot drift. This was the main reason `packages/shared` exists.
 
-## Files through the API, MinIO internal-only
+## Files through the API, Garage internal-only
 
-**Chosen:** uploads and downloads both pass through the API; MinIO is unreachable from the internet.
+**Chosen:** uploads and downloads both pass through the API; Garage is unreachable from the internet.
 
-**Why:** the files are private health-adjacent data - a recording may only be heard by its group, their psychologist, and admins. Routing playback through `GET /files/:id` puts the ownership check in front of every byte. Keeping MinIO internal removes an entire attack surface.
+**Why:** the files are private health-adjacent data - a recording may only be heard by its group, their psychologist, and admins. Routing playback through `GET /files/:id` puts the ownership check in front of every byte. Keeping Garage internal removes an entire attack surface.
 
 **Why not presigned URLs:** they shine at scale by offloading traffic, but cost the permission checkpoint and add complexity - wrong trade at this size. Revisit only if file traffic ever becomes a real load problem.
 

@@ -18,7 +18,7 @@ The intervention behind the platform was tested in a randomized controlled study
 |---|---|
 | Frontend | Vite · React · TypeScript · React Router · TanStack Query · Tailwind + shadcn/ui · react-hook-form + zod · react-i18next |
 | Backend | NestJS · PostgreSQL · Prisma · cookie sessions · argon2 |
-| Media | MinIO (S3-compatible), files served only through the permission-checked API |
+| Media | Garage (S3-compatible object storage), files served only through the permission-checked API |
 | Infra | Monorepo (pnpm workspaces) · Docker Compose · Caddy (auto-HTTPS) · DigitalOcean droplet |
 
 ## Documentation
@@ -39,7 +39,7 @@ Prerequisites: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ```sh
 pnpm install          # install workspace dependencies
-docker compose up -d  # start local infrastructure (Postgres + MinIO)
+docker compose up -d  # start local infrastructure (Postgres + Garage)
 docker compose ps     # check that both containers are up
 docker compose down   # stop them (data survives in volumes)
 ```
@@ -60,8 +60,8 @@ Local services:
 | Service | Address | Credentials (dev only) |
 |---|---|---|
 | PostgreSQL | `localhost:5432` | `yasdestek` / `yasdestek-dev`, db `yasdestek` |
-| MinIO S3 API | `localhost:9000` | `yasdestek` / `yasdestek-dev` |
-| MinIO console | http://localhost:9001 | same as above |
+| Garage S3 API | `localhost:3900` | key `yasdestek` / secret `yasdestek-dev-secret`, bucket `media` |
+| Garage health | http://localhost:3903/health | - |
 
 ## Status
 

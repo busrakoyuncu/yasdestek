@@ -10,7 +10,7 @@ The backend is a single REST API in `apps/api`, serving all three roles. It owns
 | Framework | NestJS |
 | Database | PostgreSQL |
 | ORM / migrations | Prisma |
-| File storage | MinIO (S3-compatible, Docker), internal-only |
+| File storage | Garage (S3-compatible, Docker) through the AWS SDK S3 client, internal-only |
 | Auth | Cookie-based sessions (httpOnly, secure), stored in Postgres |
 | Password hashing | argon2 |
 | Validation | zod schemas shared with the frontend via `packages/shared` |
@@ -36,7 +36,7 @@ apps/api/src/
 ├── forum/         # group×module forum reads, comments, moderation
 ├── messages/      # participant↔psychologist threads, inbox, read marks
 ├── analytics/     # admin views: psychologists → users → progress
-├── storage/       # the only MinIO client (global module)
+├── storage/       # the only S3 client (global module)
 ├── prisma/        # PrismaService (global module)
 ├── common/        # exception filter, zod validation pipe, roles guard, current user, password generator
 ├── scripts/       # reset-password recovery command
@@ -55,7 +55,7 @@ One `User` table for all roles.
 - **ContentPage** - slug + content for editable platform pages; seeded with `general-rules` ("Genel Kurallar"), admin-editable, readable by all roles.
 - **GroupModule** - assignment of a module to a group (modules are assigned group-level, not per user).
 - **Response** - one per user per module: text, published state, timestamps, `deletedAt?`.
-- **MediaFile** - MinIO storage key, mime, size, `responseId`, `uploaderId`.
+- **MediaFile** - object storage key, mime, size, `responseId`, `uploaderId`.
 - **Comment** - text, `authorId`, `responseId`, `deletedAt?`, `deletedById?`. Comments attach to responses only - single-level threading, no comments on comments. The forum feed is the group's responses each with its comments nested beneath.
 - **Message** - `senderId`, `recipientId`, body, `readAt?`, timestamps. Private user↔psychologist messaging: one continuous thread per pair; a user may only message their own psychologist and vice versa (ownership enforced like everything else).
 - **Session** - id, `userId`, expiry.
@@ -64,7 +64,7 @@ One `User` table for all roles.
 
 Moderated comments keep their rows (`deletedAt`, `deletedById`). The forum sends them with `text` and `author` set to null, and the frontend renders the placeholder ("Bu yorum danışman tarafından silinmiştir"). `Response.deletedAt` exists in the schema but no route sets it in v1.
 
-Hard delete exists only as an explicit admin action for privacy requests: `DELETE /users/:id` erases a participant with their comments, the comments on their posts, files, responses, messages, and sessions in one transaction, then removes their MinIO objects. Psychologists are deactivated, never erased.
+Hard delete exists only as an explicit admin action for privacy requests: `DELETE /users/:id` erases a participant with their comments, the comments on their posts, files, responses, messages, and sessions in one transaction, then removes their Garage objects. Psychologists are deactivated, never erased.
 
 ## 4. Authentication
 
@@ -145,10 +145,10 @@ GET    /analytics/users/:id                 A: assigned modules with status not_
 
 ## 7. File Handling
 
-- **Upload:** browser → API (`multipart`, held in memory by multer up to the largest limit) → type and size checked against the rules in `packages/shared` (images ≤ 10MB jpeg/png/webp/heic, audio ≤ 50MB webm/opus, mp4/aac - Safari records aac) → object written to MinIO under `responses/<responseId>/<uuid>` → `MediaFile` row. Object first, row second, so a failed write never leaves a row pointing at nothing. The participant's draft response is created if they upload before writing any text.
-- **Download:** browser → `GET /files/:id` → API runs the permission query → streams from MinIO with `Content-Type`, `Content-Length`, `Accept-Ranges`. `Range: bytes=start-end` answers 206 with `Content-Range`; a start past the end answers 416.
+- **Upload:** browser → API (`multipart`, held in memory by multer up to the largest limit) → type and size checked against the rules in `packages/shared` (images ≤ 10MB jpeg/png/webp/heic, audio ≤ 50MB webm/opus, mp4/aac - Safari records aac) → object written to Garage under `responses/<responseId>/<uuid>` → `MediaFile` row. Object first, row second, so a failed write never leaves a row pointing at nothing. The participant's draft response is created if they upload before writing any text.
+- **Download:** browser → `GET /files/:id` → API runs the permission query → streams from Garage with `Content-Type`, `Content-Length`, `Accept-Ranges`. `Range: bytes=start-end` answers 206 with `Content-Range`; a start past the end answers 416.
 - **Delete:** uploader only; row first, then the object. A leftover object is harmless, a dangling row is not.
-- **MinIO is never exposed publicly** - only `StorageService` talks to it, and the storage key never leaves the API. No presigned URLs in v1. The bucket is created on startup if missing.
+- **Garage is never exposed publicly** - only `StorageService` talks to it, and the storage key never leaves the API. No presigned URLs in v1. The bucket is created on startup if missing.
 
 ## 8. Seeding
 
@@ -162,14 +162,14 @@ Existing rows are never overwritten, so admin edits survive a re-seed.
 
 ## 9. Operations Notes
 
-- Runs on the existing DigitalOcean droplet alongside Postgres and MinIO (deployment details in the system-design doc).
-- **Nightly backup cron:** `pg_dump` + MinIO data directory into a dated archive; offsite copy (free tier object storage or manual pull) strongly recommended - media and narratives are irreplaceable.
+- Runs on the existing DigitalOcean droplet alongside Postgres and Garage (deployment details in the system-design doc).
+- **Nightly backup cron:** `pg_dump` + Garage data directory into a dated archive; offsite copy (free tier object storage or manual pull) strongly recommended - media and narratives are irreplaceable.
 - Config via env vars only; no secrets in the repo.
 
 ## 10. Testing Strategy
 
 - **Unit (Jest):** every service has a spec with Prisma mocked - activation chain, password flows, scoping filters per role, soft-delete placeholder, file rules, status derivation.
-- **Endpoint (supertest):** one e2e file per feature, built around adversarial permission tests: wrong role on every endpoint, cross-psychologist and cross-group attempts (expected 404), deactivated-session rejection, inactive-user login, the forced password change, the rate limit. Files run against the real MinIO container.
+- **Endpoint (supertest):** one e2e file per feature, built around adversarial permission tests: wrong role on every endpoint, cross-psychologist and cross-group attempts (expected 404), deactivated-session rejection, inactive-user login, the forced password change, the rate limit. Files run against the real Garage container.
 - **Test database:** the e2e global setup (`test/global-setup.ts`) derives `<db>_test` from `DATABASE_URL`, drops and recreates it, runs `prisma migrate deploy` and the seed, and points every worker at it. Dev data is never touched. Each e2e file prefixes the accounts it creates and deletes them afterwards.
 - **Running:** `pnpm test` and `pnpm test:e2e` from the repo root; e2e needs `docker compose up -d`. ts-jest compiles tests through `tsconfig.spec.json` (CommonJS) so Jest can load the generated Prisma client.
-- **CI:** `.github/workflows/ci.yml` runs build, lint (zero warnings), Prettier, type-check, unit and e2e tests on every pull request and push to `main`, with a Postgres service and a MinIO container.
+- **CI:** `.github/workflows/ci.yml` runs build, lint (zero warnings), Prettier, type-check, unit and e2e tests on every pull request and push to `main`, with a Postgres service and a Garage container.

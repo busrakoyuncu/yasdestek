@@ -4,7 +4,7 @@ Companion to `SYSTEM_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 ## Docker (and what it even is)
 
-**Chosen:** Postgres, MinIO, and the API each run in a Docker container; `docker-compose.yml` defines them all.
+**Chosen:** Postgres, Garage, and the API each run in a Docker container; `docker-compose.yml` defines them all.
 
 **What it is:** Docker runs a program in a sealed, self-contained box (container) holding the program plus everything it needs, isolated from the host machine. Containers are disposable - delete and recreate in seconds; persistent data lives in **volumes** (storage bolted to the host that survives container rebuilds).
 
@@ -13,7 +13,7 @@ Companion to `SYSTEM_ARCHITECTURE.md`. For each decision: what we picked, why, a
 - **Clean machine.** Nothing installed system-wide; wiping or upgrading a service is delete-and-recreate, not uninstall-and-pray.
 - **One-command infrastructure.** `docker compose up` starts everything, wired together, on any machine with Docker.
 
-**Why not installing Postgres/MinIO directly on the droplet:** works, but upgrades, conflicts, and server rebuilds become manual archaeology; and dev machines would each need their own hand-installed copies.
+**Why not installing Postgres/Garage directly on the droplet:** works, but upgrades, conflicts, and server rebuilds become manual archaeology; and dev machines would each need their own hand-installed copies.
 
 **Why not Kubernetes / managed container platforms:** built for fleets of servers and teams; one droplet + one compose file is the right size, and the paid managed options violate the zero-cost constraint.
 
@@ -35,7 +35,7 @@ Companion to `SYSTEM_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 **Why not `api.yasdestek.com`:** buys nothing here and reintroduces exactly that configuration. Subdomains earn their keep with separate teams or separate infrastructure - neither applies.
 
-## Postgres and MinIO never public
+## Postgres and Garage never public
 
 **Chosen:** only Caddy listens on public ports; database and file storage are reachable solely by the API over the internal Docker network.
 
@@ -59,7 +59,7 @@ Companion to `SYSTEM_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 ## Nightly backups from day one
 
-**Chosen:** 03:00 cron - `pg_dump` + MinIO media archive, dated, rolling window; offsite copy strongly recommended (free: R2 free tier or manual pull).
+**Chosen:** 03:00 cron - `pg_dump` + Garage data archive, dated, rolling window; offsite copy strongly recommended (free: R2 free tier or manual pull).
 
 **Why:** the droplet is a single point of failure holding irreplaceable human writing and voices. A backup on the same disk protects against mistakes and corruption; only an offsite copy protects against the machine dying. Shipping this with the *first* deploy, not later, because "later" historically means "after the first loss".
 
