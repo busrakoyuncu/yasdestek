@@ -16,7 +16,7 @@ The intervention behind the platform was tested in a randomized controlled study
 
 | Layer | Choices |
 |---|---|
-| Frontend | Vite · React · TypeScript · React Router · TanStack Query · Tailwind + shadcn/ui · react-hook-form + zod · react-i18next |
+| Frontend | Vite · Vue 3 · TypeScript · Vue Router · TanStack Query · Tailwind + shadcn-vue · vee-validate + zod · vue-i18n |
 | Backend | NestJS · PostgreSQL · Prisma · cookie sessions · argon2 |
 | Media | Garage (S3-compatible object storage), files served only through the permission-checked API |
 | Infra | Monorepo (pnpm workspaces) · Docker Compose · Caddy (auto-HTTPS) · DigitalOcean droplet |
