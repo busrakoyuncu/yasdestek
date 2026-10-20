@@ -18,3 +18,6 @@ build/
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# typescript incremental build info
+*.tsbuildinfo
