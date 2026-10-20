@@ -106,7 +106,7 @@ export class UsersService {
   }
 
   // Privacy request: erases a participant and everything they wrote, in one
-  // transaction. Their files leave MinIO afterwards; a leftover object is
+  // transaction. Their objects leave storage afterwards; a leftover object is
   // harmless, a dangling row is not. Psychologists are deactivated, not erased.
   async remove(id: string): Promise<void> {
     const keys = await this.prisma.$transaction(async (tx) => {

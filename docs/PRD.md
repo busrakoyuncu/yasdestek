@@ -121,7 +121,7 @@ A user's response to a module can include:
 
 - **Monorepo** (`apps/web`, `apps/api`, `packages/shared`).
 - Frontend: Vite + React + TypeScript - full decisions in `FRONTEND_ARCHITECTURE.md` (+ `_ESSENTIALS`).
-- Backend: NestJS + PostgreSQL + Prisma + MinIO, cookie-based sessions - full decisions in `BACKEND_ARCHITECTURE.md` (+ `_ESSENTIALS`).
+- Backend: NestJS + PostgreSQL + Prisma + Garage, cookie-based sessions - full decisions in `BACKEND_ARCHITECTURE.md` (+ `_ESSENTIALS`).
 - Media limits: images ≤ 10MB (jpeg/png/webp/heic), audio ≤ 50MB (webm/opus, mp4/aac).
 - Deployment target: existing DigitalOcean server; zero-cost constraint on services (no paid storage/SaaS).
 

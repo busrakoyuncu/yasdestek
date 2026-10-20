@@ -9,11 +9,11 @@ env:
   DATABASE_URL: postgresql://yasdestek:yasdestek-dev@localhost:5432/yasdestek
   SEED_ADMIN_USERNAME: admin
   SEED_ADMIN_PASSWORD: change-me
-  MINIO_ENDPOINT: localhost
-  MINIO_PORT: "9000"
-  MINIO_ACCESS_KEY: yasdestek
-  MINIO_SECRET_KEY: yasdestek-dev
-  MINIO_BUCKET: media
+  S3_ENDPOINT: http://localhost:3900
+  S3_REGION: garage
+  S3_ACCESS_KEY: yasdestek
+  S3_SECRET_KEY: yasdestek-dev-secret
+  S3_BUCKET: media
 
 jobs:
   api:
@@ -35,24 +35,31 @@ jobs:
           --health-retries 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
 
-      - name: Start MinIO
+      # Same image and config as docker-compose.yml. A service container
+      # cannot take a command, so it is started here instead.
+      - name: Start Garage
         run: |
-          docker run -d --name minio -p 9000:9000 \
-            -e MINIO_ROOT_USER=yasdestek -e MINIO_ROOT_PASSWORD=yasdestek-dev \
-            minio/minio server /data
-          for i in $(seq 1 20); do
-            curl -sf http://localhost:9000/minio/health/live && break
+          docker run -d --name garage -p 3900:3900 -p 3903:3903 \
+            -v "$PWD/garage.toml:/etc/garage.toml:ro" \
+            -e GARAGE_RPC_SECRET="$(openssl rand -hex 32)" \
+            -e GARAGE_DEFAULT_ACCESS_KEY=yasdestek \
+            -e GARAGE_DEFAULT_SECRET_KEY=yasdestek-dev-secret \
+            -e GARAGE_DEFAULT_BUCKET=media \
+            dxflrs/garage:v2.4.1 /garage server --single-node --default-bucket
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3903/health && break
             sleep 1
           done
+          curl -sf http://localhost:3903/health
 
       - run: pnpm install --frozen-lockfile
 

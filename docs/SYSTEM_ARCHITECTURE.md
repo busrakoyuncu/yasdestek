@@ -14,14 +14,14 @@ How the monorepo's parts run in production on the existing DigitalOcean droplet,
                     │  Docker Compose:                     │
                     │   ├── api       (NestJS)             │
                     │   ├── postgres  (volume: db data)    │
-                    │   └── minio     (volume: media)      │
+                    │   └── garage     (volume: media)      │
                     │                                      │
                     │  cron (03:00): pg_dump + media dir   │
                     │  .env (secrets, never in git)        │
                     └──────────────────────────────────────┘
 ```
 
-- **Postgres and MinIO are never exposed to the internet** - they're reachable only by the API on the internal Docker network. The only public entrance is Caddy on 80/443.
+- **Postgres and Garage are never exposed to the internet** - they're reachable only by the API on the internal Docker network. The only public entrance is Caddy on 80/443.
 - Port 80 exists only to redirect to 443 (Caddy does this by default).
 
 ## 2. Caddy (reverse proxy)
@@ -49,15 +49,15 @@ Production `docker-compose.yml` runs three services:
 |---|---|---|
 | `api` | built from `apps/api` Dockerfile | stateless |
 | `postgres` | official postgres | named volume `pgdata` |
-| `minio` | official minio | named volume `media` |
+| `garage` | `dxflrs/garage` (pinned) + `garage.toml` from the repo | named volume `garage` |
 
 - Caddy runs on the host (or as a fourth compose service - decided at setup; host install is simplest).
 - **Volumes** hold all state; containers are disposable and rebuilt on every deploy.
-- Local development uses the same compose idea: postgres + minio in Docker, while `api` and `web` run directly (`pnpm dev`) for hot reload. Dev and prod differ in dressing, not shape.
+- Local development uses the same compose idea: postgres + garage in Docker, while `api` and `web` run directly (`pnpm dev`) for hot reload. Dev and prod differ in dressing, not shape.
 
 ## 5. Configuration & Secrets
 
-- All secrets (Postgres password, session secret, MinIO keys, seed admin credentials) live in a `.env` file **on the droplet only**; `.env.example` in git documents the required keys with dummy values.
+- All secrets (Postgres password, session secret, Garage rpc secret and S3 keys, seed admin credentials) live in a `.env` file **on the droplet only**; `.env.example` in git documents the required keys with dummy values.
 - The web build gets its config (`VITE_API_URL=/api`) at build time; nothing secret ships to the browser.
 
 ## 6. Deployment
@@ -79,7 +79,7 @@ One command, every step visible and understandable.
 Nightly cron on the droplet (03:00):
 
 1. `pg_dump` the database
-2. Archive the MinIO media volume
+2. Archive the Garage data volume
 3. Pack both into a dated archive, keep a rolling window (e.g. 14 days)
 4. **Offsite copy strongly recommended** - the archive alone still lives on the same disk it protects. Free option: Cloudflare R2 free tier (10GB, S3-compatible; requires card on file) or periodic manual pull to a local machine.
 
