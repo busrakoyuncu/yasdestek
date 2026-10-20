@@ -9,6 +9,7 @@ import * as argon2 from 'argon2';
 import { CurrentUser } from '../common/current-user';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { StorageService } from '../storage/storage.service';
 import { UsersService } from './users.service';
 
 const admin = { id: 'a1', role: 'ADMIN' } as CurrentUser;
@@ -16,9 +17,14 @@ const psychologist = { id: 'p1', role: 'PSYCHOLOGIST' } as CurrentUser;
 
 describe('UsersService', () => {
   const tx = {
-    user: { updateMany: jest.fn() },
+    user: { updateMany: jest.fn(), findFirst: jest.fn(), delete: jest.fn() },
     session: { deleteMany: jest.fn() },
+    mediaFile: { findMany: jest.fn(), deleteMany: jest.fn() },
+    comment: { deleteMany: jest.fn() },
+    response: { deleteMany: jest.fn() },
+    message: { deleteMany: jest.fn() },
   };
+  const storage = { remove: jest.fn() };
   const prisma = {
     user: {
       create: jest.fn(),
@@ -28,7 +34,10 @@ describe('UsersService', () => {
     },
     $transaction: jest.fn((fn: (tx: unknown) => Promise<unknown>) => fn(tx)),
   };
-  const service = new UsersService(prisma as unknown as PrismaService);
+  const service = new UsersService(
+    prisma as unknown as PrismaService,
+    storage as unknown as StorageService,
+  );
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -167,5 +176,37 @@ describe('UsersService', () => {
       service.create(admin, { role: 'USER', username: 'elif' }),
     ).rejects.toBeInstanceOf(BadRequestException);
     expect(prisma.user.create).not.toHaveBeenCalled();
+  });
+
+  it('hard deletes a participant and everything they wrote, then their objects', async () => {
+    tx.user.findFirst.mockResolvedValueOnce(null);
+    await expect(service.remove('p1')).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(tx.user.delete).not.toHaveBeenCalled();
+
+    tx.user.findFirst.mockResolvedValueOnce({ id: 'u1' });
+    tx.mediaFile.findMany.mockResolvedValueOnce([
+      { storageKey: 'k1' },
+      { storageKey: 'k2' },
+    ]);
+    storage.remove
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error('gone'));
+    await service.remove('u1');
+    expect(tx.comment.deleteMany).toHaveBeenCalledWith({
+      where: { OR: [{ authorId: 'u1' }, { response: { userId: 'u1' } }] },
+    });
+    expect(tx.mediaFile.deleteMany).toHaveBeenCalledWith({
+      where: { uploaderId: 'u1' },
+    });
+    expect(tx.response.deleteMany).toHaveBeenCalledWith({
+      where: { userId: 'u1' },
+    });
+    expect(tx.message.deleteMany).toHaveBeenCalledWith({
+      where: { OR: [{ senderId: 'u1' }, { recipientId: 'u1' }] },
+    });
+    expect(tx.user.delete).toHaveBeenCalledWith({ where: { id: 'u1' } });
+    expect(storage.remove.mock.calls).toEqual([['k1'], ['k2']]);
   });
 });

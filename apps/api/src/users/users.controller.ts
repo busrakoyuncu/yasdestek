@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { createUserSchema, type CreateUserInput } from '@yasdestek/shared';
 import { CurrentUser } from '../common/current-user';
 import { Roles } from '../common/roles.decorator';
@@ -44,5 +52,12 @@ export class UsersController {
     @Param('id') id: string,
   ): Promise<{ password: string }> {
     return { password: await this.users.resetPassword(me, id) };
+  }
+  // Privacy request: erases a participant and everything they wrote. Admin only.
+  @Roles('ADMIN')
+  @Delete(':id')
+  @HttpCode(204)
+  remove(@Param('id') id: string) {
+    return this.users.remove(id);
   }
 }

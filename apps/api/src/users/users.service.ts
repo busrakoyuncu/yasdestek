@@ -3,6 +3,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import type { CreateUserInput } from '@yasdestek/shared';
@@ -11,6 +12,7 @@ import { CurrentUser } from '../common/current-user';
 import { generatePassword } from '../common/password';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { StorageService } from '../storage/storage.service';
 
 // Who a caller may manage. Admins manage every non-admin account;
 // psychologists manage their own participants. Used inside every query so
@@ -23,7 +25,12 @@ function managedBy(me: CurrentUser): Prisma.UserWhereInput {
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(UsersService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService,
+  ) {}
 
   // Creates an inactive account with a temporary password, returned once.
   async create(me: CurrentUser, input: CreateUserInput) {
@@ -96,6 +103,40 @@ export class UsersService {
       await tx.session.deleteMany({ where: { userId: id } });
     });
     return password;
+  }
+
+  // Privacy request: erases a participant and everything they wrote, in one
+  // transaction. Their files leave MinIO afterwards; a leftover object is
+  // harmless, a dangling row is not. Psychologists are deactivated, not erased.
+  async remove(id: string): Promise<void> {
+    const keys = await this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.findFirst({
+        where: { id, role: 'USER' },
+        select: { id: true },
+      });
+      if (!user) throw new NotFoundException();
+      const files = await tx.mediaFile.findMany({
+        where: { uploaderId: id },
+        select: { storageKey: true },
+      });
+      await tx.comment.deleteMany({
+        where: { OR: [{ authorId: id }, { response: { userId: id } }] },
+      });
+      await tx.mediaFile.deleteMany({ where: { uploaderId: id } });
+      await tx.response.deleteMany({ where: { userId: id } });
+      await tx.message.deleteMany({
+        where: { OR: [{ senderId: id }, { recipientId: id }] },
+      });
+      await tx.user.delete({ where: { id } });
+      return files.map((file) => file.storageKey);
+    });
+    for (const key of keys) {
+      await this.storage
+        .remove(key)
+        .catch((error: Error) =>
+          this.logger.warn(`Could not remove ${key}: ${error.message}`),
+        );
+    }
   }
 
   private async resolvePsychologistId(

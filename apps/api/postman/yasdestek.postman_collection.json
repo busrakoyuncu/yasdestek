@@ -182,6 +182,14 @@
             "url": "{{baseUrl}}/users/{{userId}}/reset-password",
             "description": "201 with a new temporary password. The owner must change it at next login."
           }
+        },
+        {
+          "name": "Hard delete (admin)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/users/{{userId}}",
+            "description": "Privacy request. Erases a participant and everything they wrote, including files. 404 for psychologists (deactivate them instead)."
+          }
         }
       ]
     },
