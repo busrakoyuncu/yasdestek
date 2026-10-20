@@ -32,6 +32,14 @@
     {
       "key": "fileId",
       "value": ""
+    },
+    {
+      "key": "responseId",
+      "value": ""
+    },
+    {
+      "key": "commentId",
+      "value": ""
     }
   ],
   "item": [
@@ -476,6 +484,46 @@
             "method": "DELETE",
             "url": "{{baseUrl}}/files/{{fileId}}",
             "description": "204. 404 for files you did not upload."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Forum",
+      "description": "A group's published responses for a module, with comments. Members comment; the group's psychologist and admins read and moderate.",
+      "item": [
+        {
+          "name": "Read forum",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/{{groupId}}/forum/{{moduleId}}",
+            "description": "Members of the group, its psychologist, admins. 404 when the module is not assigned to the group or the group is not yours. Removed comments have text and author null."
+          }
+        },
+        {
+          "name": "Comment (participant)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/responses/{{responseId}}/comments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Yanındayım.\"\n}"
+            },
+            "description": "201. Only on published responses in your own group."
+          }
+        },
+        {
+          "name": "Remove comment (psychologist or admin)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/comments/{{commentId}}",
+            "description": "204. Soft delete: the forum shows a placeholder. 404 when not in your groups or already removed."
           }
         }
       ]

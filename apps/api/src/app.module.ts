@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { FilesModule } from './files/files.module';
+import { ForumModule } from './forum/forum.module';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
 import { ModulesModule } from './modules/modules.module';
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     PagesModule,
     ResponsesModule,
     FilesModule,
+    ForumModule,
   ],
   controllers: [AppController],
   providers: [
