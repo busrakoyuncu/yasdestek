@@ -26,7 +26,7 @@ import { StorageService } from '../storage/storage.service';
 import { FilesService } from './files.service';
 import { parseRange } from './range';
 
-// Media goes in and out through here only. MinIO itself is never public.
+// Media goes in and out through here only. Object storage itself is never public.
 @Controller('files')
 export class FilesController {
   constructor(

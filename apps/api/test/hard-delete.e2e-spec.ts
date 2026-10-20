@@ -8,7 +8,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { StorageService } from '../src/storage/storage.service';
 
 // u1 writes, uploads, comments, and messages; then an admin erases u1.
-// Real MinIO. Four logins.
+// Real object storage (Garage). Four logins.
 describe('Hard delete (e2e)', () => {
   let app: INestApplication<App>;
   let prisma: PrismaService;

@@ -1,0 +1,16 @@
+# Garage (S3-compatible object storage) for a single node. Used as-is by
+# docker-compose.yml and CI; production mounts the same file. Secrets come
+# from the environment (GARAGE_RPC_SECRET, GARAGE_DEFAULT_*), never from here.
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+db_engine = "sqlite"
+replication_factor = 1
+rpc_bind_addr = "[::]:3901"
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+
+[admin]
+# GET /health on this port answers 200 once the node is operational.
+api_bind_addr = "[::]:3903"

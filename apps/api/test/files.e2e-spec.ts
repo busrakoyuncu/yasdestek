@@ -7,7 +7,7 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { StorageService } from '../src/storage/storage.service';
 
-// Real MinIO. One psychologist with a group of two (u1 uploads, u2 is the
+// Real object storage (Garage). One psychologist with a group of two (u1 uploads, u2 is the
 // group mate), one participant in another group (u3), a second psychologist,
 // and an admin. Six logins.
 describe('Files (e2e)', () => {
