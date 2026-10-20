@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import cookieParser from 'cookie-parser';
+import { AnalyticsModule } from './analytics/analytics.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LOGIN_RATE_LIMIT } from './auth/auth.constants';
@@ -37,6 +38,7 @@ import { UsersModule } from './users/users.module';
     FilesModule,
     ForumModule,
     MessagesModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [

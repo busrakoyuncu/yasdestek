@@ -597,6 +597,28 @@
           }
         }
       ]
+    },
+    {
+      "name": "Analytics",
+      "description": "Admin only.",
+      "item": [
+        {
+          "name": "Psychologists with participants",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/analytics/psychologists",
+            "description": "Every psychologist, their participants, and each participant's group."
+          }
+        },
+        {
+          "name": "Participant progress",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/analytics/users/{{userId}}",
+            "description": "The participant's assigned modules in order with status: not_started, in_progress (draft), completed (published). 404 for non-participants."
+          }
+        }
+      ]
     }
   ]
 }
