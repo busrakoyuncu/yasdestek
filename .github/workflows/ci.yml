@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  DATABASE_URL: postgresql://yasdestek:yasdestek-dev@localhost:5432/yasdestek
+  SEED_ADMIN_USERNAME: admin
+  SEED_ADMIN_PASSWORD: change-me
+  MINIO_ENDPOINT: localhost
+  MINIO_PORT: "9000"
+  MINIO_ACCESS_KEY: yasdestek
+  MINIO_SECRET_KEY: yasdestek-dev
+  MINIO_BUCKET: media
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: yasdestek
+          POSTGRES_PASSWORD: yasdestek-dev
+          POSTGRES_DB: yasdestek
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U yasdestek"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Start MinIO
+        run: |
+          docker run -d --name minio -p 9000:9000 \
+            -e MINIO_ROOT_USER=yasdestek -e MINIO_ROOT_PASSWORD=yasdestek-dev \
+            minio/minio server /data
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:9000/minio/health/live && break
+            sleep 1
+          done
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm test:e2e
