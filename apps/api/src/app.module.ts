@@ -13,6 +13,7 @@ import { FilesModule } from './files/files.module';
 import { ForumModule } from './forum/forum.module';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
+import { MessagesModule } from './messages/messages.module';
 import { ModulesModule } from './modules/modules.module';
 import { PagesModule } from './pages/pages.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -35,6 +36,7 @@ import { UsersModule } from './users/users.module';
     ResponsesModule,
     FilesModule,
     ForumModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [

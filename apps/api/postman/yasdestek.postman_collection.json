@@ -40,6 +40,10 @@
     {
       "key": "commentId",
       "value": ""
+    },
+    {
+      "key": "messageId",
+      "value": ""
     }
   ],
   "item": [
@@ -524,6 +528,72 @@
             "method": "DELETE",
             "url": "{{baseUrl}}/comments/{{commentId}}",
             "description": "204. Soft delete: the forum shows a placeholder. 404 when not in your groups or already removed."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "description": "Private thread between a participant and their psychologist. Admins are not part of it.",
+      "item": [
+        {
+          "name": "My thread (participant) / Inbox (psychologist)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/messages",
+            "description": "Participant: all messages with your psychologist, oldest first. Psychologist: your participants with unread counts."
+          }
+        },
+        {
+          "name": "Thread with a participant (psychologist)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/messages/{{userId}}",
+            "description": "404 when the participant is not yours."
+          }
+        },
+        {
+          "name": "Send (participant)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/messages",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Bugün zor bir gündü.\"\n}"
+            },
+            "description": "Always goes to your psychologist. 201."
+          }
+        },
+        {
+          "name": "Send (psychologist)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/messages",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipientId\": \"{{userId}}\",\n  \"body\": \"Yanındayım.\"\n}"
+            },
+            "description": "recipientId required (400 RECIPIENT_REQUIRED), must be your participant (404)."
+          }
+        },
+        {
+          "name": "Mark read",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/messages/{{messageId}}/read",
+            "description": "204. Recipient only; 404 when already read."
           }
         }
       ]
