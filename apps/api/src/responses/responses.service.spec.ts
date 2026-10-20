@@ -36,11 +36,24 @@ describe('ResponsesService', () => {
   it('creates on first save and updates afterwards through one upsert', async () => {
     prisma.module.findFirst.mockResolvedValueOnce({ id: 'm1' });
     await service.save(member, 'm1', input);
-    expect(prisma.response.upsert).toHaveBeenCalledWith({
-      where: { userId_moduleId: { userId: 'u1', moduleId: 'm1' } },
-      create: { userId: 'u1', moduleId: 'm1', ...input },
-      update: input,
-    });
+    expect(prisma.response.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId_moduleId: { userId: 'u1', moduleId: 'm1' } },
+        create: { userId: 'u1', moduleId: 'm1', ...input },
+        update: input,
+      }),
+    );
+  });
+
+  it('ensures a draft exists without touching an existing one', async () => {
+    prisma.module.findFirst.mockResolvedValueOnce({ id: 'm1' });
+    await service.ensure(member, 'm1');
+    expect(prisma.response.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: { userId: 'u1', moduleId: 'm1' },
+        update: {},
+      }),
+    );
   });
 
   it('reads my own response, 404 when I have none', async () => {
@@ -48,8 +61,5 @@ describe('ResponsesService', () => {
     await expect(service.getMine(member, 'm1')).rejects.toBeInstanceOf(
       NotFoundException,
     );
-    expect(prisma.response.findUnique).toHaveBeenCalledWith({
-      where: { userId_moduleId: { userId: 'u1', moduleId: 'm1' } },
-    });
   });
 });

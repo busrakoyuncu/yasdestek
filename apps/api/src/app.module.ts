@@ -9,6 +9,7 @@ import { LOGIN_RATE_LIMIT } from './auth/auth.constants';
 import { AuthModule } from './auth/auth.module';
 import { SessionGuard } from './auth/session.guard';
 import { AppExceptionFilter } from './common/app-exception.filter';
+import { FilesModule } from './files/files.module';
 import { RolesGuard } from './common/roles.guard';
 import { GroupsModule } from './groups/groups.module';
 import { ModulesModule } from './modules/modules.module';
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     ModulesModule,
     PagesModule,
     ResponsesModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [

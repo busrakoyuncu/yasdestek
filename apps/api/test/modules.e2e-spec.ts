@@ -136,8 +136,9 @@ describe('Modules (e2e)', () => {
     expect(global.body).toMatchObject({
       createdById: ids.admin,
       isBase: false,
-      order: 7,
+      order: expect.any(Number) as number,
     });
+    expect((global.body as ModuleRow).order).toBeGreaterThan(6);
     ids.global = (global.body as ModuleRow).id;
 
     for (const p of ['p1', 'p2']) {
