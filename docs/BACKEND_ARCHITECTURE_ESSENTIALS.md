@@ -96,7 +96,7 @@ Companion to `BACKEND_ARCHITECTURE.md`. For each decision: what we picked, why, 
 
 ## Soft delete with visible placeholder
 
-**Chosen:** moderated comments/responses keep their rows (`deletedAt`, `deletedById`); the UI shows "Bu yorum psikolog tarafından silindi". Hard delete is a separate explicit admin action for privacy requests.
+**Chosen:** moderated comments/responses keep their rows (`deletedAt`, `deletedById`); the UI shows "Bu yorum danışman tarafından silinmiştir". Hard delete is a separate explicit admin action for privacy requests.
 
 **Why:** moderation disputes need the record; accidental deletes need undo; and the visible placeholder keeps group trust - content vanishing silently breeds suspicion in a therapeutic group. True erasure stays available for "delete my data" requests, where it is the correct behavior.
 

@@ -8,4 +8,4 @@ async function bootstrap() {
   app.set('trust proxy', 1);
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+void bootstrap();

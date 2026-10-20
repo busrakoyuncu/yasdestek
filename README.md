@@ -44,6 +44,17 @@ docker compose ps     # check that both containers are up
 docker compose down   # stop them (data survives in volumes)
 ```
 
+Everyday commands, all from the repo root:
+
+```sh
+pnpm dev              # api in watch mode on http://localhost:3000
+pnpm test             # api unit tests
+pnpm test:e2e         # api end-to-end tests (needs the containers; uses a throwaway <db>_test database)
+pnpm lint             # eslint
+pnpm typecheck        # tsc for every package
+pnpm build            # shared package, then api
+```
+
 Local services:
 
 | Service | Address | Credentials (dev only) |
@@ -54,4 +65,4 @@ Local services:
 
 ## Status
 
-Walking-skeleton phase: workspace and local infrastructure are in place; `apps/api`, `apps/web`, and `packages/shared` land next.
+Backend complete: `apps/api` serves auth, users, groups, modules, pages, responses, files, forum, messaging, and analytics, with unit and e2e tests and CI. `packages/shared` holds the zod schemas. `apps/web` is next.
