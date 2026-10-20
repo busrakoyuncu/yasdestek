@@ -65,4 +65,4 @@ Local services:
 
 ## Status
 
-Walking-skeleton phase: workspace and local infrastructure are in place; `apps/api`, `apps/web`, and `packages/shared` land next.
+Backend complete: `apps/api` serves auth, users, groups, modules, pages, responses, files, forum, messaging, and analytics, with unit and e2e tests and CI. `packages/shared` holds the zod schemas. `apps/web` is next.
