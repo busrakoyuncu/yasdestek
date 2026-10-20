@@ -77,6 +77,6 @@ Rules:
 
 ## 7. Implementation Notes
 
-- Tokens live once as CSS variables (`:root` = light; `.dark` = dark overrides), mapped into `tailwind.config` so classes like `bg-surface`, `text-muted` exist; shadcn components consume the same variables.
+- Tokens live once as CSS variables (`:root` = light; `.dark` = dark overrides), exposed to Tailwind v4 through `@theme` in the main stylesheet so classes like `bg-surface`, `text-muted` exist; shadcn-vue components consume the same variables.
 - Fonts self-hosted as woff2 in `apps/web` (subsets: latin + latin-ext), declared via `@font-face` with `font-display: swap`.
 - The app icon / manifest theme color derive from this palette (`background` cream, `primary` rust) - designed alongside the first screens.
