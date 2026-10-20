@@ -47,7 +47,7 @@ docker compose down   # stop them (data survives in volumes)
 Everyday commands, all from the repo root:
 
 ```sh
-pnpm dev              # api in watch mode on http://localhost:3000
+pnpm dev              # web on http://localhost:5173, api on :3000, shared package in watch mode
 pnpm test             # api unit tests
 pnpm test:e2e         # api end-to-end tests (needs the containers; uses a throwaway <db>_test database)
 pnpm lint             # eslint

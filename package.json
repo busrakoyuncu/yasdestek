@@ -2,7 +2,7 @@
   "name": "yasdestek",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter api start:dev",
+    "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r build",
     "lint": "pnpm --filter api lint:check",
     "format:check": "pnpm --filter api format:check",

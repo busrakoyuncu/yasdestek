@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "dev": "nest start --watch",
     "build": "nest build",
     "postinstall": "prisma generate",
     "reset-password": "ts-node src/scripts/reset-password.ts",
