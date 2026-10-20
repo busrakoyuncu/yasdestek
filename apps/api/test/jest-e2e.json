@@ -6,7 +6,10 @@
   "transform": {
     "^.+\\.(t|j)s$": [
       "ts-jest",
-      { "tsconfig": "<rootDir>/../tsconfig.spec.json" }
+      {
+        "tsconfig": "<rootDir>/../tsconfig.spec.json"
+      }
     ]
-  }
+  },
+  "globalSetup": "<rootDir>/global-setup.ts"
 }
