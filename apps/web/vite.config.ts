@@ -1,7 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'node:path';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
@@ -13,6 +13,11 @@ export default defineConfig({
   },
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
+  },
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.test.ts'],
+    setupFiles: ['src/test/setup.ts'],
   },
   server: {
     // Same shape as production: the app calls /api, Caddy (here: Vite) forwards to the api.
