@@ -41,7 +41,8 @@
     "NOT_FOUND": "Das konnten wir nicht finden.",
     "UNAUTHORIZED": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "NETWORK": "Keine Verbindung. Prüfen Sie Ihr Internet und versuchen Sie es erneut.",
-    "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "title": "Etwas ist schiefgelaufen"
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",

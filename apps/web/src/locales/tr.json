@@ -41,7 +41,8 @@
     "NOT_FOUND": "Aradığınız şey bulunamadı.",
     "UNAUTHORIZED": "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
     "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
-    "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "title": "Bir sorun oluştu"
   },
   "validation": {
     "required": "Bu alan gerekli.",
