@@ -57,5 +57,11 @@
   "area": {
     "welcome": "Willkommen, {name}",
     "comingSoon": "Dieser Bereich kommt bald."
+  },
+  "nav": {
+    "main": "Hauptmenü",
+    "home": "Start",
+    "rules": "Allgemeine Regeln",
+    "userMenu": "Kontomenü"
   }
 }

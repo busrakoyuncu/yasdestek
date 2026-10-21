@@ -57,5 +57,11 @@
   "area": {
     "welcome": "Welcome, {name}",
     "comingSoon": "This area is coming soon."
+  },
+  "nav": {
+    "main": "Main menu",
+    "home": "Home",
+    "rules": "General rules",
+    "userMenu": "Account menu"
   }
 }

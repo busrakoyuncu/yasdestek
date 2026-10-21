@@ -57,5 +57,11 @@
   "area": {
     "welcome": "Hoş geldiniz, {name}",
     "comingSoon": "Bu alan yakında hazır olacak."
+  },
+  "nav": {
+    "main": "Ana menü",
+    "home": "Ana sayfa",
+    "rules": "Genel kurallar",
+    "userMenu": "Hesap menüsü"
   }
 }
