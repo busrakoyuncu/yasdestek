@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "Yasdestek"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "retry": "Yeniden dene",
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "language": "Dil"
+  },
+  "lang": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş yap",
+      "username": "Kullanıcı adı",
+      "password": "Şifre",
+      "submit": "Giriş yap",
+      "welcome": "Yasdestek'e Hoşgeldiniz"
+    },
+    "changePassword": {
+      "title": "Yeni şifre belirle",
+      "intro": "İlk girişte kendi şifrenizi seçmeniz gerekir.",
+      "current": "Mevcut şifre",
+      "new": "Yeni şifre",
+      "submit": "Şifreyi değiştir"
+    },
+    "logout": "Çıkış yap"
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "Kullanıcı adı veya şifre hatalı.",
+    "ACCOUNT_INACTIVE": "Hesabınız henüz etkinleştirilmedi. Danışmanınızla görüşün.",
+    "PASSWORD_CHANGE_REQUIRED": "Devam etmek için önce şifrenizi değiştirmeniz gerekiyor.",
+    "WRONG_PASSWORD": "Mevcut şifre hatalı.",
+    "TOO_MANY_REQUESTS": "Çok fazla deneme yaptınız. Lütfen bir dakika bekleyin.",
+    "VALIDATION_ERROR": "Girdiğiniz bilgileri kontrol edin.",
+    "NOT_FOUND": "Aradığınız şey bulunamadı.",
+    "UNAUTHORIZED": "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
+    "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
+    "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+  },
+  "validation": {
+    "required": "Bu alan gerekli.",
+    "minLength": "En az {n} karakter olmalı.",
+    "maxLength": "En fazla {n} karakter olabilir.",
+    "invalid": "Geçersiz değer."
+  },
+  "role": {
+    "ADMIN": "Yönetici",
+    "PSYCHOLOGIST": "Danışman",
+    "USER": "Katılımcı"
+  },
+  "area": {
+    "welcome": "Hoş geldiniz, {name}",
+    "comingSoon": "Bu alan yakında hazır olacak."
+  }
+}

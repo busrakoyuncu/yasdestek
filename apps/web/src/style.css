@@ -1,0 +1,129 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn-vue/tailwind.css';
+
+@import './fonts.css';
+
+/*
+ ---break---
+ */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens from docs/DESIGN_ARCHITECTURE.md ("calm autumn").
+ * Values live once below (:root = light, .dark = autumn at night).
+ * shadcn-vue components read the standard names; our own names
+ * (surface, surface-raised, text-secondary, secondary-accent) sit beside them.
+ */
+@theme inline {
+  /* UI: headings, buttons, labels, module content */
+  --font-sans: 'Google Sans', system-ui, sans-serif;
+  /* everything participants write: responses, comments */
+  --font-body: 'Nunito Sans', system-ui, sans-serif;
+  /* module 3 letters only, never below 18px */
+  --font-letter: 'Playwrite DE LA', cursive;
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-secondary: var(--text-secondary);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: #faf6f0;
+  --foreground: #2b2118;
+  --surface: #f1e9de;
+  --surface-raised: #fffdfa;
+  --text-secondary: #4a3f35;
+  --secondary-accent: #7a7c58;
+
+  --card: var(--surface-raised);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--foreground);
+  --primary: #a0522d;
+  --primary-foreground: #faf6f0;
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --muted-foreground: #6e6259;
+  --accent: var(--surface);
+  --accent-foreground: var(--foreground);
+  --destructive: #b3392f;
+  --border: #e5dacb;
+  --input: #e5dacb;
+  --ring: #a0522d;
+
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--background);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* cards and modals round at lg/xl; buttons and tags are full pills */
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #191410;
+  --foreground: #efe7dc;
+  --surface: #241d17;
+  --surface-raised: #201a14;
+  --text-secondary: #cbbfaf;
+  --secondary-accent: #9fa173;
+
+  --primary: #c97b4f;
+  --primary-foreground: #191410;
+  --muted-foreground: #a89a8c;
+  --destructive: #cf5b4e;
+  --border: #332a22;
+  --input: #332a22;
+  --ring: #c97b4f;
+}
+
+/*
+ ---break---
+ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+}

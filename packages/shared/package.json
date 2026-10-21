@@ -2,11 +2,11 @@
   "name": "@yasdestek/shared",
   "version": "0.0.1",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > dist/esm/package.json",
+    "dev": "tsc -b tsconfig.json tsconfig.esm.json --watch",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
@@ -14,5 +14,14 @@
   },
   "devDependencies": {
     "typescript": "^5.7.3"
-  }
+  },
+  "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "sideEffects": false
 }
