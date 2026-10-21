@@ -11,7 +11,7 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 | Token | Light | Dark | Used for |
 |---|---|---|---|
 | `background` | `#FAF6F0` | `#191410` | page ground |
-| `surface` | `#F1E9DE` | `#241D17` | cards, sidebar, ghost buttons |
+| `surface` | `#F5DCC4` | `#241D17` | cards, sidebar, ghost buttons |
 | `surface-raised` | `#FFFDFA` | `#201A14` | comments, letters, modals |
 | `border` | `#E5DACB` | `#332A22` | hairlines, card borders |
 | `primary` | `#A0522D` | `#C97B4F` | buttons, links, active states |

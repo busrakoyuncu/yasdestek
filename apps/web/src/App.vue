@@ -1,7 +1,8 @@
 <script setup lang="ts">
-// App frame. Layout shells per role area land here later.
+import { Toaster } from '@/components/ui/sonner';
 </script>
 
 <template>
   <RouterView />
+  <Toaster position="top-center" />
 </template>

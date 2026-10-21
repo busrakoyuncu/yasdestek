@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+} from 'vue-router';
 import { homeFor, sessionQuery } from '@/features/auth/useSession';
 import { queryClient } from '@/lib/query';
 import type { Role } from '@/types/user';
@@ -10,6 +14,39 @@ declare module 'vue-router' {
     allowPasswordChangePending?: boolean;
   }
 }
+
+// One chunk per area, so participants never download admin code. Screens
+// are children of their area's layout.
+const areas: { path: string; role: Role; layout: () => Promise<unknown> }[] = [
+  {
+    path: '/app',
+    role: 'USER',
+    layout: () => import('@/app/layouts/ParticipantLayout.vue'),
+  },
+  {
+    path: '/psychologist',
+    role: 'PSYCHOLOGIST',
+    layout: () => import('@/app/layouts/PsychologistLayout.vue'),
+  },
+  {
+    path: '/admin',
+    role: 'ADMIN',
+    layout: () => import('@/app/layouts/AdminLayout.vue'),
+  },
+];
+
+const areaRoutes: RouteRecordRaw[] = areas.map(({ path, role, layout }) => ({
+  path,
+  component: layout,
+  meta: { role },
+  children: [
+    { path: '', component: () => import('@/app/AreaHome.vue') },
+    {
+      path: 'rules',
+      component: () => import('@/features/pages/GeneralRulesPage.vue'),
+    },
+  ],
+}));
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -27,22 +64,7 @@ export const router = createRouter({
       component: () => import('@/features/auth/ChangePasswordPage.vue'),
       meta: { allowPasswordChangePending: true },
     },
-    // One chunk per area, so participants never download admin code.
-    {
-      path: '/app',
-      component: () => import('@/app/AreaPlaceholder.vue'),
-      meta: { role: 'USER' },
-    },
-    {
-      path: '/psychologist',
-      component: () => import('@/app/AreaPlaceholder.vue'),
-      meta: { role: 'PSYCHOLOGIST' },
-    },
-    {
-      path: '/admin',
-      component: () => import('@/app/AreaPlaceholder.vue'),
-      meta: { role: 'ADMIN' },
-    },
+    ...areaRoutes,
     { path: '/:pathMatch(.*)*', redirect: { name: 'login' } },
   ],
 });

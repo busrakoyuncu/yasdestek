@@ -41,7 +41,8 @@
     "NOT_FOUND": "We could not find that.",
     "UNAUTHORIZED": "Your session has ended. Please sign in again.",
     "NETWORK": "Could not connect. Check your internet and try again.",
-    "UNKNOWN": "Something went wrong. Please try again."
+    "UNKNOWN": "Something went wrong. Please try again.",
+    "title": "Something went wrong"
   },
   "validation": {
     "required": "This field is required.",
@@ -57,5 +58,11 @@
   "area": {
     "welcome": "Welcome, {name}",
     "comingSoon": "This area is coming soon."
+  },
+  "nav": {
+    "main": "Main menu",
+    "home": "Home",
+    "rules": "General rules",
+    "userMenu": "Account menu"
   }
 }
