@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
+import { Button } from '@/components/ui/button';
 
-// Placeholder until the login page exists. Proves the api proxy works.
+// Placeholder until the login page exists. Proves the api proxy and the theme.
 const health = useQuery({
   queryKey: ['health'],
   queryFn: async () => {
@@ -13,13 +14,20 @@ const health = useQuery({
 </script>
 
 <template>
-  <main>
-    <h1>Yasdestek</h1>
-    <p>
+  <main
+    class="mx-auto flex min-h-svh max-w-md flex-col justify-center gap-6 p-6"
+  >
+    <h1 class="text-3xl font-medium">Yasdestek</h1>
+    <p class="text-text-secondary">
       api:
-      <span v-if="health.isPending.value">...</span>
-      <span v-else-if="health.isError.value">{{ health.error.value?.message }}</span>
+      <span v-if="health.isPending.value" class="text-muted-foreground"
+        >...</span
+      >
+      <span v-else-if="health.isError.value" class="text-destructive">
+        {{ health.error.value?.message }}
+      </span>
       <span v-else>{{ health.data.value }}</span>
     </p>
+    <Button @click="health.refetch()">Yenile</Button>
   </main>
 </template>

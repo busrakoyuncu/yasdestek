@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r build",
-    "lint": "pnpm --filter api lint:check",
-    "format:check": "pnpm --filter api format:check",
+    "lint": "pnpm --filter api lint:check && pnpm --filter web lint",
+    "format:check": "pnpm --filter api format:check && pnpm --filter web format:check",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm --filter api test",
     "test:e2e": "pnpm --filter api test:e2e"
