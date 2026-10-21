@@ -39,7 +39,13 @@ const areaRoutes: RouteRecordRaw[] = areas.map(({ path, role, layout }) => ({
   path,
   component: layout,
   meta: { role },
-  children: [{ path: '', component: () => import('@/app/AreaHome.vue') }],
+  children: [
+    { path: '', component: () => import('@/app/AreaHome.vue') },
+    {
+      path: 'rules',
+      component: () => import('@/features/pages/GeneralRulesPage.vue'),
+    },
+  ],
 }));
 
 export const router = createRouter({
