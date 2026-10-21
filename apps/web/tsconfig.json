@@ -16,7 +16,8 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "include": ["src", "vite.config.ts"]
 }

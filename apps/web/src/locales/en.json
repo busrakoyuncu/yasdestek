@@ -1,0 +1,44 @@
+{
+  "app": { "name": "Yasdestek" },
+  "common": {
+    "loading": "Loading...",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language"
+  },
+  "lang": { "tr": "Türkçe", "en": "English", "de": "Deutsch" },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign in"
+    },
+    "changePassword": {
+      "title": "Set a new password",
+      "intro": "On your first sign-in you need to choose your own password.",
+      "current": "Current password",
+      "new": "New password",
+      "submit": "Change password"
+    },
+    "logout": "Sign out"
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "Wrong username or password.",
+    "ACCOUNT_INACTIVE": "Your account is not active yet. Please contact your counselor.",
+    "PASSWORD_CHANGE_REQUIRED": "You need to change your password before continuing.",
+    "WRONG_PASSWORD": "The current password is wrong.",
+    "TOO_MANY_REQUESTS": "Too many attempts. Please wait a minute.",
+    "VALIDATION_ERROR": "Please check what you entered.",
+    "NOT_FOUND": "We could not find that.",
+    "UNAUTHORIZED": "Your session has ended. Please sign in again.",
+    "NETWORK": "Could not connect. Check your internet and try again.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  },
+  "home": {
+    "api": "api",
+    "bodySample": "What you write appears in this typeface: ğ, ş, İ, ı, ç, ö, ü.",
+    "letterSample": "Dear mother, I thought of you a lot today."
+  }
+}
