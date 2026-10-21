@@ -35,6 +35,18 @@ const areas: { path: string; role: Role; layout: () => Promise<unknown> }[] = [
   },
 ];
 
+// Screens specific to one area, added as the features are built.
+const areaChildren: Record<Role, RouteRecordRaw[]> = {
+  USER: [],
+  PSYCHOLOGIST: [],
+  ADMIN: [
+    {
+      path: 'psychologists',
+      component: () => import('@/features/admin/PsychologistsPage.vue'),
+    },
+  ],
+};
+
 const areaRoutes: RouteRecordRaw[] = areas.map(({ path, role, layout }) => ({
   path,
   component: layout,
@@ -45,6 +57,7 @@ const areaRoutes: RouteRecordRaw[] = areas.map(({ path, role, layout }) => ({
       path: 'rules',
       component: () => import('@/features/pages/GeneralRulesPage.vue'),
     },
+    ...areaChildren[role],
   ],
 }));
 

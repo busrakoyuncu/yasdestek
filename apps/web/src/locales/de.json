@@ -7,7 +7,9 @@
     "retry": "Erneut versuchen",
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "confirm": "Bestätigen",
+    "create": "Anlegen"
   },
   "lang": {
     "tr": "Türkçe",
@@ -63,6 +65,41 @@
     "main": "Hauptmenü",
     "home": "Start",
     "rules": "Allgemeine Regeln",
-    "userMenu": "Kontomenü"
+    "userMenu": "Kontomenü",
+    "psychologists": "Begleitungen"
+  },
+  "users": {
+    "psychologists": "Begleitungen",
+    "participants": "Teilnehmende",
+    "username": "Benutzername",
+    "usernameHint": "3-32 Zeichen: Kleinbuchstaben, Ziffern, Punkt, Unterstrich, Bindestrich.",
+    "status": "Status",
+    "created": "Erstellt",
+    "actions": "Aktionen",
+    "empty": "Noch keine Konten.",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "pendingPassword": "Passwort ausstehend",
+    "activate": "Aktivieren",
+    "deactivate": "Deaktivieren",
+    "resetPassword": "Passwort zurücksetzen",
+    "activated": "Konto aktiviert.",
+    "deactivated": "Konto deaktiviert.",
+    "deactivateTitle": "{name} deaktivieren?",
+    "deactivateIntro": "Die Person wird sofort abgemeldet und kann sich erst nach erneuter Aktivierung anmelden. Nichts Geschriebenes wird gelöscht.",
+    "resetTitle": "Passwort für {name} zurücksetzen?",
+    "resetIntro": "Ein neues temporäres Passwort wird erstellt und offene Sitzungen enden. Beim nächsten Anmelden wählt die Person ein eigenes Passwort.",
+    "create": {
+      "PSYCHOLOGIST": "Begleitung hinzufügen",
+      "USER": "Teilnehmende Person hinzufügen",
+      "intro": "Das Konto ist zunächst inaktiv. Das temporäre Passwort wird einmal angezeigt."
+    },
+    "oneTime": {
+      "title": "Temporäres Passwort",
+      "intro": "Dieses Passwort ist nur jetzt sichtbar. Geben Sie es weiter; beim ersten Anmelden wird ein eigenes gewählt.",
+      "copy": "Passwort kopieren",
+      "copied": "Kopiert",
+      "done": "Fertig"
+    }
   }
 }

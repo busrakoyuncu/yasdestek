@@ -7,7 +7,9 @@
     "retry": "Yeniden dene",
     "save": "Kaydet",
     "cancel": "Vazgeç",
-    "language": "Dil"
+    "language": "Dil",
+    "confirm": "Onayla",
+    "create": "Oluştur"
   },
   "lang": {
     "tr": "Türkçe",
@@ -63,6 +65,41 @@
     "main": "Ana menü",
     "home": "Ana sayfa",
     "rules": "Genel kurallar",
-    "userMenu": "Hesap menüsü"
+    "userMenu": "Hesap menüsü",
+    "psychologists": "Danışmanlar"
+  },
+  "users": {
+    "psychologists": "Danışmanlar",
+    "participants": "Katılımcılar",
+    "username": "Kullanıcı adı",
+    "usernameHint": "3-32 karakter: küçük harf, rakam, nokta, alt çizgi, tire.",
+    "status": "Durum",
+    "created": "Oluşturulma",
+    "actions": "İşlemler",
+    "empty": "Henüz hesap yok.",
+    "active": "Etkin",
+    "inactive": "Etkin değil",
+    "pendingPassword": "Şifre bekleniyor",
+    "activate": "Etkinleştir",
+    "deactivate": "Devre dışı bırak",
+    "resetPassword": "Şifre sıfırla",
+    "activated": "Hesap etkinleştirildi.",
+    "deactivated": "Hesap devre dışı bırakıldı.",
+    "deactivateTitle": "{name} devre dışı bırakılsın mı?",
+    "deactivateIntro": "Kişi anında çıkış yapar ve siz yeniden etkinleştirene kadar giriş yapamaz. Yazdıkları silinmez.",
+    "resetTitle": "{name} için şifre sıfırlansın mı?",
+    "resetIntro": "Yeni bir geçici şifre oluşturulur ve açık oturumlar kapanır. Kişi ilk girişte kendi şifresini seçer.",
+    "create": {
+      "PSYCHOLOGIST": "Danışman ekle",
+      "USER": "Katılımcı ekle",
+      "intro": "Hesap etkin olmayan durumda oluşturulur. Geçici şifre bir kez gösterilir."
+    },
+    "oneTime": {
+      "title": "Geçici şifre",
+      "intro": "Bu şifre yalnızca şimdi görünür. Kişiye iletin; ilk girişte kendi şifresini seçecek.",
+      "copy": "Şifreyi kopyala",
+      "copied": "Kopyalandı",
+      "done": "Tamam"
+    }
   }
 }

@@ -7,7 +7,9 @@
     "retry": "Try again",
     "save": "Save",
     "cancel": "Cancel",
-    "language": "Language"
+    "language": "Language",
+    "confirm": "Confirm",
+    "create": "Create"
   },
   "lang": {
     "tr": "Türkçe",
@@ -63,6 +65,41 @@
     "main": "Main menu",
     "home": "Home",
     "rules": "General rules",
-    "userMenu": "Account menu"
+    "userMenu": "Account menu",
+    "psychologists": "Counselors"
+  },
+  "users": {
+    "psychologists": "Counselors",
+    "participants": "Participants",
+    "username": "Username",
+    "usernameHint": "3-32 characters: lowercase letters, digits, dot, underscore, dash.",
+    "status": "Status",
+    "created": "Created",
+    "actions": "Actions",
+    "empty": "No accounts yet.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pendingPassword": "Password pending",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "resetPassword": "Reset password",
+    "activated": "Account activated.",
+    "deactivated": "Account deactivated.",
+    "deactivateTitle": "Deactivate {name}?",
+    "deactivateIntro": "They are signed out at once and cannot sign in until you reactivate them. Nothing they wrote is deleted.",
+    "resetTitle": "Reset the password for {name}?",
+    "resetIntro": "A new temporary password is created and open sessions end. They choose their own password at the next sign-in.",
+    "create": {
+      "PSYCHOLOGIST": "Add counselor",
+      "USER": "Add participant",
+      "intro": "The account starts inactive. The temporary password is shown once."
+    },
+    "oneTime": {
+      "title": "Temporary password",
+      "intro": "This password is visible only now. Pass it on; they will choose their own at first sign-in.",
+      "copy": "Copy password",
+      "copied": "Copied",
+      "done": "Done"
+    }
   }
 }
