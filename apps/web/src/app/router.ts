@@ -41,6 +41,10 @@ const areaChildren: Record<Role, RouteRecordRaw[]> = {
   PSYCHOLOGIST: [],
   ADMIN: [
     {
+      path: 'participants',
+      component: () => import('@/features/admin/ParticipantsPage.vue'),
+    },
+    {
       path: 'psychologists',
       component: () => import('@/features/admin/PsychologistsPage.vue'),
     },

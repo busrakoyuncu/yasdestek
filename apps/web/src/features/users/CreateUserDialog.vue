@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createUserSchema } from '@yasdestek/shared';
 import { useForm } from 'vee-validate';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,28 +21,33 @@ import type { CreatedUser } from './useUsers';
 import { useUsers } from './useUsers';
 
 // Creates one account of a fixed role. The caller shows the returned
-// one-time password; this dialog only collects the username.
+// one-time password. A psychologist creating a participant is the owner
+// automatically; an admin picks one from `psychologists`.
 const props = defineProps<{
   role: Exclude<Role, 'ADMIN'>;
-  psychologistId?: string;
+  psychologists?: { id: string; username: string }[];
 }>();
 const open = defineModel<boolean>('open', { required: true });
 const emit = defineEmits<{ created: [created: CreatedUser] }>();
 const { t } = useI18n();
 const { create } = useUsers();
 
+const needsPicker = computed(
+  () => props.role === 'USER' && props.psychologists !== undefined,
+);
+const schema = needsPicker.value
+  ? createUserSchema.pick({ username: true, psychologistId: true }).required()
+  : createUserSchema.pick({ username: true });
+
 const { handleSubmit, defineField, errors, resetForm } = useForm({
-  validationSchema: toTypedSchema(createUserSchema.pick({ username: true })),
+  validationSchema: toTypedSchema(schema),
 });
 const [username, usernameAttrs] = defineField('username');
+const [psychologistId, psychologistAttrs] = defineField('psychologistId');
 
-const onSubmit = handleSubmit(async ({ username }) => {
+const onSubmit = handleSubmit(async (values) => {
   const created = await create
-    .mutateAsync({
-      role: props.role,
-      username,
-      psychologistId: props.psychologistId,
-    })
+    .mutateAsync({ role: props.role, ...values })
     .catch(() => null);
   if (!created) return;
   resetForm();
@@ -73,6 +79,26 @@ const onSubmit = handleSubmit(async ({ username }) => {
           </p>
           <p v-if="errors.username" class="text-sm text-destructive">
             {{ errors.username }}
+          </p>
+        </div>
+        <div v-if="needsPicker" class="flex flex-col gap-2">
+          <Label for="new-psychologist">{{ t('users.psychologist') }}</Label>
+          <select
+            id="new-psychologist"
+            v-model="psychologistId"
+            v-bind="psychologistAttrs"
+            class="h-9 rounded-md border bg-surface-raised px-3 text-sm"
+            :aria-invalid="!!errors.psychologistId"
+          >
+            <option value="" disabled>
+              {{ t('users.choosePsychologist') }}
+            </option>
+            <option v-for="p in psychologists" :key="p.id" :value="p.id">
+              {{ p.username }}
+            </option>
+          </select>
+          <p v-if="errors.psychologistId" class="text-sm text-destructive">
+            {{ errors.psychologistId }}
           </p>
         </div>
         <p

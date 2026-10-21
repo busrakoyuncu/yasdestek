@@ -66,7 +66,8 @@
     "home": "Start",
     "rules": "Allgemeine Regeln",
     "userMenu": "Kontomenü",
-    "psychologists": "Begleitungen"
+    "psychologists": "Begleitungen",
+    "participants": "Teilnehmende"
   },
   "users": {
     "psychologists": "Begleitungen",
@@ -100,6 +101,8 @@
       "copy": "Passwort kopieren",
       "copied": "Kopiert",
       "done": "Fertig"
-    }
+    },
+    "psychologist": "Begleitung",
+    "choosePsychologist": "Begleitung wählen"
   }
 }

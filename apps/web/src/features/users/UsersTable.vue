@@ -20,7 +20,8 @@ import { useUsers, type UserRow } from './useUsers';
 
 // Accounts with their status and the three management actions. Shared by
 // the admin's psychologist list and the psychologist's participant list.
-defineProps<{ rows: UserRow[] }>();
+// `psychologists` (id -> username) adds a column with each participant's psychologist.
+defineProps<{ rows: UserRow[]; psychologists?: Record<string, string> }>();
 const { t } = useI18n();
 const { activate, deactivate, resetPassword } = useUsers();
 
@@ -61,6 +62,9 @@ async function onReset() {
     <TableHeader>
       <TableRow>
         <TableHead>{{ t('users.username') }}</TableHead>
+        <TableHead v-if="psychologists">{{
+          t('users.psychologist')
+        }}</TableHead>
         <TableHead>{{ t('users.status') }}</TableHead>
         <TableHead class="hidden sm:table-cell">{{
           t('users.created')
@@ -69,11 +73,16 @@ async function onReset() {
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableEmpty v-if="rows.length === 0" :colspan="4">{{
+      <TableEmpty v-if="rows.length === 0" :colspan="psychologists ? 5 : 4">{{
         t('users.empty')
       }}</TableEmpty>
       <TableRow v-for="user in rows" :key="user.id">
         <TableCell class="font-medium">{{ user.username }}</TableCell>
+        <TableCell v-if="psychologists" class="text-muted-foreground">
+          {{
+            (user.psychologistId && psychologists[user.psychologistId]) || '-'
+          }}
+        </TableCell>
         <TableCell>
           <Badge v-if="!user.active" variant="outline">{{
             t('users.inactive')

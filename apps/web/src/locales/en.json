@@ -66,7 +66,8 @@
     "home": "Home",
     "rules": "General rules",
     "userMenu": "Account menu",
-    "psychologists": "Counselors"
+    "psychologists": "Counselors",
+    "participants": "Participants"
   },
   "users": {
     "psychologists": "Counselors",
@@ -100,6 +101,8 @@
       "copy": "Copy password",
       "copied": "Copied",
       "done": "Done"
-    }
+    },
+    "psychologist": "Counselor",
+    "choosePsychologist": "Choose a counselor"
   }
 }

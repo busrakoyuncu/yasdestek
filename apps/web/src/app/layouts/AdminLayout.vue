@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { BookOpenTextIcon, HomeIcon, StethoscopeIcon } from '@lucide/vue';
+import {
+  BookOpenTextIcon,
+  HomeIcon,
+  StethoscopeIcon,
+  UsersIcon,
+} from '@lucide/vue';
 import AppShell from '@/app/AppShell.vue';
 import ErrorBoundary from '@/components/ErrorBoundary.vue';
 import type { NavItem } from '@/app/nav';
@@ -12,6 +17,7 @@ const nav: NavItem[] = [
     label: 'nav.psychologists',
     icon: StethoscopeIcon,
   },
+  { to: '/admin/participants', label: 'nav.participants', icon: UsersIcon },
   { to: '/admin/rules', label: 'nav.rules', icon: BookOpenTextIcon },
 ];
 </script>
