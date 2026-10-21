@@ -11,6 +11,12 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
   skipFormatting,
   {
+    // The editor runs eslint from the repo root, where two tsconfig roots exist.
+    languageOptions: {
+      parserOptions: { tsconfigRootDir: import.meta.dirname },
+    },
+  },
+  {
     // shadcn-vue primitives are copied in as-is: single-word names, optional class prop.
     files: ['src/components/ui/**'],
     rules: {

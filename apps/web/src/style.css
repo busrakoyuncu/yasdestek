@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn-vue/tailwind.css';
 
+@import './fonts.css';
+
 /*
  ---break---
  */
@@ -12,11 +14,13 @@
  * Values live once below (:root = light, .dark = autumn at night).
  * shadcn-vue components read the standard names; our own names
  * (surface, surface-raised, text-secondary, secondary-accent) sit beside them.
- * Fonts are self-hosted in a later step; system stacks hold the place.
  */
 @theme inline {
+  /* UI: headings, buttons, labels, module content */
   --font-sans: 'Google Sans', system-ui, sans-serif;
+  /* everything participants write: responses, comments */
   --font-body: 'Nunito Sans', system-ui, sans-serif;
+  /* module 3 letters only, never below 18px */
   --font-letter: 'Playwrite DE LA', cursive;
   --font-heading: var(--font-sans);
 

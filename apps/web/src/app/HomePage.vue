@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/vue-query';
 import { Button } from '@/components/ui/button';
 
-// Placeholder until the login page exists. Proves the api proxy and the theme.
+// Placeholder until the login page exists. Proves the api proxy, the theme, and the fonts.
 const health = useQuery({
   queryKey: ['health'],
   queryFn: async () => {
@@ -27,6 +27,12 @@ const health = useQuery({
         {{ health.error.value?.message }}
       </span>
       <span v-else>{{ health.data.value }}</span>
+    </p>
+    <p class="font-body text-text-secondary">
+      Yazdıklarınız bu yazı tipiyle görünür: ğ, ş, i, ı, ç, ö, ü.
+    </p>
+    <p class="font-letter text-lg leading-loose">
+      Sevgili anneciğim, bugün seni çok düşündüm.
     </p>
     <Button @click="health.refetch()">Yenile</Button>
   </main>
