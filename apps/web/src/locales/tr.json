@@ -1,5 +1,7 @@
 {
-  "app": { "name": "Yasdestek" },
+  "app": {
+    "name": "Yasdestek"
+  },
   "common": {
     "loading": "Yükleniyor...",
     "retry": "Yeniden dene",
@@ -7,13 +9,18 @@
     "cancel": "Vazgeç",
     "language": "Dil"
   },
-  "lang": { "tr": "Türkçe", "en": "English", "de": "Deutsch" },
+  "lang": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch"
+  },
   "auth": {
     "login": {
       "title": "Giriş yap",
       "username": "Kullanıcı adı",
       "password": "Şifre",
-      "submit": "Giriş yap"
+      "submit": "Giriş yap",
+      "welcome": "Yasdestek'e Hoşgeldiniz"
     },
     "changePassword": {
       "title": "Yeni şifre belirle",
@@ -36,9 +43,19 @@
     "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
     "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
   },
-  "home": {
-    "api": "api",
-    "bodySample": "Yazdıklarınız bu yazı tipiyle görünür: ğ, ş, İ, ı, ç, ö, ü.",
-    "letterSample": "Sevgili anneciğim, bugün seni çok düşündüm."
+  "validation": {
+    "required": "Bu alan gerekli.",
+    "minLength": "En az {n} karakter olmalı.",
+    "maxLength": "En fazla {n} karakter olabilir.",
+    "invalid": "Geçersiz değer."
+  },
+  "role": {
+    "ADMIN": "Yönetici",
+    "PSYCHOLOGIST": "Danışman",
+    "USER": "Katılımcı"
+  },
+  "area": {
+    "welcome": "Hoş geldiniz, {name}",
+    "comingSoon": "Bu alan yakında hazır olacak."
   }
 }

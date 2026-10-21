@@ -1,5 +1,7 @@
 {
-  "app": { "name": "Yasdestek" },
+  "app": {
+    "name": "Yasdestek"
+  },
   "common": {
     "loading": "Wird geladen...",
     "retry": "Erneut versuchen",
@@ -7,13 +9,18 @@
     "cancel": "Abbrechen",
     "language": "Sprache"
   },
-  "lang": { "tr": "Türkçe", "en": "English", "de": "Deutsch" },
+  "lang": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch"
+  },
   "auth": {
     "login": {
       "title": "Anmelden",
       "username": "Benutzername",
       "password": "Passwort",
-      "submit": "Anmelden"
+      "submit": "Anmelden",
+      "welcome": "Willkommen bei Yasdestek"
     },
     "changePassword": {
       "title": "Neues Passwort festlegen",
@@ -36,9 +43,19 @@
     "NETWORK": "Keine Verbindung. Prüfen Sie Ihr Internet und versuchen Sie es erneut.",
     "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
   },
-  "home": {
-    "api": "api",
-    "bodySample": "Was Sie schreiben, erscheint in dieser Schrift: ğ, ş, İ, ı, ç, ö, ü.",
-    "letterSample": "Liebe Mama, heute habe ich viel an dich gedacht."
+  "validation": {
+    "required": "Dieses Feld ist erforderlich.",
+    "minLength": "Mindestens {n} Zeichen.",
+    "maxLength": "Höchstens {n} Zeichen.",
+    "invalid": "Ungültiger Wert."
+  },
+  "role": {
+    "ADMIN": "Administration",
+    "PSYCHOLOGIST": "Begleitung",
+    "USER": "Teilnehmende"
+  },
+  "area": {
+    "welcome": "Willkommen, {name}",
+    "comingSoon": "Dieser Bereich kommt bald."
   }
 }

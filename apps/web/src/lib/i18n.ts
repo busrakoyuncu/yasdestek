@@ -1,7 +1,9 @@
 import { createI18n } from 'vue-i18n';
-import de from '@/locales/de.json';
-import en from '@/locales/en.json';
-import tr from '@/locales/tr.json';
+import { z } from 'zod';
+import { de, en, tr } from 'zod/locales';
+import messagesDe from '@/locales/de.json';
+import messagesEn from '@/locales/en.json';
+import messagesTr from '@/locales/tr.json';
 
 export const LOCALES = ['tr', 'en', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -24,18 +26,22 @@ function detectLocale(): Locale {
 }
 
 // All three files share the Turkish file's shape; the type catches a missing key.
-type MessageSchema = typeof tr;
+type MessageSchema = typeof messagesTr;
 
 export const i18n = createI18n<[MessageSchema], Locale, false>({
   legacy: false,
   locale: detectLocale(),
   fallbackLocale: 'tr',
-  messages: { tr, en, de },
+  messages: { tr: messagesTr, en: messagesEn, de: messagesDe },
 });
+
+// zod's own messages (used for issue kinds we do not translate ourselves)
+const zodLocales = { tr, en, de };
 
 export function setLocale(locale: Locale) {
   i18n.global.locale.value = locale;
   document.documentElement.lang = locale;
+  z.config(zodLocales[locale]());
   try {
     localStorage.setItem(STORAGE_KEY, locale);
   } catch {
@@ -44,3 +50,4 @@ export function setLocale(locale: Locale) {
 }
 
 document.documentElement.lang = i18n.global.locale.value;
+z.config(zodLocales[i18n.global.locale.value]());
