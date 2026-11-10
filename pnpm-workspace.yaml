@@ -9,8 +9,7 @@ allowBuilds:
   argon2: true
   prisma: true
   unrs-resolver: true
-  vue-demi: true
 
 minimumReleaseAgeExclude:
-  - '@tanstack/query-core@5.104.5'
-  - '@tanstack/vue-query@5.104.5'
+  - '@testing-library/user-event@14.6.9'
+  - i18next@27.1.1

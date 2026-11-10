@@ -1,18 +1,15 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import 'shadcn-vue/tailwind.css';
+@import 'shadcn/tailwind.css';
 
 @import './fonts.css';
 
-/*
- ---break---
- */
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design tokens from docs/DESIGN_ARCHITECTURE.md ("calm autumn").
- * Values live once below (:root = light, .dark = autumn at night).
- * shadcn-vue components read the standard names; our own names
+ * Design tokens from docs/DESIGN_ARCHITECTURE.md ("quiet woods").
+ * Values live once below (:root = light, .dark = the woods at night).
+ * shadcn components read the standard names; our own names
  * (surface, surface-raised, text-secondary, secondary-accent) sit beside them.
  */
 @theme inline {
@@ -46,79 +43,60 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 }
 
 :root {
-  --background: #faf6f0;
-  --foreground: #2b2118;
-  --surface: #f5dcc4;
-  --surface-raised: #fffdfa;
-  --text-secondary: #4a3f35;
-  --secondary-accent: #7a7c58;
+  --background: #f3f2ec;
+  --foreground: #1b2540;
+  --surface: #e4e8f0;
+  --surface-raised: #fbfbf8;
+  --text-secondary: #3a4661;
+  --secondary-accent: #8f6f12;
 
   --card: var(--surface-raised);
   --card-foreground: var(--foreground);
   --popover: var(--surface-raised);
   --popover-foreground: var(--foreground);
-  --primary: #a0522d;
-  --primary-foreground: #faf6f0;
+  --primary: #3d5a8a;
+  --primary-foreground: #f3f2ec;
   --secondary: var(--surface);
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
-  --muted-foreground: #6e6259;
+  --muted-foreground: #5f6a84;
   --accent: var(--surface);
   --accent-foreground: var(--foreground);
   --destructive: #b3392f;
-  --border: #e5dacb;
-  --input: #e5dacb;
-  --ring: #a0522d;
-
-  --sidebar: var(--surface);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--background);
-  --sidebar-accent-foreground: var(--foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
+  --border: #cfd6e3;
+  --input: #cfd6e3;
+  --ring: #3d5a8a;
 
   /* cards and modals round at lg/xl; buttons and tags are full pills */
   --radius: 1rem;
 }
 
 .dark {
-  --background: #191410;
-  --foreground: #efe7dc;
-  --surface: #241d17;
-  --surface-raised: #201a14;
-  --text-secondary: #cbbfaf;
-  --secondary-accent: #9fa173;
+  --background: #0b1530;
+  --foreground: #eef2ff;
+  --surface: #14213f;
+  --surface-raised: #1a2a4d;
+  --text-secondary: #c5cfe6;
+  --secondary-accent: #ffd24d;
 
-  --primary: #c97b4f;
-  --primary-foreground: #191410;
-  --muted-foreground: #a89a8c;
-  --destructive: #cf5b4e;
-  --border: #332a22;
-  --input: #332a22;
-  --ring: #c97b4f;
+  --primary: #9db5e1;
+  --primary-foreground: #0b1530;
+  --muted-foreground: #8e9bba;
+  --destructive: #e0675c;
+  --border: #2b3b61;
+  --input: #2b3b61;
+  --ring: #9db5e1;
 }
 
-/*
- ---break---
- */
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -1,11 +1,11 @@
-import { queryOptions, useMutation, useQuery } from '@tanstack/vue-query';
-import type { ChangePasswordInput, LoginInput } from '@yasdestek/shared';
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
+import type { LoginInput } from '@yasdestek/shared';
 import { api, ApiError } from '@/lib/api';
 import { queryClient } from '@/lib/query';
 import type { CurrentUser, Role } from '@/types/user';
 
-// The signed-in user, or null. Fetched once per page load; login, logout,
-// and password change update it in place instead of refetching.
+// The signed-in user, or null. Fetched once per page load; login updates it
+// in place instead of refetching.
 export const sessionQuery = queryOptions({
   queryKey: ['session'],
   queryFn: async (): Promise<CurrentUser | null> => {
@@ -38,19 +38,5 @@ export function useSession() {
     onSuccess: setUser,
   });
 
-  const logout = useMutation({
-    mutationFn: () => api.post<void>('/auth/logout'),
-    onSettled: () => setUser(null),
-  });
-
-  const changePassword = useMutation({
-    mutationFn: (input: ChangePasswordInput) =>
-      api.post<void>('/auth/change-password', input),
-    onSuccess: () => {
-      const user = session.data.value;
-      if (user) setUser({ ...user, mustChangePassword: false });
-    },
-  });
-
-  return { user: session.data, login, logout, changePassword };
+  return { user: session.data, isLoading: session.isPending, login };
 }

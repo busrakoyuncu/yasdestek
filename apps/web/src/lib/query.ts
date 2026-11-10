@@ -1,4 +1,4 @@
-import { MutationCache, QueryCache, QueryClient } from '@tanstack/vue-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { ApiError } from '@/lib/api';
 
 // A 401 while signed in means the session ended (expired, deactivated,
@@ -9,10 +9,10 @@ async function onSessionEnded(error: unknown) {
   if (queryClient.getQueryData(['session']) == null) return;
   queryClient.setQueryData(['session'], null);
   const { router } = await import('@/app/router');
-  await router.replace({ name: 'login' });
+  await router.navigate('/login', { replace: true });
 }
 
-// One client for the app and the router guard.
+// One client for the whole app.
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
   queryCache: new QueryCache({ onError: onSessionEnded }),

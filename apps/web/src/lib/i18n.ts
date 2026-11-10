@@ -1,4 +1,5 @@
-import { createI18n } from 'vue-i18n';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import { z } from 'zod';
 import { de, en, tr } from 'zod/locales';
 import messagesDe from '@/locales/de.json';
@@ -25,23 +26,49 @@ function detectLocale(): Locale {
   return isLocale(browser) ? browser : 'tr';
 }
 
-// All three files share the Turkish file's shape; the type catches a missing key.
-type MessageSchema = typeof messagesTr;
-
-export const i18n = createI18n<[MessageSchema], Locale, false>({
-  legacy: false,
-  locale: detectLocale(),
-  fallbackLocale: 'tr',
-  messages: { tr: messagesTr, en: messagesEn, de: messagesDe },
+void i18n.use(initReactI18next).init({
+  lng: detectLocale(),
+  fallbackLng: 'tr',
+  resources: {
+    tr: { translation: messagesTr },
+    en: { translation: messagesEn },
+    de: { translation: messagesDe },
+  },
+  // React already escapes rendered strings
+  interpolation: { escapeValue: false },
 });
 
-// zod's own messages (used for issue kinds we do not translate ourselves)
+// Short translated field messages for the common zod issue kinds. Anything
+// else falls through to zod's own messages in the active language.
+function fieldMessage(issue: z.core.$ZodRawIssue): string | undefined {
+  switch (issue.code) {
+    case 'invalid_type':
+      return issue.input === undefined
+        ? i18n.t('validation.required')
+        : i18n.t('validation.invalid');
+    case 'too_small':
+      return Number(issue.minimum) <= 1
+        ? i18n.t('validation.required')
+        : i18n.t('validation.minLength', { n: issue.minimum });
+    case 'too_big':
+      return i18n.t('validation.maxLength', { n: issue.maximum });
+    case 'invalid_format':
+      return i18n.t('validation.invalid');
+    default:
+      return undefined;
+  }
+}
+
 const zodLocales = { tr, en, de };
 
-export function setLocale(locale: Locale) {
-  i18n.global.locale.value = locale;
+function applyLocale(locale: Locale) {
   document.documentElement.lang = locale;
-  z.config(zodLocales[locale]());
+  z.config({ ...zodLocales[locale](), customError: fieldMessage });
+}
+
+export async function setLocale(locale: Locale) {
+  await i18n.changeLanguage(locale);
+  applyLocale(locale);
   try {
     localStorage.setItem(STORAGE_KEY, locale);
   } catch {
@@ -49,5 +76,6 @@ export function setLocale(locale: Locale) {
   }
 }
 
-document.documentElement.lang = i18n.global.locale.value;
-z.config(zodLocales[i18n.global.locale.value]());
+applyLocale(i18n.language as Locale);
+
+export { i18n };

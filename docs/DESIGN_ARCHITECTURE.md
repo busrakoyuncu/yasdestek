@@ -1,8 +1,8 @@
 # Yasdestek - Design Architecture
 
-Visual direction: **calm autumn**. Warm, muted, unhurried - evolved from the original thesis site's nature-calm feel (foggy landscape, soft greens) into a deliberate token system. Users arrive grieving; the interface should feel like a quiet, warm room, never like a productivity dashboard.
+Visual direction: **quiet woods**. Cool, misty, unhurried - taken from the landing page's night forest (fog-blue trunks, a cream sky, warm firefly light in the grass). Users arrive grieving; the interface should feel like a still clearing at dusk, never like a productivity dashboard.
 
-Live preview (light + dark, real fonts, sample UI): https://claude.ai/code/artifact/5da641f4-ab73-4fc2-bf34-de8966e72dd1
+Live reference: the landing page at `/` (the forest image with the interactive fireflies). The tokens below are sampled from it.
 
 ## 1. Color Tokens
 
@@ -10,23 +10,23 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 
 | Token | Light | Dark | Used for |
 |---|---|---|---|
-| `background` | `#FAF6F0` | `#191410` | page ground |
-| `surface` | `#F5DCC4` | `#241D17` | cards, sidebar, ghost buttons |
-| `surface-raised` | `#FFFDFA` | `#201A14` | comments, letters, modals |
-| `border` | `#E5DACB` | `#332A22` | hairlines, card borders |
-| `primary` | `#A0522D` | `#C97B4F` | buttons, links, active states |
-| `secondary` | `#7A7C58` | `#9FA173` | tags, subtle accents |
-| `text` | `#2B2118` | `#EFE7DC` | body text, headings |
-| `text-secondary` | `#4A3F35` | `#CBBFAF` | card body text |
-| `muted` | `#6E6259` | `#A89A8C` | timestamps, hints, placeholders |
-| `danger` | `#B3392F` | `#CF5B4E` | delete, deactivate |
+| `background` | `#F3F2EC` | `#0B1530` | page ground |
+| `surface` | `#E4E8F0` | `#14213F` | cards, sidebar, ghost buttons |
+| `surface-raised` | `#FBFBF8` | `#1A2A4D` | comments, letters, modals |
+| `border` | `#CFD6E3` | `#2B3B61` | hairlines, card borders |
+| `primary` | `#3D5A8A` | `#9DB5E1` | buttons, links, active states |
+| `secondary` | `#8F6F12` | `#FFD24D` | tags, subtle accents (firefly gold) |
+| `text` | `#1B2540` | `#EEF2FF` | body text, headings |
+| `text-secondary` | `#3A4661` | `#C5CFE6` | card body text |
+| `muted` | `#5F6A84` | `#8E9BBA` | timestamps, hints, placeholders |
+| `danger` | `#B3392F` | `#E0675C` | delete, deactivate |
 
 Rules:
 
-- **Never pure black or pure white.** Text is espresso on cream (light) and soft cream on dark espresso (dark) - warmth survives both modes.
-- Dark mode is **the same warmth at night**, not an inversion: accents brighten (`primary` `#A0522D 
-→ #C97B4F`) so they stay visible on dark ground; backgrounds stay warm-toned, never neutral gray or `#000`.
-- `danger` is visually distinct from `primary` rust - destructive actions must never look like ordinary primary actions.
+- **Never pure black or pure white.** Text is night ink on cream (light) and soft cream on night blue (dark) - the woods survive both modes.
+- Dark mode is **the same woods at night**, not an inversion: accents brighten (`primary` `#3D5A8A → #9DB5E1`, `secondary` `#8F6F12 → #FFD24D`) so they stay visible on dark ground; backgrounds stay blue-toned, never neutral gray or `#000`.
+- `secondary` gold reaches AA only for large text on the light ground; use it for tags, icons, and accents, not for small body text.
+- `danger` is visually distinct from `primary` blue - destructive actions must never look like ordinary primary actions.
 
 ## 2. Theme Behavior
 
@@ -55,7 +55,7 @@ Rules:
 ## 4. Shape & Elevation
 
 - **Rounded everywhere**: soft radii (roughly Tailwind `rounded-xl`-`rounded-2xl` for cards/modals, full pill for buttons and tags). No sharp corners - softness is a deliberate emotional choice for this audience.
-- **Shadows only on overlays** (modals, dropdowns, toasts): soft, warm-tinted, low-contrast. Everything else sits flat on the cream/espresso layers, separated by `surface` steps and hairline borders.
+- **Shadows only on overlays** (modals, dropdowns, toasts): soft, night-tinted, low-contrast. Everything else sits flat on the cream/night layers, separated by `surface` steps and hairline borders.
 
 ## 5. Spacing & Layout
 
@@ -77,6 +77,6 @@ Rules:
 
 ## 7. Implementation Notes
 
-- Tokens live once as CSS variables (`:root` = light; `.dark` = dark overrides), exposed to Tailwind v4 through `@theme` in the main stylesheet so classes like `bg-surface`, `text-muted` exist; shadcn-vue components consume the same variables.
+- Tokens live once as CSS variables (`:root` = light; `.dark` = dark overrides), mapped into `tailwind.config` so classes like `bg-surface`, `text-muted` exist; shadcn components consume the same variables.
 - Fonts self-hosted as woff2 in `apps/web` (subsets: latin + latin-ext), declared via `@font-face` with `font-display: swap`.
-- The app icon / manifest theme color derive from this palette (`background` cream, `primary` rust) - designed alongside the first screens.
+- The app icon / manifest theme color derive from this palette (`background` cream, `primary` fog blue) - designed alongside the first screens.
