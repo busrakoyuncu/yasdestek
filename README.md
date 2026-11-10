@@ -65,4 +65,4 @@ Local services:
 
 ## Status
 
-Backend complete: `apps/api` serves auth, users, groups, modules, pages, responses, files, forum, messaging, and analytics, with unit and e2e tests and CI. `packages/shared` holds the zod schemas. `apps/web` is next.
+Backend complete: `apps/api` serves auth, users, groups, modules, pages, responses, files, forum, messaging, and analytics, with unit and e2e tests and CI. `packages/shared` holds the zod schemas. `apps/web` has the React scaffold, the welcome page, the login page, and the language switch; the role areas are next.
