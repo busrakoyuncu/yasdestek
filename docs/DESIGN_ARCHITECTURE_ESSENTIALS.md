@@ -30,6 +30,10 @@ Companion to `DESIGN_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 **Why dark mode at all:** users may write at night, in bed, in low light - for this product that's not an edge case.
 
+**Why the forest pages are always night:** the welcome and login pages are the painting. A light version would mean a second image and a second mood for a door people pass through once per visit. Scoping `dark` to the page root (instead of `<html>`) keeps the rest of the app free to follow the device.
+
+**Why a `glow` token:** cool cream text on the forest read as cold. The fireflies are the only warm light in the scene, so text and accents over the image borrow their colour. It is a token rather than a one-off so the login, welcome, and any future forest surface agree.
+
 ## Three fonts by content role
 
 **Chosen:** Google Sans (UI + module content), Nunito Sans (what users write), Playwrite DE LA (letters only).

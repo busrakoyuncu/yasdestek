@@ -31,7 +31,8 @@ Rules:
 
 ## 2. Theme Behavior
 
-- Default follows the device (`prefers-color-scheme`); a manual light/dark toggle overrides it, stored per user.
+- App areas (`/app`, `/psychologist`, `/admin`): default follows the device (`prefers-color-scheme`); a manual light/dark toggle overrides it, stored per user. The toggle arrives with the participant screens; until then these areas render light.
+- The public forest pages (welcome at `/`, login) are **always night**: the page root carries the `dark` class, so they use the dark token set whatever the device prefers. Anything rendered in a portal (menus, dialogs, toasts) opened from these pages gets the `dark` class passed to it, because portals mount outside the page root.
 - Both themes are first-class: every screen is checked in both before shipping.
 
 ## 3. Typography
@@ -78,6 +79,8 @@ Rules:
 
 ## 7. Implementation Notes
 
-- Tokens live once as CSS variables (`:root` = light; `.dark` = dark overrides), mapped into `tailwind.config` so classes like `bg-surface`, `text-muted` exist; shadcn components consume the same variables.
+- Tokens live once as CSS variables in `apps/web/src/style.css` (`:root` = light; `.dark` = dark overrides). Tailwind v4 has no config file: the `@theme inline` block maps each variable to a utility (`bg-surface`, `text-muted`, `text-glow`), and shadcn components consume the same variables.
+- Alias tokens (`popover`, `card`, `muted`, `accent`, `secondary` point at `surface` or `surface-raised`) are restated inside `.dark`. A CSS variable alias resolves where it is declared, so without this a page themed dark on its own would still get the light values.
+- A new token is a new row in the table above, in the same change. Components never hardcode hex values; a one-off colour that cannot be expressed with a token is a sign the table is missing a row.
 - Fonts self-hosted as woff2 in `apps/web` (subsets: latin + latin-ext), declared via `@font-face` with `font-display: swap`.
 - The app icon / manifest theme color derive from this palette (`background` cream, `primary` fog blue) - designed alongside the first screens.
