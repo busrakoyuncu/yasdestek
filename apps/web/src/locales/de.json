@@ -1,4 +1,7 @@
 {
+  "common": {
+    "language": "Sprache"
+  },
   "welcome": {
     "title": "Willkommen bei Yasdestek",
     "continue": "Weiter"
