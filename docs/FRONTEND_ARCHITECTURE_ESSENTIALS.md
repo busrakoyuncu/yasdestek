@@ -109,3 +109,11 @@ Companion to `FRONTEND_ARCHITECTURE.md`. For each decision: what we picked, why,
 **Why:** work happens feature-by-feature ("forum commenting") - one folder holds everything relevant. Features stay independent (no cross-feature imports), which keeps boundaries honest as the app grows.
 
 **Why not type-based (`components/`, `hooks/`, `store/` at top level):** every feature change touches many folders, related code scatters, and nothing stops any file importing any other.
+
+## Vendored firefly module, not a dependency
+
+**Chosen:** the landing page's firefly canvas is one ES module copied into `features/welcome` with its type declarations, exactly as its author ships it.
+
+**Why:** it is not on npm, it has no dependencies, and it is under 350 lines that were read in full before copying. A vendored file is pinned by definition and cannot change under us. It is lint-checked like our own code but formatted as received, so a future diff against the upstream file stays readable.
+
+**Why not rewriting it in React:** the animation is a plain canvas loop driven by pointer events on `window`; React adds nothing to it. The React side is one `useEffect` that creates it on mount and destroys it on unmount.
