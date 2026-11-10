@@ -20,6 +20,7 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 | `text-secondary` | `#3A4661` | `#C5CFE6` | card body text |
 | `muted` | `#5F6A84` | `#8E9BBA` | timestamps, hints, placeholders |
 | `danger` | `#B3392F` | `#E0675C` | delete, deactivate |
+| `glow` | `#FFE7B3` | `#FFE7B3` | firefly light: text and accents over the forest image |
 
 Rules:
 
