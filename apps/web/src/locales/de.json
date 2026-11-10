@@ -1,0 +1,36 @@
+{
+  "welcome": {
+    "title": "Willkommen bei Yasdestek",
+    "continue": "Weiter"
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "submit": "Anmelden",
+      "welcome": "Willkommen bei Yasdestek"
+    }
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "Benutzername oder Passwort ist falsch.",
+    "ACCOUNT_INACTIVE": "Ihr Konto ist noch nicht freigeschaltet. Bitte wenden Sie sich an Ihre Begleitung.",
+    "PASSWORD_CHANGE_REQUIRED": "Bitte ändern Sie zuerst Ihr Passwort.",
+    "TOO_MANY_REQUESTS": "Zu viele Versuche. Bitte warten Sie eine Minute.",
+    "VALIDATION_ERROR": "Bitte prüfen Sie Ihre Eingaben.",
+    "NOT_FOUND": "Das konnten wir nicht finden.",
+    "UNAUTHORIZED": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "NETWORK": "Keine Verbindung. Prüfen Sie Ihr Internet und versuchen Sie es erneut.",
+    "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich.",
+    "minLength": "Mindestens {{n}} Zeichen.",
+    "maxLength": "Höchstens {{n}} Zeichen.",
+    "invalid": "Ungültiger Wert."
+  },
+  "area": {
+    "welcome": "Willkommen, {{name}}",
+    "comingSoon": "Dieser Bereich kommt bald."
+  }
+}

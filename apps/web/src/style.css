@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@import './fonts.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens from docs/DESIGN_ARCHITECTURE.md ("quiet woods").
+ * Values live once below (:root = light, .dark = the woods at night).
+ * shadcn components read the standard names; our own names
+ * (surface, surface-raised, text-secondary, secondary-accent) sit beside them.
+ */
+@theme inline {
+  /* UI: headings, buttons, labels, module content */
+  --font-sans: 'Google Sans', system-ui, sans-serif;
+  /* everything participants write: responses, comments */
+  --font-body: 'Nunito Sans', system-ui, sans-serif;
+  /* module 3 letters only, never below 18px */
+  --font-letter: 'Playwrite DE LA', cursive;
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-secondary: var(--text-secondary);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  --background: #f3f2ec;
+  --foreground: #1b2540;
+  --surface: #e4e8f0;
+  --surface-raised: #fbfbf8;
+  --text-secondary: #3a4661;
+  --secondary-accent: #8f6f12;
+
+  --card: var(--surface-raised);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--foreground);
+  --primary: #3d5a8a;
+  --primary-foreground: #f3f2ec;
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --muted-foreground: #5f6a84;
+  --accent: var(--surface);
+  --accent-foreground: var(--foreground);
+  --destructive: #b3392f;
+  --border: #cfd6e3;
+  --input: #cfd6e3;
+  --ring: #3d5a8a;
+
+  /* cards and modals round at lg/xl; buttons and tags are full pills */
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #0b1530;
+  --foreground: #eef2ff;
+  --surface: #14213f;
+  --surface-raised: #1a2a4d;
+  --text-secondary: #c5cfe6;
+  --secondary-accent: #ffd24d;
+
+  --primary: #9db5e1;
+  --primary-foreground: #0b1530;
+  --muted-foreground: #8e9bba;
+  --destructive: #e0675c;
+  --border: #2b3b61;
+  --input: #2b3b61;
+  --ring: #9db5e1;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+}
