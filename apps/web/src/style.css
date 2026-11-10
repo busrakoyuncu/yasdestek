@@ -40,6 +40,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-glow: var(--glow);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -76,6 +77,10 @@
   --input: #cfd6e3;
   --ring: #3d5a8a;
 
+  /* firefly light: text and accents over the forest image. The forest is
+     always night, so the value is the same in both modes. */
+  --glow: #ffe7b3;
+
   /* cards and modals round at lg/xl; buttons and tags are full pills */
   --radius: 1rem;
 }
@@ -95,6 +100,19 @@
   --border: #2b3b61;
   --input: #2b3b61;
   --ring: #9db5e1;
+
+  /* Aliases resolve where they are declared, so the ones from :root keep
+     their light values inside a nested .dark element. Restate them here so
+     a page can be themed dark on its own (the forest pages are). */
+  --card: var(--surface-raised);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --accent: var(--surface);
+  --accent-foreground: var(--foreground);
 }
 
 @layer base {
