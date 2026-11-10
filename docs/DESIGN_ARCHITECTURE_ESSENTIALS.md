@@ -2,29 +2,31 @@
 
 Companion to `DESIGN_ARCHITECTURE.md`. For each decision: what we picked, why, and why not the alternatives.
 
-## Calm autumn direction
+## Quiet woods direction
 
-**Chosen:** warm, muted autumn palette evolving the original thesis site's nature-calm feel.
+**Chosen:** a cool, misty palette taken from the landing page's night forest: fog blues, a cream sky, and the warm gold of the fireflies.
 
-**Why:** the audience arrives grieving. The interface should read as a quiet, warm room - the thesis site's foggy-landscape softness was already right for this; we kept its spirit and executed it as a real token system instead of a background photo doing all the work.
+**Why:** the audience arrives grieving. The interface should read as a still clearing at dusk - the original thesis site's foggy-landscape softness was already right for this; the landing page makes it literal, and the tokens are sampled from that image so the rest of the app feels like the same place.
 
-**Why not a clinical/neutral look:** grays and blues read as institutional - hospital forms, dashboards. Wrong emotional register for narrative grief work.
+**Why not a clinical/neutral look:** flat grays and saturated corporate blues read as institutional - hospital forms, dashboards. The blues here are desaturated and misty, and they always sit on cream or night ground, never on gray.
 
-## Brown-family light mode, but layered
+**Why we left the autumn palette (2026-11-10):** the first direction was warm brown and rust. Once the forest landing page existed, the brown app behind it felt like a different product. Cream stayed; the browns became blues.
 
-**Chosen:** cream ground, beige surfaces, rust primary, olive secondary, espresso text.
+## Blue-and-cream light mode, layered
 
-**Why:** an all-brown UI goes muddy fast. The structure is cream/beige *layers* with brown reserved for text and one strong rust accent - warmth without heaviness. Olive-sage is a quiet nod to the original site's greens.
+**Chosen:** cream ground, fog-tinted surfaces, fog-blue primary, firefly-gold secondary, night-ink text.
 
-**Why espresso `#2B2118`, not black:** pure `#000` on cream is harsh and cold; espresso reads as black while keeping the warmth. (Requested "black text" is honored in perception, softened in value.)
+**Why:** an all-blue UI goes cold fast. The structure is cream *layers* with blue reserved for text, borders, and one strong primary accent - calm without chill. The gold secondary is the fireflies: a small warm note on every screen, used for tags and accents only, since it reaches AA contrast on cream only at large sizes.
 
-**Why `danger` is a separate red:** rust is the primary action color; destructive actions (delete, deactivate) must never be visually confusable with ordinary actions.
+**Why night ink `#1B2540`, not black:** pure `#000` on cream is harsh; a very dark blue reads as black while keeping the palette's hue. (Requested "black text" is honored in perception, softened in value.)
 
-## Dark mode as "autumn at night"
+**Why `danger` is a separate red:** blue is the primary action color; destructive actions (delete, deactivate) must never be visually confusable with ordinary actions.
 
-**Chosen:** dark espresso grounds (never `#000`, never neutral gray), soft-cream text (never `#FFF`), same accents brightened (`#A0522D → #C97B4F`, `#7A7C58 → #9FA173`).
+## Dark mode as "the woods at night"
 
-**Why:** naive inversion or standard gray dark modes make the product feel like a different, colder app at night. Keeping warm hues in the darks and brightening (not reusing) the accents preserves identity and legibility. Pure white text on dark glares; soft cream doesn't.
+**Chosen:** night-blue grounds taken from the forest's darkest values (never `#000`, never neutral gray), soft-cream text (never `#FFF`), same accents brightened (`#3D5A8A → #9DB5E1`, `#8F6F12 → #FFD24D`).
+
+**Why:** naive inversion or standard gray dark modes make the product feel like a different, colder app at night. Keeping the blue hue in the darks and brightening (not reusing) the accents preserves identity and legibility. Pure white text on dark glares; soft cream doesn't. The landing page is always rendered in this theme, so dark mode is literally its colors.
 
 **Why dark mode at all:** users may write at night, in bed, in low light - for this product that's not an edge case.
 
@@ -42,7 +44,7 @@ Companion to `DESIGN_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 ## Rounded shapes, shadows only on overlays
 
-**Chosen:** pill buttons, soft-radius cards, no sharp corners; small warm shadows on modals/dropdowns only, everything else flat.
+**Chosen:** pill buttons, soft-radius cards, no sharp corners; small night-tinted shadows on modals/dropdowns only, everything else flat.
 
 **Why:** softness is an emotional decision for this audience ("not sharp, because the users already feel bad" - the founding instinct, and it's correct: sharp geometry reads as severe). Restricting shadows to overlays keeps the flat cream layers calm and makes elevation *mean* something: a shadow = "this floats above and demands attention."
 
