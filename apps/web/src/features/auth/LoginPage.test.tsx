@@ -46,6 +46,19 @@ describe('LoginPage', () => {
     });
   });
 
+  it('reveals the password on request', async () => {
+    renderApp(<LoginPage />, '/login');
+    const password = screen.getByLabelText('Şifre');
+    expect(password).toHaveAttribute('type', 'password');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Şifreyi göster' }),
+    );
+    expect(password).toHaveAttribute('type', 'text');
+    expect(
+      screen.getByRole('button', { name: 'Şifreyi gizle' }),
+    ).toBeInTheDocument();
+  });
+
   it('shows a translated message for a wrong password', async () => {
     vi.mocked(api.post).mockRejectedValueOnce(
       new ApiError(401, 'INVALID_CREDENTIALS', 'nope'),

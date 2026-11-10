@@ -12,11 +12,18 @@
       "username": "Kullanıcı adı",
       "password": "Şifre",
       "submit": "Giriş yap",
-      "welcome": "Yasdestek'e Hoşgeldiniz"
+      "showPassword": "Şifreyi göster",
+      "hidePassword": "Şifreyi gizle",
+      "help": "Kullanıcı adınızı ve şifrenizi danışmanınızdan aldınız. Giriş yapamıyorsanız danışmanınızla görüşün.",
+      "submitting": "Giriş yapılıyor…",
+      "intro": "Kaybınızın ardından bu yolu adım adım, bir danışman ve sizinle aynı deneyimi paylaşan insanlarla birlikte yürüyün."
+    },
+    "changePassword": {
+      "pending": "Devam etmeden önce şifrenizi değiştirmeniz gerekiyor. Bu ekran yakında hazır olacak."
     }
   },
   "errors": {
-    "INVALID_CREDENTIALS": "Kullanıcı adı veya şifre hatalı.",
+    "INVALID_CREDENTIALS": "Kullanıcı adı veya şifre hatalı. Tekrar deneyin; olmazsa danışmanınızla görüşün.",
     "ACCOUNT_INACTIVE": "Hesabınız henüz etkinleştirilmedi. Danışmanınızla görüşün.",
     "PASSWORD_CHANGE_REQUIRED": "Devam etmek için önce şifrenizi değiştirmeniz gerekiyor.",
     "TOO_MANY_REQUESTS": "Çok fazla deneme yaptınız. Lütfen bir dakika bekleyin.",

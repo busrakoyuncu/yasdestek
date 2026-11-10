@@ -1,9 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 import { loginSchema, type LoginInput } from '@yasdestek/shared';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
-import { LanguageSwitch } from '@/components/LanguageSwitch';
+import { ForestPage } from '@/components/ForestPage';
+import { cn } from 'cn';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,9 +18,11 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { user, login } = useSession();
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -29,7 +34,11 @@ export function LoginPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     const signedIn = await login.mutateAsync(values).catch(() => null);
-    if (!signedIn) return;
+    if (!signedIn) {
+      // the answer was no: put the person back where they can fix it
+      setFocus('password');
+      return;
+    }
     const redirect = params.get('redirect');
     await navigate(
       signedIn.mustChangePassword
@@ -39,38 +48,33 @@ export function LoginPage() {
     );
   });
 
+  const field =
+    'h-11 rounded-xl border-primary/40 bg-background/40 text-base text-glow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/60 dark:bg-background/40 dark:aria-invalid:border-destructive';
+  const message = 'text-base leading-6 text-destructive';
+
   return (
-    // Same forest as the landing page, still, always in the dark theme.
-    <main className="dark relative min-h-svh overflow-hidden bg-background text-foreground">
-      <img
-        src="/forest-2752.jpg"
-        srcSet="/forest-1280.jpg 1280w, /forest-2752.jpg 2752w"
-        sizes="100vw"
-        alt=""
-        className="absolute inset-0 size-full object-cover"
-      />
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-background/35 via-transparent via-35% to-background/55"
-        aria-hidden="true"
-      />
-      <header className="absolute top-4 right-4 z-10">
-        <LanguageSwitch
-          className="rounded-full border-secondary-accent/70 bg-background/40 text-glow backdrop-blur-sm hover:border-secondary-accent hover:bg-secondary-accent/10 hover:text-glow aria-expanded:border-secondary-accent aria-expanded:bg-secondary-accent/10 aria-expanded:text-glow dark:hover:bg-secondary-accent/10"
-          menuClassName="dark min-w-40 border border-secondary-accent/70 bg-popover text-glow ring-0 [&_[role=menuitemradio]]:focus:text-glow"
-        />
-      </header>
+    <ForestPage>
       {/* Desktop: welcome on the left, form on the right. Phone: stacked. */}
       <div className="relative mx-auto grid min-h-svh max-w-6xl content-center gap-10 px-6 py-20 md:grid-cols-2 md:items-center md:gap-16">
-        <h1 className="text-center text-4xl font-medium text-balance drop-shadow-[0_2px_24px_var(--background)] md:text-left md:text-5xl lg:text-6xl">
-          {t('auth.login.welcome')}
-        </h1>
+        <div className="relative isolate text-center md:text-left">
+          {/* a little dusk behind the words, so they read over the fog */}
+          <div
+            className="absolute -inset-x-24 -inset-y-16 -z-10 bg-radial from-background/50 via-background/15 via-45% to-transparent to-70%"
+            aria-hidden="true"
+          />
+          <p className="mx-auto max-w-md text-xl leading-relaxed text-pretty md:mx-0 md:text-2xl">
+            {t('auth.login.intro')}
+          </p>
+        </div>
 
+        {/* fog-blue hairlines for the card and fields; gold stays for buttons */}
         <form
-          className="flex w-full max-w-sm flex-col gap-5 rounded-2xl border bg-surface-raised/80 p-6 backdrop-blur-sm md:justify-self-end"
+          className="flex w-full max-w-sm flex-col gap-5 rounded-2xl border border-primary/30 bg-surface-raised/90 p-6 backdrop-blur-sm md:justify-self-end"
           noValidate
           onSubmit={onSubmit}
+          onChange={() => login.isError && login.reset()}
         >
-          <h2 className="text-2xl font-medium">{t('auth.login.title')}</h2>
+          <h1 className="text-2xl font-medium">{t('auth.login.title')}</h1>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="username">{t('auth.login.username')}</Label>
@@ -79,10 +83,16 @@ export function LoginPage() {
               autoComplete="username"
               autoCapitalize="none"
               aria-invalid={!!errors.username}
+              aria-describedby={
+                errors.username ? 'username-message' : undefined
+              }
+              autoCorrect="off"
+              spellCheck={false}
+              className={field}
               {...register('username')}
             />
             {errors.username && (
-              <p className="text-sm text-destructive">
+              <p id="username-message" className={message}>
                 {errors.username.message}
               </p>
             )}
@@ -90,31 +100,62 @@ export function LoginPage() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">{t('auth.login.password')}</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              aria-invalid={!!errors.password}
-              {...register('password')}
-            />
-            {errors.password && (
-              <p className="text-sm text-destructive">
-                {errors.password.message}
-              </p>
-            )}
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                aria-invalid={!!errors.password}
+                aria-describedby="password-message"
+                className={cn(field, 'pr-12')}
+                {...register('password')}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((on) => !on)}
+                aria-label={t(
+                  showPassword
+                    ? 'auth.login.hidePassword'
+                    : 'auth.login.showPassword',
+                )}
+                className="absolute inset-y-0 right-0 grid size-11 place-items-center rounded-full text-glow/70 outline-none hover:text-glow focus-visible:ring-3 focus-visible:ring-primary/60"
+              >
+                {showPassword ? (
+                  <EyeOff className="size-5" aria-hidden="true" />
+                ) : (
+                  <Eye className="size-5" aria-hidden="true" />
+                )}
+              </button>
+            </div>
+            {/* one reserved line for whatever went wrong with signing in: the
+                password check, or the server's answer. Nothing else moves. */}
+            <p
+              id="password-message"
+              role="alert"
+              className={cn(message, 'min-h-6')}
+            >
+              {errors.password?.message ??
+                (login.isError ? errorMessage(login.error) : null)}
+            </p>
           </div>
 
-          {login.isError && (
-            <p role="alert" className="text-sm text-destructive">
-              {errorMessage(login.error)}
-            </p>
-          )}
-
-          <Button type="submit" size="lg" disabled={login.isPending}>
-            {t('auth.login.submit')}
+          {/* the one filled button on the forest: firelight cream, night text */}
+          <Button
+            type="submit"
+            size="lg"
+            className="h-11 rounded-full bg-glow text-base font-medium text-background hover:bg-glow/90 disabled:opacity-60"
+            disabled={login.isPending}
+            aria-busy={login.isPending}
+          >
+            {t(login.isPending ? 'auth.login.submitting' : 'auth.login.submit')}
           </Button>
+
+          {/* who to turn to: these accounts are handed out by the counselor */}
+          <p className="text-sm leading-5 text-pretty text-text-secondary">
+            {t('auth.login.help')}
+          </p>
         </form>
       </div>
-    </main>
+    </ForestPage>
   );
 }

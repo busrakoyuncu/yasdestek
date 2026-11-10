@@ -19,13 +19,13 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 | `text` | `#1B2540` | `#EEF2FF` | body text, headings |
 | `text-secondary` | `#3A4661` | `#C5CFE6` | card body text |
 | `muted` | `#5F6A84` | `#8E9BBA` | timestamps, hints, placeholders |
-| `danger` | `#B3392F` | `#E0675C` | delete, deactivate |
+| `danger` | `#B3392F` | `#F08A80` | delete, deactivate, error text (dark value clears 4.5:1 on cards) |
 | `glow` | `#FFE7B3` | `#FFE7B3` | firefly light: text and accents over the forest image |
 
 Rules:
 
 - **Never pure black or pure white.** Text is night ink on cream (light) and soft cream on night blue (dark) - the woods survive both modes.
-- Dark mode is **the same woods at night**, not an inversion: accents brighten (`primary` `#3D5A8A → #9DB5E1`, `secondary` `#8F6F12 → #FFD24D`) so they stay visible on dark ground; backgrounds stay blue-toned, never neutral gray or `#000`.
+- Dark mode is **the same woods at night**, not an inversion: accents brighten (`primary` `#3D5A8A → #9DB5E1`, `secondary` `#8F6F12 → #FFD24D`, `danger` `#B3392F → #F08A80`) so they stay visible on dark ground; backgrounds stay blue-toned, never neutral gray or `#000`.
 - `secondary` gold reaches AA only for large text on the light ground; use it for tags, icons, and accents, not for small body text.
 - `danger` is visually distinct from `primary` blue - destructive actions must never look like ordinary primary actions.
 
