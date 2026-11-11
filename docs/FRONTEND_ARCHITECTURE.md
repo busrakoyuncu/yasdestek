@@ -30,15 +30,17 @@ Feature-based organization - each feature folder owns its components, queries, a
 
 ```
 apps/web/src/
-├── app/                  # app frame: router, layout shells, placeholder home
+├── app/                  # app frame: router, RequireAuth, AppShell, AreaError, navigation
 ├── features/
 │   ├── welcome/          # landing page: forest image, firefly canvas, Continue
-│   ├── auth/             # login page, session query, role home map
+│   ├── auth/             # login, password change, session query, role home map
+│   ├── pages/            # editable platform pages (general rules)
+│   ├── app/              # participant area chunk: its routes and screens
 │   ├── modules/          # module list/detail, text editor, audio recorder, image upload
 │   ├── forum/            # group forum: posts, comments, moderation actions
 │   ├── psychologist/     # user management, groups, activation, own-module management
 │   └── admin/            # psychologist management, global modules, analytics
-├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, shadcn primitives under ui/
+├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, ComingSoon, shadcn primitives under ui/
 ├── lib/                  # api client, i18n setup, query client, error messages, cn
 ├── locales/              # tr.json (source of truth), en.json, de.json
 ├── test/                 # vitest setup and the renderApp helper
@@ -63,8 +65,10 @@ Rules:
 ```
 
 - The welcome page is a door, not marketing (public pages are a non-goal in the PRD). It has no copy beyond the greeting.
-- A single guard component reads the session (current user + role) and redirects users who open an area that is not theirs. Until the areas exist, one placeholder answers every signed-in route.
-- Route-based code splitting per area, so participants do not download admin code.
+- `RequireAuth` is a layout route in front of each area: it shows the loading screen while the session is unknown, sends visitors to login with a `redirect` back, sends a pending password change to that screen, and sends the wrong role to its own home.
+- Under the guard, `AppShell` frames every signed-in screen: sidebar and top bar on desktop; for participants a bottom tab bar on phones, for the other roles the sidebar behind a menu button. The user menu holds the theme choice and sign out; the language switch sits beside it.
+- Each area's screens live in `features/<area>/routes.tsx`, one lazily loaded chunk that renders its own `<Routes>`, so participants do not download admin code. The route lists per role are in `app/navigation.ts`.
+- Unknown paths go to the welcome page.
 - The guard is UX only - every permission is enforced again by the API.
 
 ## 4. State Management
@@ -84,7 +88,7 @@ Two kinds of state, handled differently:
 
 - Tailwind CSS everywhere; shadcn/ui provides accessible primitives (dialogs, dropdowns, forms, toasts) copied into `components/`.
 - One custom theme via CSS variables (colors, fonts, radii) defined in `DESIGN_ARCHITECTURE.md` - a quiet, misty look for the participant area; the same tokens keep admin/psychologist areas consistent. Tailwind v4 is configured in CSS: the `@theme inline` block in `style.css` turns each variable into a utility class.
-- Dark mode is a class, not a media query: `.dark` on `<html>` for the app areas (toggle to come), `.dark` on the page root for the always-night forest pages. See the design doc for the alias rule that makes a scoped `.dark` work.
+- Dark mode is a class, not a media query: `.dark` on `<html>` for the app areas, `.dark` on the page root for the always-night forest pages. `lib/theme.ts` owns the html class: `system` (default, follows the device live), `light` or `dark`, chosen in the user menu and kept in local storage under `theme:<userId>`. See the design doc for the alias rule that makes a scoped `.dark` work.
 - Participant area is **mobile-first responsive** (writing and audio recording must work well on phones). Admin and psychologist areas are desktop-first but not broken on mobile.
 
 ## 7. Internationalization
@@ -117,9 +121,9 @@ Two kinds of state, handled differently:
 
 One pattern app-wide:
 
-- Failed user actions (mutations): toast with a human message.
-- Failed data loads: TanStack Query error states rendered inline with retry.
-- Unexpected crashes: React error boundary per role area with a retry button.
+- Failed user actions (mutations): toast with a human message (`toastError` in `lib/toast.ts`, sonner mounted in `AppShell`).
+- Failed data loads: TanStack Query error states rendered inline with a retry button (`RulesPage` is the reference).
+- Unexpected crashes: `AreaError` on each area route, with a reload button, since the home-screen app has no browser refresh.
 - Waiting: a signed-in screen renders `PageLoading` (night background, firefly spinner fading in after 300ms so a fast answer never flashes it) while the session is unknown; the same screen is the fallback while a lazily loaded area downloads. Buttons that start a request disable themselves and change their label; no spinners inside buttons.
 
 ## 11. Environment & Tooling
