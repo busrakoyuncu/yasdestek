@@ -18,6 +18,9 @@ export function AreaHome() {
       />
     );
   }
+  // The handed-out password has to go before anything else loads.
+  if (user.mustChangePassword)
+    return <Navigate to="/change-password" replace />;
 
   // Night-themed like the pages before it, so sign-in does not end in a flash of cream.
   return (
@@ -26,13 +29,7 @@ export function AreaHome() {
         <h1 className="text-3xl font-medium text-glow">
           {t('area.welcome', { name: user.username })}
         </h1>
-        <p className="text-text-secondary">
-          {t(
-            pathname === '/change-password'
-              ? 'auth.changePassword.pending'
-              : 'area.comingSoon',
-          )}
-        </p>
+        <p className="text-text-secondary">{t('area.comingSoon')}</p>
       </div>
     </main>
   );

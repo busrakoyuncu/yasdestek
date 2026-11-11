@@ -91,7 +91,7 @@ describe('Auth (e2e)', () => {
     api()
       .post('/auth/change-password')
       .set('Cookie', cookie)
-      .send({ currentPassword: 'wrong', newPassword: 'brand-new-pass' })
+      .send({ currentPassword: 'wrong', newPassword: 'Brand-new-pass' })
       .expect(400)
       .expect((res) =>
         expect(res.body).toMatchObject({ code: 'WRONG_PASSWORD' }),
@@ -101,7 +101,7 @@ describe('Auth (e2e)', () => {
     await api()
       .post('/auth/change-password')
       .set('Cookie', cookie)
-      .send({ currentPassword: 'temp-pass-1', newPassword: 'brand-new-pass' })
+      .send({ currentPassword: 'temp-pass-1', newPassword: 'Brand-new-pass' })
       .expect(204);
     await api()
       .get('/auth/me')
@@ -120,6 +120,6 @@ describe('Auth (e2e)', () => {
   it('accepts the new password afterwards', () =>
     api()
       .post('/auth/login')
-      .send({ username, password: 'brand-new-pass' })
+      .send({ username, password: 'Brand-new-pass' })
       .expect(200));
 });

@@ -15,7 +15,11 @@ export default defineConfig(
   prettier,
   {
     files: ['**/*.{js,ts,tsx}'],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: globals.browser,
+      // the editor runs eslint from the repo root, where two tsconfigs compete
+      parserOptions: { tsconfigRootDir: import.meta.dirname },
+    },
   },
   {
     // shadcn primitives export their variant helpers next to the component

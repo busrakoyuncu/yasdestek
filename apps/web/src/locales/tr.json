@@ -1,9 +1,11 @@
 {
   "common": {
-    "language": "Dil"
+    "language": "Dil",
+    "showPassword": "Şifreyi göster",
+    "hidePassword": "Şifreyi gizle"
   },
   "welcome": {
-    "title": "Yasdestek'e Hoşgeldiniz",
+    "title": "Yasdestek'e hoş geldiniz",
     "continue": "Devam et"
   },
   "auth": {
@@ -12,18 +14,24 @@
       "username": "Kullanıcı adı",
       "password": "Şifre",
       "submit": "Giriş yap",
-      "showPassword": "Şifreyi göster",
-      "hidePassword": "Şifreyi gizle",
       "help": "Kullanıcı adınızı ve şifrenizi danışmanınızdan aldınız. Giriş yapamıyorsanız danışmanınızla görüşün.",
       "submitting": "Giriş yapılıyor…",
       "intro": "Kaybınızın ardından bu yolu adım adım, bir danışman ve sizinle aynı deneyimi paylaşan insanlarla birlikte yürüyün."
     },
     "changePassword": {
-      "pending": "Devam etmeden önce şifrenizi değiştirmeniz gerekiyor. Bu ekran yakında hazır olacak."
+      "title": "Yeni şifre belirleyin",
+      "intro": "Danışmanınızın verdiği şifre yalnızca ilk giriş içindi. Devam etmeden önce yalnızca sizin bildiğiniz yeni bir şifre belirleyin.",
+      "currentPassword": "Mevcut şifre",
+      "currentPasswordHint": "Danışmanınızdan aldığınız şifre",
+      "newPassword": "Yeni şifre",
+      "newPasswordHint": "En az 8 karakter, bir büyük ve bir küçük harf",
+      "submit": "Şifreyi değiştir",
+      "submitting": "Değiştiriliyor…"
     }
   },
   "errors": {
     "INVALID_CREDENTIALS": "Kullanıcı adı veya şifre hatalı. Tekrar deneyin; olmazsa danışmanınızla görüşün.",
+    "WRONG_PASSWORD": "Mevcut şifre hatalı. Tekrar deneyin.",
     "ACCOUNT_INACTIVE": "Hesabınız henüz etkinleştirilmedi. Danışmanınızla görüşün.",
     "PASSWORD_CHANGE_REQUIRED": "Devam etmek için önce şifrenizi değiştirmeniz gerekiyor.",
     "TOO_MANY_REQUESTS": "Çok fazla deneme yaptınız. Lütfen bir dakika bekleyin.",
@@ -37,7 +45,8 @@
     "required": "Bu alan gerekli.",
     "minLength": "En az {{n}} karakter olmalı.",
     "maxLength": "En fazla {{n}} karakter olabilir.",
-    "invalid": "Geçersiz değer."
+    "invalid": "Geçersiz değer.",
+    "passwordCase": "Büyük ve küçük harf içermeli."
   },
   "area": {
     "welcome": "Hoş geldiniz, {{name}}",

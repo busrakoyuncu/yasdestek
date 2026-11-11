@@ -13,7 +13,7 @@ describe('WelcomePage', () => {
   it('welcomes and continues to the login page', async () => {
     const { router } = renderApp(<WelcomePage />, '/');
     expect(
-      screen.getByRole('heading', { name: "Yasdestek'e Hoşgeldiniz" }),
+      screen.getByRole('heading', { name: "Yasdestek'e hoş geldiniz" }),
     ).toBeInTheDocument();
     await userEvent.click(screen.getByRole('link', { name: 'Devam et' }));
     expect(router.state.location.pathname).toBe('/login');

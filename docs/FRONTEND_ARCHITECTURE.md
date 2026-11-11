@@ -91,7 +91,7 @@ Two kinds of state, handled differently:
 
 - react-i18next with Turkish as default, plus English and German. Language is picked in this order: the saved choice in local storage, then the browser language if it is one of the three, then Turkish. The `LanguageSwitch` dropdown changes it and saves it.
 - All UI strings live in translation files from day one - no hardcoded user-facing text in components. Keys are grouped per feature (`auth.login.title`, `welcome.continue`); interpolation uses i18next's `{{name}}` form. `tr.json` is the source of truth; the other two files mirror its keys.
-- Validation messages: zod's issues for required, too short, too long, and invalid format are mapped to `validation.*` keys through zod's global `customError`, so every form shows the same short translated messages without per-field work; anything else falls through to zod's own locale messages.
+- Validation messages: zod's issues for required, too short, too long, and invalid format are mapped to `validation.*` keys through zod's global `customError`, so every form shows the same short translated messages without per-field work; anything else falls through to zod's own locale messages. A custom rule in a shared schema names its own key in `params.key` (the password case rule uses `passwordCase`), and the same mapping translates it.
 - Module *content* (prompts written by admins/psychologists) is data, not UI - it is stored and displayed as authored, not translated by the app.
 - Date formatting follows the active locale via date-fns.
 

@@ -54,6 +54,11 @@ function fieldMessage(issue: z.core.$ZodRawIssue): string | undefined {
       return i18n.t('validation.maxLength', { n: issue.maximum });
     case 'invalid_format':
       return i18n.t('validation.invalid');
+    case 'custom': {
+      // shared schemas name their rule's translation in params.key
+      const key = (issue.params as { key?: string } | undefined)?.key;
+      return key ? i18n.t(`validation.${key}`) : undefined;
+    }
     default:
       return undefined;
   }
