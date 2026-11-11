@@ -19,12 +19,21 @@ export function AreaHome() {
     );
   }
 
+  // Night-themed like the pages before it, so sign-in does not end in a flash of cream.
   return (
-    <main className="mx-auto flex min-h-svh max-w-2xl flex-col justify-center gap-3 px-6">
-      <h1 className="text-3xl font-medium">
-        {t('area.welcome', { name: user.username })}
-      </h1>
-      <p className="text-muted-foreground">{t('area.comingSoon')}</p>
+    <main className="dark flex min-h-svh flex-col justify-center bg-background text-foreground">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-3 px-6">
+        <h1 className="text-3xl font-medium text-glow">
+          {t('area.welcome', { name: user.username })}
+        </h1>
+        <p className="text-text-secondary">
+          {t(
+            pathname === '/change-password'
+              ? 'auth.changePassword.pending'
+              : 'area.comingSoon',
+          )}
+        </p>
+      </div>
     </main>
   );
 }

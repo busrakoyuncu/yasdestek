@@ -12,11 +12,18 @@
       "username": "Benutzername",
       "password": "Passwort",
       "submit": "Anmelden",
-      "welcome": "Willkommen bei Yasdestek"
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort ausblenden",
+      "help": "Benutzername und Passwort haben Sie von Ihrer Begleitung erhalten. Wenn die Anmeldung nicht klappt, wenden Sie sich an Ihre Begleitung.",
+      "submitting": "Anmeldung läuft…",
+      "intro": "Gehen Sie diesen Weg nach Ihrem Verlust Schritt für Schritt, mit einer Begleitung und mit Menschen, die dasselbe erleben."
+    },
+    "changePassword": {
+      "pending": "Bitte ändern Sie zuerst Ihr Passwort. Dieser Bildschirm kommt bald."
     }
   },
   "errors": {
-    "INVALID_CREDENTIALS": "Benutzername oder Passwort ist falsch.",
+    "INVALID_CREDENTIALS": "Benutzername oder Passwort ist falsch. Versuchen Sie es erneut oder wenden Sie sich an Ihre Begleitung.",
     "ACCOUNT_INACTIVE": "Ihr Konto ist noch nicht freigeschaltet. Bitte wenden Sie sich an Ihre Begleitung.",
     "PASSWORD_CHANGE_REQUIRED": "Bitte ändern Sie zuerst Ihr Passwort.",
     "TOO_MANY_REQUESTS": "Zu viele Versuche. Bitte warten Sie eine Minute.",
