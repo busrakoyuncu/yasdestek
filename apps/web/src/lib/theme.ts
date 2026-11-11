@@ -20,13 +20,21 @@ function readTheme(userId: string): Theme {
   }
 }
 
+const resolveTheme = (theme: Theme): 'light' | 'dark' =>
+  theme === 'dark' || (theme === 'system' && darkQuery().matches)
+    ? 'dark'
+    : 'light';
+
 function applyTheme(theme: Theme) {
-  const dark = theme === 'dark' || (theme === 'system' && darkQuery().matches);
-  document.documentElement.classList.toggle('dark', dark);
+  document.documentElement.classList.toggle(
+    'dark',
+    resolveTheme(theme) === 'dark',
+  );
 }
 
 // Applies the user's theme to <html> while the area is mounted and keeps it in
-// step with the device when it is on "system". Returns the choice and a setter.
+// step with the device when it is on "system". Returns the choice, what it
+// resolves to right now, and a setter.
 export function useTheme(userId: string) {
   const [theme, setThemeState] = useState<Theme>(() => readTheme(userId));
 
@@ -50,5 +58,5 @@ export function useTheme(userId: string) {
     }
   };
 
-  return { theme, setTheme };
+  return { theme, resolved: resolveTheme(theme), setTheme };
 }
