@@ -54,8 +54,9 @@ export function PasswordField({ id, label, error, hint, ...input }: Props) {
         id={messageId}
         role="alert"
         className={cn(
-          'min-h-6 text-base leading-6',
-          error ? 'text-destructive' : 'text-text-secondary',
+          // same line height either way, so swapping hint for error moves nothing
+          'min-h-6 leading-6',
+          error ? 'text-base text-destructive' : 'text-sm text-text-secondary',
         )}
       >
         {error ?? hint}
