@@ -2,7 +2,8 @@
   "common": {
     "language": "Dil",
     "showPassword": "Şifreyi göster",
-    "hidePassword": "Şifreyi gizle"
+    "hidePassword": "Şifreyi gizle",
+    "loading": "Yükleniyor…"
   },
   "welcome": {
     "title": "Yasdestek'e hoş geldiniz",

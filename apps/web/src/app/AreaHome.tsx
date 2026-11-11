@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Navigate, useLocation } from 'react-router';
 import { useSession } from '@/features/auth/useSession';
+import { PageLoading } from '@/components/PageLoading';
 
 // Stand-in for every signed-in screen until the role areas exist.
 // Not signed in: back to login, remembering where the person wanted to go.
@@ -9,7 +10,7 @@ export function AreaHome() {
   const { user, isLoading } = useSession();
   const { pathname } = useLocation();
 
-  if (isLoading) return null;
+  if (isLoading) return <PageLoading />;
   if (!user) {
     return (
       <Navigate

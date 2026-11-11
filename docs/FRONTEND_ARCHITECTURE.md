@@ -38,7 +38,7 @@ apps/web/src/
 │   ├── forum/            # group forum: posts, comments, moderation actions
 │   ├── psychologist/     # user management, groups, activation, own-module management
 │   └── admin/            # psychologist management, global modules, analytics
-├── components/           # shared UI: LanguageSwitch, and shadcn primitives under ui/
+├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, shadcn primitives under ui/
 ├── lib/                  # api client, i18n setup, query client, error messages, cn
 ├── locales/              # tr.json (source of truth), en.json, de.json
 ├── test/                 # vitest setup and the renderApp helper
@@ -120,6 +120,7 @@ One pattern app-wide:
 - Failed user actions (mutations): toast with a human message.
 - Failed data loads: TanStack Query error states rendered inline with retry.
 - Unexpected crashes: React error boundary per role area with a retry button.
+- Waiting: a signed-in screen renders `PageLoading` (night background, firefly spinner fading in after 300ms so a fast answer never flashes it) while the session is unknown; the same screen is the fallback while a lazily loaded area downloads. Buttons that start a request disable themselves and change their label; no spinners inside buttons.
 
 ## 11. Environment & Tooling
 
