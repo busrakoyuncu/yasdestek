@@ -22,9 +22,9 @@
       "title": "Neues Passwort wählen",
       "intro": "Das Passwort von Ihrer Begleitung war nur für die erste Anmeldung. Wählen Sie vor dem Weitermachen ein neues, das nur Sie kennen.",
       "currentPassword": "Aktuelles Passwort",
-      "currentPasswordHint": "Das Passwort von Ihrer Begleitung.",
+      "currentPasswordHint": "Das Passwort von Ihrer Begleitung",
       "newPassword": "Neues Passwort",
-      "newPasswordHint": "Mindestens 8 Zeichen.",
+      "newPasswordHint": "8+ Zeichen, ein Groß-, ein Kleinbuchstabe",
       "submit": "Passwort ändern",
       "submitting": "Wird geändert…"
     }
@@ -45,7 +45,8 @@
     "required": "Dieses Feld ist erforderlich.",
     "minLength": "Mindestens {{n}} Zeichen.",
     "maxLength": "Höchstens {{n}} Zeichen.",
-    "invalid": "Ungültiger Wert."
+    "invalid": "Ungültiger Wert.",
+    "passwordCase": "Braucht Groß- und Kleinbuchstaben."
   },
   "area": {
     "welcome": "Willkommen, {{name}}",

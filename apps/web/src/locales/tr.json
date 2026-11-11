@@ -22,9 +22,9 @@
       "title": "Yeni şifre belirleyin",
       "intro": "Danışmanınızın verdiği şifre yalnızca ilk giriş içindi. Devam etmeden önce yalnızca sizin bildiğiniz yeni bir şifre belirleyin.",
       "currentPassword": "Mevcut şifre",
-      "currentPasswordHint": "Danışmanınızdan aldığınız şifre.",
+      "currentPasswordHint": "Danışmanınızdan aldığınız şifre",
       "newPassword": "Yeni şifre",
-      "newPasswordHint": "En az 8 karakter.",
+      "newPasswordHint": "En az 8 karakter, bir büyük ve bir küçük harf",
       "submit": "Şifreyi değiştir",
       "submitting": "Değiştiriliyor…"
     }
@@ -45,7 +45,8 @@
     "required": "Bu alan gerekli.",
     "minLength": "En az {{n}} karakter olmalı.",
     "maxLength": "En fazla {{n}} karakter olabilir.",
-    "invalid": "Geçersiz değer."
+    "invalid": "Geçersiz değer.",
+    "passwordCase": "Büyük ve küçük harf içermeli."
   },
   "area": {
     "welcome": "Hoş geldiniz, {{name}}",

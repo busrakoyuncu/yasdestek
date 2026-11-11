@@ -44,14 +44,23 @@ describe('ChangePasswordPage', () => {
     expect(api.post).not.toHaveBeenCalled();
   });
 
+  it('asks for an uppercase and a lowercase letter', async () => {
+    renderApp(<ChangePasswordPage />, '/change-password');
+    await fill('handed-out', 'all-lowercase');
+    expect(
+      await screen.findByText('Büyük ve küçük harf içermeli.'),
+    ).toBeInTheDocument();
+    expect(api.post).not.toHaveBeenCalled();
+  });
+
   it('changes the password and sends the participant home', async () => {
     vi.mocked(api.post).mockResolvedValueOnce(undefined);
     const { router } = renderApp(<ChangePasswordPage />, '/change-password');
-    await fill('handed-out', 'only-mine-now');
+    await fill('handed-out', 'Only-mine-now');
     await waitFor(() => expect(router.state.location.pathname).toBe('/app'));
     expect(api.post).toHaveBeenCalledWith('/auth/change-password', {
       currentPassword: 'handed-out',
-      newPassword: 'only-mine-now',
+      newPassword: 'Only-mine-now',
     });
   });
 
@@ -60,7 +69,7 @@ describe('ChangePasswordPage', () => {
       new ApiError(400, 'WRONG_PASSWORD', 'nope'),
     );
     renderApp(<ChangePasswordPage />, '/change-password');
-    await fill('not-it', 'only-mine-now');
+    await fill('not-it', 'Only-mine-now');
     expect(
       await screen.findByText('Mevcut şifre hatalı. Tekrar deneyin.'),
     ).toBeInTheDocument();

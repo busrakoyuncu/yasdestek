@@ -96,7 +96,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"currentPassword\": \"{{password}}\",\n  \"newPassword\": \"a-new-password\"\n}"
+              "raw": "{\n  \"currentPassword\": \"{{password}}\",\n  \"newPassword\": \"A-new-password\"\n}"
             },
             "description": "204 on success and ends every other session. 400 WRONG_PASSWORD. Note: the seed does not reset the admin password afterwards."
           }

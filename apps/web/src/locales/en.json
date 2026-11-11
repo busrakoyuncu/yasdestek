@@ -22,16 +22,16 @@
       "title": "Choose a new password",
       "intro": "The password from your counselor was only for the first sign-in. Before continuing, choose a new one that only you know.",
       "currentPassword": "Current password",
-      "currentPasswordHint": "The password your counselor gave you.",
+      "currentPasswordHint": "The password your counselor gave you",
       "newPassword": "New password",
-      "newPasswordHint": "At least 8 characters.",
+      "newPasswordHint": "8+ characters, one uppercase, one lowercase",
       "submit": "Change password",
       "submitting": "Changing…"
     }
   },
   "errors": {
     "INVALID_CREDENTIALS": "Wrong username or password. Try again, or contact your counselor if it keeps failing.",
-    "WRONG_PASSWORD": "The current password is wrong. Try again.",
+    "WRONG_PASSWORD": "Wrong current password. Try again.",
     "ACCOUNT_INACTIVE": "Your account is not active yet. Please contact your counselor.",
     "PASSWORD_CHANGE_REQUIRED": "You need to change your password before continuing.",
     "TOO_MANY_REQUESTS": "Too many attempts. Please wait a minute.",
@@ -45,7 +45,8 @@
     "required": "This field is required.",
     "minLength": "Must be at least {{n}} characters.",
     "maxLength": "Can be at most {{n}} characters.",
-    "invalid": "Invalid value."
+    "invalid": "Invalid value.",
+    "passwordCase": "Needs upper and lower case letters."
   },
   "area": {
     "welcome": "Welcome, {{name}}",

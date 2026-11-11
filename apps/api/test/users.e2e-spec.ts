@@ -39,7 +39,7 @@ describe('Users (e2e)', () => {
     await api()
       .post('/auth/change-password')
       .set('Cookie', cookie)
-      .send({ currentPassword: temp[name], newPassword: `${name}-own-pass` })
+      .send({ currentPassword: temp[name], newPassword: `${name}-Own-pass` })
       .expect(204);
     return cookie;
   }
