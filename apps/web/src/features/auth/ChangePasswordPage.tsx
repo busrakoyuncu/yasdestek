@@ -63,6 +63,15 @@ export function ChangePasswordPage() {
           <h1 className="text-2xl font-medium">
             {t('auth.changePassword.title')}
           </h1>
+          {/* not shown or sent: tells password managers whose password this is */}
+          <input
+            type="text"
+            name="username"
+            autoComplete="username"
+            value={user.username}
+            readOnly
+            hidden
+          />
 
           <PasswordField
             id="current-password"
