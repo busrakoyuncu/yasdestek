@@ -22,7 +22,9 @@ const user = {
 };
 
 describe('LoginPage', () => {
-  beforeEach(() => vi.mocked(api.post).mockReset());
+  beforeEach(() => {
+    vi.mocked(api.post).mockReset();
+  });
 
   it('refuses an empty form without calling the api', async () => {
     renderApp(<LoginPage />, '/login');
