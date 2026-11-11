@@ -1,6 +1,8 @@
 {
   "common": {
-    "language": "Dil"
+    "language": "Dil",
+    "showPassword": "Şifreyi göster",
+    "hidePassword": "Şifreyi gizle"
   },
   "welcome": {
     "title": "Yasdestek'e Hoşgeldiniz",
@@ -12,8 +14,6 @@
       "username": "Kullanıcı adı",
       "password": "Şifre",
       "submit": "Giriş yap",
-      "showPassword": "Şifreyi göster",
-      "hidePassword": "Şifreyi gizle",
       "help": "Kullanıcı adınızı ve şifrenizi danışmanınızdan aldınız. Giriş yapamıyorsanız danışmanınızla görüşün.",
       "submitting": "Giriş yapılıyor…",
       "intro": "Kaybınızın ardından bu yolu adım adım, bir danışman ve sizinle aynı deneyimi paylaşan insanlarla birlikte yürüyün."

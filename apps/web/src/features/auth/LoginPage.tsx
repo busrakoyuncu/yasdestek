@@ -1,16 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
 import { loginSchema, type LoginInput } from '@yasdestek/shared';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useSearchParams } from 'react-router';
 import { ForestPage } from '@/components/ForestPage';
-import { cn } from 'cn';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { errorMessage } from '@/lib/errors';
+import { forestField, PasswordField } from './PasswordField';
 import { homeFor, useSession } from './useSession';
 
 export function LoginPage() {
@@ -18,7 +16,6 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { user, login } = useSession();
-  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -47,10 +44,6 @@ export function LoginPage() {
       { replace: true },
     );
   });
-
-  const field =
-    'h-11 rounded-xl border-primary/40 bg-background/40 text-base text-glow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/60 dark:bg-background/40 dark:aria-invalid:border-destructive';
-  const message = 'text-base leading-6 text-destructive';
 
   return (
     <ForestPage>
@@ -88,56 +81,31 @@ export function LoginPage() {
               }
               autoCorrect="off"
               spellCheck={false}
-              className={field}
+              className={forestField}
               {...register('username')}
             />
             {errors.username && (
-              <p id="username-message" className={message}>
+              <p
+                id="username-message"
+                className="text-base leading-6 text-destructive"
+              >
                 {errors.username.message}
               </p>
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password">{t('auth.login.password')}</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                aria-invalid={!!errors.password}
-                aria-describedby="password-message"
-                className={cn(field, 'pr-12')}
-                {...register('password')}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((on) => !on)}
-                aria-label={t(
-                  showPassword
-                    ? 'auth.login.hidePassword'
-                    : 'auth.login.showPassword',
-                )}
-                className="absolute inset-y-0 right-0 grid size-11 place-items-center rounded-full text-glow/70 outline-none hover:text-glow focus-visible:ring-3 focus-visible:ring-primary/60"
-              >
-                {showPassword ? (
-                  <EyeOff className="size-5" aria-hidden="true" />
-                ) : (
-                  <Eye className="size-5" aria-hidden="true" />
-                )}
-              </button>
-            </div>
-            {/* one reserved line for whatever went wrong with signing in: the
-                password check, or the server's answer. Nothing else moves. */}
-            <p
-              id="password-message"
-              role="alert"
-              className={cn(message, 'min-h-6')}
-            >
-              {errors.password?.message ??
-                (login.isError ? errorMessage(login.error) : null)}
-            </p>
-          </div>
+          {/* one reserved line for whatever went wrong with signing in: the
+              password check, or the server's answer. Nothing else moves. */}
+          <PasswordField
+            id="password"
+            label={t('auth.login.password')}
+            autoComplete="current-password"
+            error={
+              errors.password?.message ??
+              (login.isError ? errorMessage(login.error) : null)
+            }
+            {...register('password')}
+          />
 
           {/* the one filled button on the forest: firelight cream, night text */}
           <Button

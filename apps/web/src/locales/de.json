@@ -1,6 +1,8 @@
 {
   "common": {
-    "language": "Sprache"
+    "language": "Sprache",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden"
   },
   "welcome": {
     "title": "Willkommen bei Yasdestek",
@@ -12,8 +14,6 @@
       "username": "Benutzername",
       "password": "Passwort",
       "submit": "Anmelden",
-      "showPassword": "Passwort anzeigen",
-      "hidePassword": "Passwort ausblenden",
       "help": "Benutzername und Passwort haben Sie von Ihrer Begleitung erhalten. Wenn die Anmeldung nicht klappt, wenden Sie sich an Ihre Begleitung.",
       "submitting": "Anmeldung läuft…",
       "intro": "Gehen Sie diesen Weg nach Ihrem Verlust Schritt für Schritt, mit einer Begleitung und mit Menschen, die dasselbe erleben."

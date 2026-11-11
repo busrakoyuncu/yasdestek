@@ -1,6 +1,8 @@
 {
   "common": {
-    "language": "Language"
+    "language": "Language",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "welcome": {
     "title": "Welcome to Yasdestek",
@@ -12,8 +14,6 @@
       "username": "Username",
       "password": "Password",
       "submit": "Sign in",
-      "showPassword": "Show password",
-      "hidePassword": "Hide password",
       "help": "Your counselor gave you your username and password. If you cannot sign in, contact your counselor.",
       "submitting": "Signing in…",
       "intro": "After your loss, walk this path step by step, with a counselor and with people who share the same experience."
