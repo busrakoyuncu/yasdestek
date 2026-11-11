@@ -1,16 +1,25 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import {
+  createMemoryRouter,
+  RouterProvider,
+  type RouteObject,
+} from 'react-router';
 import { queryClient } from '@/lib/query';
 
 // Mounts an element at `path` with the same providers the app uses, inside a
 // memory router with a catch-all route so navigation can be asserted.
-export function renderApp(element: ReactNode, path = '/') {
+// `children` nest under the element, for layout routes that render an Outlet.
+export function renderApp(
+  element: ReactNode,
+  path = '/',
+  children?: RouteObject[],
+) {
   queryClient.clear();
   const router = createMemoryRouter(
     [
-      { path, element },
+      { path, element, children },
       { path: '*', element: null },
     ],
     { initialEntries: [path] },

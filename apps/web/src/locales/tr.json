@@ -3,7 +3,11 @@
     "language": "Dil",
     "showPassword": "Şifreyi göster",
     "hidePassword": "Şifreyi gizle",
-    "loading": "Yükleniyor…"
+    "loading": "Yükleniyor…",
+    "menu": "Menü",
+    "account": "Hesap menüsü",
+    "signOut": "Çıkış yap",
+    "retry": "Tekrar dene"
   },
   "welcome": {
     "title": "Yasdestek'e hoş geldiniz",
@@ -40,7 +44,8 @@
     "NOT_FOUND": "Aradığınız şey bulunamadı.",
     "UNAUTHORIZED": "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
     "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
-    "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "crashTitle": "Bir şeyler ters gitti"
   },
   "validation": {
     "required": "Bu alan gerekli.",
@@ -50,7 +55,33 @@
     "passwordCase": "Büyük ve küçük harf içermeli."
   },
   "area": {
-    "welcome": "Hoş geldiniz, {{name}}",
     "comingSoon": "Bu alan yakında hazır olacak."
+  },
+  "nav": {
+    "modules": "Modüller",
+    "messages": "Mesajlar",
+    "rules": "Genel Kurallar",
+    "participants": "Katılımcılar",
+    "groups": "Gruplar",
+    "inbox": "Gelen Kutusu",
+    "counselors": "Danışmanlar",
+    "analytics": "Analitik"
+  },
+  "theme": {
+    "label": "Görünüm",
+    "system": "Cihaza göre",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "roles": {
+    "USER": "Katılımcı",
+    "PSYCHOLOGIST": "Danışman",
+    "ADMIN": "Yönetici"
+  },
+  "app": {
+    "home": {
+      "title": "Anlatmak iyi gelir",
+      "intro": "Burada kaybınızı kelimelere dökebilir, duygularınızı adlandırabilir ve sevdiğinizle bağınızı sürdürebilirsiniz."
+    }
   }
 }

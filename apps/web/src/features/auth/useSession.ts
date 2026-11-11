@@ -49,10 +49,21 @@ export function useSession() {
     },
   });
 
+  // Ends the session on the server, then forgets the user here. Other queries
+  // are dropped too, so nothing from this person survives into the next sign-in.
+  const logout = useMutation({
+    mutationFn: () => api.post<void>('/auth/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      setUser(null);
+    },
+  });
+
   return {
     user: session.data,
     isLoading: session.isPending,
     login,
     changePassword,
+    logout,
   };
 }
