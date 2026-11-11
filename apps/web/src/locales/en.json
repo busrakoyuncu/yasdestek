@@ -3,7 +3,11 @@
     "language": "Language",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "menu": "Menu",
+    "account": "Account menu",
+    "signOut": "Sign out",
+    "retry": "Try again"
   },
   "welcome": {
     "title": "Welcome to Yasdestek",
@@ -40,7 +44,8 @@
     "NOT_FOUND": "We could not find that.",
     "UNAUTHORIZED": "Your session has ended. Please sign in again.",
     "NETWORK": "Could not connect. Check your internet and try again.",
-    "UNKNOWN": "Something went wrong. Please try again."
+    "UNKNOWN": "Something went wrong. Please try again.",
+    "crashTitle": "Something went wrong"
   },
   "validation": {
     "required": "This field is required.",
@@ -50,7 +55,33 @@
     "passwordCase": "Needs upper and lower case letters."
   },
   "area": {
-    "welcome": "Welcome, {{name}}",
     "comingSoon": "This area is coming soon."
+  },
+  "nav": {
+    "modules": "Modules",
+    "messages": "Messages",
+    "rules": "General Rules",
+    "participants": "Participants",
+    "groups": "Groups",
+    "inbox": "Inbox",
+    "counselors": "Counselors",
+    "analytics": "Analytics"
+  },
+  "theme": {
+    "label": "Appearance",
+    "system": "Follow device",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "roles": {
+    "USER": "Participant",
+    "PSYCHOLOGIST": "Counselor",
+    "ADMIN": "Administrator"
+  },
+  "app": {
+    "home": {
+      "title": "Telling helps",
+      "intro": "Here you can put your loss into words, name your feelings, and keep your bond with the one you love."
+    }
   }
 }
