@@ -15,3 +15,12 @@ beforeEach(async () => {
 });
 // Without vitest globals, Testing Library does not unmount between tests on its own.
 afterEach(cleanup);
+
+// jsdom has no matchMedia; the theme hook asks it for the device preference.
+window.matchMedia ??= (query: string) =>
+  ({
+    matches: false,
+    media: query,
+    addEventListener() {},
+    removeEventListener() {},
+  }) as unknown as MediaQueryList;
