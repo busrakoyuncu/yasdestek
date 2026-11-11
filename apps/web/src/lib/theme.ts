@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
-// The app areas follow the device unless the person chose otherwise. The
-// choice is kept in this browser under the user's id, so two people sharing
-// a phone each keep their own. The forest pages ignore all of this: they put
-// `dark` on their own root and are always night.
+// The app areas are night by default, like the forest pages before them.
+// The user menu offers light and "follow the device" as well; the choice is
+// kept in this browser under the user's id, so two people sharing a phone
+// each keep their own. The forest pages ignore all of this: they put `dark`
+// on their own root and are always night.
 
 export type Theme = 'light' | 'dark' | 'system';
-export const THEMES: Theme[] = ['system', 'light', 'dark'];
+export const THEMES: Theme[] = ['dark', 'light', 'system'];
 
 const key = (userId: string) => `theme:${userId}`;
 const darkQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
@@ -14,9 +15,9 @@ const darkQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
 function readTheme(userId: string): Theme {
   try {
     const saved = localStorage.getItem(key(userId));
-    return saved === 'light' || saved === 'dark' ? saved : 'system';
+    return saved === 'light' || saved === 'system' ? saved : 'dark';
   } catch {
-    return 'system';
+    return 'dark';
   }
 }
 

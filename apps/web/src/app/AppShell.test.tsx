@@ -53,16 +53,17 @@ describe('AppShell', () => {
     ).toHaveAttribute('aria-current', 'page');
   });
 
-  it('applies the chosen theme and remembers it for this user', async () => {
+  it('is night by default and remembers a switch to light', async () => {
     mount();
     await userEvent.click(
       await screen.findByRole('button', { name: 'Hesap menüsü' }),
     );
-    await userEvent.click(
-      await screen.findByRole('menuitemradio', { name: 'Koyu' }),
-    );
     expect(document.documentElement).toHaveClass('dark');
-    expect(localStorage.getItem('theme:u1')).toBe('dark');
+    await userEvent.click(
+      await screen.findByRole('menuitemradio', { name: 'Açık' }),
+    );
+    expect(document.documentElement).not.toHaveClass('dark');
+    expect(localStorage.getItem('theme:u1')).toBe('light');
   });
 
   it('signs out through the api and returns to login', async () => {

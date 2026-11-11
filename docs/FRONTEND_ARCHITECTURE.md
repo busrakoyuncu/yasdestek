@@ -88,7 +88,7 @@ Two kinds of state, handled differently:
 
 - Tailwind CSS everywhere; shadcn/ui provides accessible primitives (dialogs, dropdowns, forms, toasts) copied into `components/`.
 - One custom theme via CSS variables (colors, fonts, radii) defined in `DESIGN_ARCHITECTURE.md` - a quiet, misty look for the participant area; the same tokens keep admin/psychologist areas consistent. Tailwind v4 is configured in CSS: the `@theme inline` block in `style.css` turns each variable into a utility class.
-- Dark mode is a class, not a media query: `.dark` on `<html>` for the app areas, `.dark` on the page root for the always-night forest pages. `lib/theme.ts` owns the html class: `system` (default, follows the device live), `light` or `dark`, chosen in the user menu and kept in local storage under `theme:<userId>`. See the design doc for the alias rule that makes a scoped `.dark` work.
+- Dark mode is a class, not a media query: `.dark` on `<html>` for the app areas, `.dark` on the page root for the always-night forest pages. `lib/theme.ts` owns the html class: `dark` (default), `light`, or `system` (follows the device live), chosen in the user menu and kept in local storage under `theme:<userId>`. See the design doc for the alias rule that makes a scoped `.dark` work.
 - Participant area is **mobile-first responsive** (writing and audio recording must work well on phones). Admin and psychologist areas are desktop-first but not broken on mobile.
 
 ## 7. Internationalization

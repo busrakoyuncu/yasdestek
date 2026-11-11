@@ -31,7 +31,7 @@ Rules:
 
 ## 2. Theme Behavior
 
-- App areas (`/app`, `/psychologist`, `/admin`): default follows the device (`prefers-color-scheme`); the user menu offers "follow device", light, and dark, and the choice is kept per user in the browser.
+- App areas (`/app`, `/psychologist`, `/admin`): night by default, so the forest's mood carries into the app; the user menu offers light and "follow device" (`prefers-color-scheme`) as well, and the choice is kept per user in the browser.
 - Controls in the app shell (language, account, menu) mirror the forest pages: in dark mode a firefly-gold hairline with firelight text; in light mode the reverse, a dark navy (`foreground`) hairline and text. Content text uses `foreground` as usual.
 - The public forest pages (welcome at `/`, login) are **always night**: the page root carries the `dark` class, so they use the dark token set whatever the device prefers. Anything rendered in a portal (menus, dialogs, toasts) opened from these pages gets the `dark` class passed to it, because portals mount outside the page root.
 - Both themes are first-class: every screen is checked in both before shipping.
