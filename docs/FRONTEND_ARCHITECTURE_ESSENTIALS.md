@@ -117,3 +117,5 @@ Companion to `FRONTEND_ARCHITECTURE.md`. For each decision: what we picked, why,
 **Why:** it is not on npm, it has no dependencies, and it is under 350 lines that were read in full before copying. A vendored file is pinned by definition and cannot change under us. It is lint-checked like our own code but formatted as received, so a future diff against the upstream file stays readable.
 
 **Why not rewriting it in React:** the animation is a plain canvas loop driven by pointer events on `window`; React adds nothing to it. The React side is one `useEffect` that creates it on mount and destroys it on unmount.
+
+The loading spinner from the same author is vendored the same way: one stylesheet in `components/firefly-spinner.css`, listed in `.prettierignore`, with `FireflySpinner` as its markup and `PageLoading` as the full-screen use.

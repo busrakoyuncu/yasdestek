@@ -2,7 +2,8 @@
   "common": {
     "language": "Sprache",
     "showPassword": "Passwort anzeigen",
-    "hidePassword": "Passwort ausblenden"
+    "hidePassword": "Passwort ausblenden",
+    "loading": "Wird geladen…"
   },
   "welcome": {
     "title": "Willkommen bei Yasdestek",

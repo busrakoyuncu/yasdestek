@@ -1,0 +1,178 @@
+/*
+ * Firefly spinner: 3-5 fireflies orbit a circle, trailing light, and glow one after another.
+ * Pure CSS, no JavaScript. The number of fireflies is the number of .ffs-arm elements (3-5).
+ *
+ * <div class="firefly-spinner" role="status">
+ *   <span class="ffs-orbit" aria-hidden="true">
+ *     <span class="ffs-arm"><i class="ffs-fly"></i></span>
+ *     <span class="ffs-arm"><i class="ffs-fly"></i></span>
+ *     <span class="ffs-arm"><i class="ffs-fly"></i></span>
+ *   </span>
+ *   <span class="ffs-label">Loading…</span>
+ * </div>
+ *
+ * Made for dark backgrounds: the glow is screen-blended light.
+ */
+
+.firefly-spinner {
+  --ffs-size: clamp(96px, 18vmin, 150px); /* outer box, glow included */
+  --ffs-orbit: 6s;                        /* one full revolution */
+  --ffs-pulse: 2.4s;                      /* one glow wave around all fireflies */
+  --ffs-trail: 110deg;                    /* light trail length behind each firefly */
+  --ffs-glow: #ffd24d;
+  --ffs-core: #fff4c8;
+  --ffs-wing: rgba(226, 234, 255, 0.5);
+  --ffs-body: #2b2118;
+
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--ffs-size);
+  height: var(--ffs-size);
+  vertical-align: middle;
+}
+
+/* The ring itself; inset leaves room for the glow. */
+.ffs-orbit {
+  --ffs-count: 3;
+  position: absolute;
+  inset: 17%;
+  animation: ffs-spin var(--ffs-orbit) linear infinite;
+}
+.ffs-orbit:has(> .ffs-arm:nth-child(4)) { --ffs-count: 4; }
+.ffs-orbit:has(> .ffs-arm:nth-child(5)) { --ffs-count: 5; }
+
+/* One arm per firefly, rotated into place. Holds the trail and the firefly. */
+.ffs-arm {
+  --i: 0;
+  /* Negative delays start every animation mid-cycle, so the wave runs clockwise from the first frame. */
+  --ffs-delay: calc((var(--i) - var(--ffs-count)) * var(--ffs-pulse) / var(--ffs-count));
+  position: absolute;
+  inset: 0;
+  transform: rotate(calc(var(--i) * 1turn / var(--ffs-count)));
+}
+.ffs-arm:nth-child(2) { --i: 1; }
+.ffs-arm:nth-child(3) { --i: 2; }
+.ffs-arm:nth-child(4) { --i: 3; }
+.ffs-arm:nth-child(5) { --i: 4; }
+
+/* Light trail: a conic fade ending at the firefly, cut to thin rings by the mask. */
+.ffs-arm::before,
+.ffs-arm::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from calc(var(--ffs-trail) * -1),
+    transparent 0deg,
+    color-mix(in srgb, var(--ffs-glow) 45%, transparent) calc(var(--ffs-trail) * 0.7),
+    var(--ffs-core) var(--ffs-trail),
+    transparent var(--ffs-trail)
+  );
+  animation: ffs-trail-pulse var(--ffs-pulse) ease-in-out var(--ffs-delay) infinite;
+}
+/* Two crisp strands on the orbit. */
+.ffs-arm::before {
+  -webkit-mask:
+    radial-gradient(closest-side, transparent 95%, #000 97.5%, transparent 100%),
+    radial-gradient(closest-side, transparent 88%, #000 90%, transparent 92%);
+  mask:
+    radial-gradient(closest-side, transparent 95%, #000 97.5%, transparent 100%),
+    radial-gradient(closest-side, transparent 88%, #000 90%, transparent 92%);
+}
+/* A soft haze strand on a slightly narrower ellipse: it meets the firefly at the top
+   and drifts across the crisp strands on the way round. */
+.ffs-arm::after {
+  inset: 0 4%;
+  filter: blur(calc(var(--ffs-size) * 0.012));
+  -webkit-mask: radial-gradient(closest-side, transparent 86%, #000 93%, transparent 100%);
+  mask: radial-gradient(closest-side, transparent 86%, #000 93%, transparent 100%);
+}
+
+/* The firefly, flying clockwise: head to the right, glowing abdomen trailing to the left. */
+.ffs-fly {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 17%;
+  height: 8%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(ellipse 20% 34% at 80% 50%, var(--ffs-body) 85%, transparent 100%),
+    radial-gradient(ellipse 40% 44% at 38% 50%, var(--ffs-core) 25%, var(--ffs-glow) 70%, transparent 100%);
+  animation: ffs-bob calc(var(--ffs-pulse) * 0.75) ease-in-out var(--ffs-delay) infinite alternate;
+}
+/* Wings: two translucent wedges swept back from the thorax. */
+.ffs-fly::before {
+  content: "";
+  position: absolute;
+  left: 62%;
+  top: 50%;
+  width: 90%;
+  height: 210%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    transparent 196deg, var(--ffs-wing) 206deg, var(--ffs-wing) 232deg, transparent 244deg,
+    transparent 296deg, var(--ffs-wing) 308deg, var(--ffs-wing) 334deg, transparent 344deg
+  );
+  -webkit-mask: radial-gradient(closest-side, #000 45%, transparent 100%);
+  mask: radial-gradient(closest-side, #000 45%, transparent 100%);
+}
+/* The light: a hot core on the abdomen plus a wide halo. */
+.ffs-fly::after {
+  content: "";
+  position: absolute;
+  left: 36%;
+  top: 50%;
+  width: 270%;
+  aspect-ratio: 1;
+  /* Centre with margins, not transform: the pulse animates `scale`, which would also scale a centring translate.
+     Percentage margins are relative to the parent's width on both axes, so -135% is half of the 270% width. */
+  margin: -135% 0 0 -135%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    var(--ffs-core) 0 9%,
+    color-mix(in srgb, var(--ffs-glow) 80%, transparent) 16%,
+    color-mix(in srgb, var(--ffs-glow) 28%, transparent) 42%,
+    color-mix(in srgb, var(--ffs-glow) 8%, transparent) 70%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  animation: ffs-glow-pulse var(--ffs-pulse) ease-in-out var(--ffs-delay) infinite;
+}
+
+/* Screen-reader text; hidden visually. */
+.ffs-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes ffs-spin {
+  to { transform: rotate(1turn); }
+}
+/* Quick swell, slow fade, then rest: one firefly at a time is at its brightest. */
+@keyframes ffs-glow-pulse {
+  0%, 100% { opacity: 0.5; scale: 0.6; }
+  22%      { opacity: 1;   scale: 1; }
+  60%      { opacity: 0.56; scale: 0.66; }
+}
+@keyframes ffs-trail-pulse {
+  0%, 100% { opacity: 0.4; }
+  22%      { opacity: 1; }
+  60%      { opacity: 0.46; }
+}
+@keyframes ffs-bob {
+  from { translate: 0 calc(var(--ffs-size) * -0.012); }
+  to   { translate: 0 calc(var(--ffs-size) * 0.012); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ffs-orbit { animation-duration: calc(var(--ffs-orbit) * 3); }
+  .ffs-fly { animation: none; }
+}

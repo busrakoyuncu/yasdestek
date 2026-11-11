@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router';
 import { ForestPage } from '@/components/ForestPage';
+import { PageLoading } from '@/components/PageLoading';
 import { Button } from '@/components/ui/button';
 import { errorMessage } from '@/lib/errors';
 import { PasswordField } from './PasswordField';
@@ -27,7 +28,7 @@ export function ChangePasswordPage() {
     defaultValues: { currentPassword: '', newPassword: '' },
   });
 
-  if (isLoading) return null;
+  if (isLoading) return <PageLoading />;
   if (!user) return <Navigate to="/login" replace />;
   // Nothing to change, or just changed: the session flag flips on success and
   // this line carries the person home.
