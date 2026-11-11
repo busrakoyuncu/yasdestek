@@ -22,6 +22,7 @@
       "title": "Yeni şifre belirleyin",
       "intro": "Danışmanınızın verdiği şifre yalnızca ilk giriş içindi. Devam etmeden önce yalnızca sizin bildiğiniz yeni bir şifre belirleyin.",
       "currentPassword": "Mevcut şifre",
+      "currentPasswordHint": "Danışmanınızdan aldığınız şifre.",
       "newPassword": "Yeni şifre",
       "newPasswordHint": "En az 8 karakter.",
       "submit": "Şifreyi değiştir",
@@ -30,7 +31,7 @@
   },
   "errors": {
     "INVALID_CREDENTIALS": "Kullanıcı adı veya şifre hatalı. Tekrar deneyin; olmazsa danışmanınızla görüşün.",
-    "WRONG_PASSWORD": "Mevcut şifre hatalı. Danışmanınızdan aldığınız şifreyi kontrol edin.",
+    "WRONG_PASSWORD": "Mevcut şifre hatalı. Tekrar deneyin.",
     "ACCOUNT_INACTIVE": "Hesabınız henüz etkinleştirilmedi. Danışmanınızla görüşün.",
     "PASSWORD_CHANGE_REQUIRED": "Devam etmek için önce şifrenizi değiştirmeniz gerekiyor.",
     "TOO_MANY_REQUESTS": "Çok fazla deneme yaptınız. Lütfen bir dakika bekleyin.",

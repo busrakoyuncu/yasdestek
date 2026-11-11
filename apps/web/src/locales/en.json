@@ -22,6 +22,7 @@
       "title": "Choose a new password",
       "intro": "The password from your counselor was only for the first sign-in. Before continuing, choose a new one that only you know.",
       "currentPassword": "Current password",
+      "currentPasswordHint": "The password your counselor gave you.",
       "newPassword": "New password",
       "newPasswordHint": "At least 8 characters.",
       "submit": "Change password",
@@ -30,7 +31,7 @@
   },
   "errors": {
     "INVALID_CREDENTIALS": "Wrong username or password. Try again, or contact your counselor if it keeps failing.",
-    "WRONG_PASSWORD": "The current password is wrong. Check the password your counselor gave you.",
+    "WRONG_PASSWORD": "The current password is wrong. Try again.",
     "ACCOUNT_INACTIVE": "Your account is not active yet. Please contact your counselor.",
     "PASSWORD_CHANGE_REQUIRED": "You need to change your password before continuing.",
     "TOO_MANY_REQUESTS": "Too many attempts. Please wait a minute.",
