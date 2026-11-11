@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
-import type { LoginInput } from '@yasdestek/shared';
+import type { ChangePasswordInput, LoginInput } from '@yasdestek/shared';
 import { api, ApiError } from '@/lib/api';
 import { queryClient } from '@/lib/query';
 import type { CurrentUser, Role } from '@/types/user';
@@ -38,5 +38,21 @@ export function useSession() {
     onSuccess: setUser,
   });
 
-  return { user: session.data, isLoading: session.isPending, login };
+  // The api answers 204, so the cached user is updated by hand: the forced
+  // change is done, everything else about them is unchanged.
+  const changePassword = useMutation({
+    mutationFn: (input: ChangePasswordInput) =>
+      api.post<void>('/auth/change-password', input),
+    onSuccess: () => {
+      const user = queryClient.getQueryData(sessionQuery.queryKey);
+      if (user) setUser({ ...user, mustChangePassword: false });
+    },
+  });
+
+  return {
+    user: session.data,
+    isLoading: session.isPending,
+    login,
+    changePassword,
+  };
 }

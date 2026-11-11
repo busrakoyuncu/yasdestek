@@ -19,11 +19,18 @@
       "intro": "Gehen Sie diesen Weg nach Ihrem Verlust Schritt für Schritt, mit einer Begleitung und mit Menschen, die dasselbe erleben."
     },
     "changePassword": {
-      "pending": "Bitte ändern Sie zuerst Ihr Passwort. Dieser Bildschirm kommt bald."
+      "title": "Neues Passwort wählen",
+      "intro": "Das Passwort von Ihrer Begleitung war nur für die erste Anmeldung. Wählen Sie vor dem Weitermachen ein neues, das nur Sie kennen.",
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "newPasswordHint": "Mindestens 8 Zeichen.",
+      "submit": "Passwort ändern",
+      "submitting": "Wird geändert…"
     }
   },
   "errors": {
     "INVALID_CREDENTIALS": "Benutzername oder Passwort ist falsch. Versuchen Sie es erneut oder wenden Sie sich an Ihre Begleitung.",
+    "WRONG_PASSWORD": "Das aktuelle Passwort ist falsch. Prüfen Sie das Passwort, das Sie von Ihrer Begleitung erhalten haben.",
     "ACCOUNT_INACTIVE": "Ihr Konto ist noch nicht freigeschaltet. Bitte wenden Sie sich an Ihre Begleitung.",
     "PASSWORD_CHANGE_REQUIRED": "Bitte ändern Sie zuerst Ihr Passwort.",
     "TOO_MANY_REQUESTS": "Zu viele Versuche. Bitte warten Sie eine Minute.",

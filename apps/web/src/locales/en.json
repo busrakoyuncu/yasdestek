@@ -19,11 +19,18 @@
       "intro": "After your loss, walk this path step by step, with a counselor and with people who share the same experience."
     },
     "changePassword": {
-      "pending": "You need to change your password before continuing. This screen is coming soon."
+      "title": "Choose a new password",
+      "intro": "The password from your counselor was only for the first sign-in. Before continuing, choose a new one that only you know.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "newPasswordHint": "At least 8 characters.",
+      "submit": "Change password",
+      "submitting": "Changing…"
     }
   },
   "errors": {
     "INVALID_CREDENTIALS": "Wrong username or password. Try again, or contact your counselor if it keeps failing.",
+    "WRONG_PASSWORD": "The current password is wrong. Check the password your counselor gave you.",
     "ACCOUNT_INACTIVE": "Your account is not active yet. Please contact your counselor.",
     "PASSWORD_CHANGE_REQUIRED": "You need to change your password before continuing.",
     "TOO_MANY_REQUESTS": "Too many attempts. Please wait a minute.",
