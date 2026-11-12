@@ -232,5 +232,18 @@
       "confirm": "Delete group",
       "done": "Group deleted"
     }
+  },
+  "messages": {
+    "myCounselor": "My counselor",
+    "emptyParticipant": "No messages yet. You can write privately to your counselor here: questions, hard moments, technical problems.",
+    "noCounselor": "You do not have a counselor yet.",
+    "emptyInbox": "No participants yet.",
+    "emptyThread": "No messages with {{name}} yet.",
+    "pick": "Choose a participant on the left.",
+    "placeholder": "Write your message…",
+    "compose": "Message",
+    "send": "Send",
+    "back": "Back to the inbox",
+    "unread": "{{count}} unread"
   }
 }
