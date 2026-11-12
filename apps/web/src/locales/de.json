@@ -113,7 +113,8 @@
       "counselorPlaceholder": "Begleitung wählen",
       "submit": "Anlegen",
       "submitting": "Wird angelegt…",
-      "created": "Konto angelegt"
+      "created": "Konto angelegt",
+      "intro": "Den Benutzernamen wählen Sie. Das vorläufige Passwort wird nach dem Anlegen einmal angezeigt."
     },
     "password": {
       "title": "Vorläufiges Passwort",

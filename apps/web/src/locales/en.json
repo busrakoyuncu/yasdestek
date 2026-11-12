@@ -113,7 +113,8 @@
       "counselorPlaceholder": "Choose a counselor",
       "submit": "Create",
       "submitting": "Creating…",
-      "created": "Account created"
+      "created": "Account created",
+      "intro": "You choose the username. The temporary password is shown once after the account is created."
     },
     "password": {
       "title": "Temporary password",

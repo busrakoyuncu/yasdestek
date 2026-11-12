@@ -122,7 +122,7 @@ export function CreatePersonDialog({ role, counselors }: Props) {
           >
             <DialogHeader>
               <DialogTitle>{title}</DialogTitle>
-              <DialogDescription>{t('people.password.note')}</DialogDescription>
+              <DialogDescription>{t('people.create.intro')}</DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col gap-2">

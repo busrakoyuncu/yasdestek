@@ -113,7 +113,8 @@
       "counselorPlaceholder": "Danışman seçin",
       "submit": "Oluştur",
       "submitting": "Oluşturuluyor…",
-      "created": "Hesap oluşturuldu"
+      "created": "Hesap oluşturuldu",
+      "intro": "Kullanıcı adını siz seçersiniz. Geçici şifre oluşturulduktan sonra bir kez gösterilir."
     },
     "password": {
       "title": "Geçici şifre",
