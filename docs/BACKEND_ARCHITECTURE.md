@@ -111,7 +111,7 @@ DELETE /groups/:id                          A, P (own); members keep their accou
 POST   /groups/:id/members                  P: add own participant (moves them if in another group)
 DELETE /groups/:id/members/:userId          P
 
-GET    /modules  GET /modules/:id           any role, scoped by visibility (participants: assigned to my group, in order)
+GET    /modules  GET /modules/:id           any role, scoped by visibility (participants: assigned to my group, in order); list rows carry the creator's username and role
 POST   /modules  PATCH /modules/:id  DELETE /modules/:id     A (global), P (own); base modules and modules with responses cannot be deleted
 POST   /groups/:groupId/modules             P: assign a visible module to an own group (idempotent)
 DELETE /groups/:groupId/modules/:moduleId   P
