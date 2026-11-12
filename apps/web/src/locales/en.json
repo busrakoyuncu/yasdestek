@@ -189,5 +189,48 @@
       "confirm": "Delete",
       "done": "Module deleted"
     }
+  },
+  "groups": {
+    "empty": "No groups yet. Split your participants into groups of 5 to 6.",
+    "new": "New group",
+    "rename": "Rename",
+    "delete": "Delete group",
+    "form": {
+      "createTitle": "New group",
+      "renameTitle": "Rename group",
+      "name": "Group name",
+      "submitCreate": "Create",
+      "submitRename": "Save",
+      "submitting": "Saving…",
+      "created": "Group created",
+      "renamed": "Group renamed"
+    },
+    "members": {
+      "title": "Members",
+      "empty": "No members yet.",
+      "add": "Add member",
+      "placeholder": "Choose a participant",
+      "noneLeft": "No unassigned participants to add.",
+      "remove": "Remove {{name}} from the group",
+      "added": "Member added",
+      "removed": "Member removed",
+      "inactive": "inactive"
+    },
+    "modules": {
+      "title": "Assigned modules",
+      "empty": "No modules assigned yet.",
+      "assign": "Assign module",
+      "placeholder": "Choose a module",
+      "noneLeft": "No other modules to assign.",
+      "unassign": "Unassign {{title}}",
+      "assigned": "Module assigned",
+      "unassigned": "Module unassigned"
+    },
+    "remove": {
+      "title": "Delete the group {{name}}?",
+      "body": "Members leave the group but keep what they wrote. Module assignments are removed.",
+      "confirm": "Delete group",
+      "done": "Group deleted"
+    }
   }
 }

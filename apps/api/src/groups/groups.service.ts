@@ -9,10 +9,16 @@ function managedGroups(me: CurrentUser): Prisma.GroupWhereInput {
   return me.role === 'ADMIN' ? {} : { psychologistId: me.id };
 }
 
+// A group comes with its members and its assigned modules (in participant
+// order), so one request draws the counselor's group screen.
 const withMembers = {
   members: {
     select: { id: true, username: true, active: true },
     orderBy: { username: 'asc' },
+  },
+  modules: {
+    select: { module: { select: { id: true, title: true, order: true } } },
+    orderBy: { module: { order: 'asc' } },
   },
 } satisfies Prisma.GroupInclude;
 

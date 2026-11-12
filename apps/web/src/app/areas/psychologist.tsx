@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router';
 import { ComingSoon } from '@/components/ComingSoon';
 import { RulesPage } from '@/features/pages/RulesPage';
+import { GroupsPage } from '@/features/groups/GroupsPage';
 import { ModulesPage } from '@/features/modules/ModulesPage';
 import { PeoplePage } from '@/features/people/PeoplePage';
 
@@ -11,7 +12,7 @@ export function Component() {
   return (
     <Routes>
       <Route index element={<PeoplePage role="USER" />} />
-      <Route path="groups" element={<ComingSoon title={t('nav.groups')} />} />
+      <Route path="groups" element={<GroupsPage />} />
       <Route path="modules" element={<ModulesPage />} />
       <Route path="inbox" element={<ComingSoon title={t('nav.inbox')} />} />
       <Route path="rules" element={<RulesPage />} />

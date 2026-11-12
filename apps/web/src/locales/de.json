@@ -189,5 +189,48 @@
       "confirm": "Löschen",
       "done": "Modul gelöscht"
     }
+  },
+  "groups": {
+    "empty": "Noch keine Gruppen. Teilen Sie Ihre Teilnehmenden in Gruppen von 5 bis 6 ein.",
+    "new": "Neue Gruppe",
+    "rename": "Umbenennen",
+    "delete": "Gruppe löschen",
+    "form": {
+      "createTitle": "Neue Gruppe",
+      "renameTitle": "Gruppe umbenennen",
+      "name": "Gruppenname",
+      "submitCreate": "Anlegen",
+      "submitRename": "Speichern",
+      "submitting": "Wird gespeichert…",
+      "created": "Gruppe angelegt",
+      "renamed": "Gruppe umbenannt"
+    },
+    "members": {
+      "title": "Mitglieder",
+      "empty": "Noch keine Mitglieder.",
+      "add": "Mitglied hinzufügen",
+      "placeholder": "Teilnehmer:in wählen",
+      "noneLeft": "Keine freien Teilnehmenden zum Hinzufügen.",
+      "remove": "{{name}} aus der Gruppe entfernen",
+      "added": "Mitglied hinzugefügt",
+      "removed": "Mitglied entfernt",
+      "inactive": "inaktiv"
+    },
+    "modules": {
+      "title": "Zugewiesene Module",
+      "empty": "Noch keine Module zugewiesen.",
+      "assign": "Modul zuweisen",
+      "placeholder": "Modul wählen",
+      "noneLeft": "Keine weiteren Module zum Zuweisen.",
+      "unassign": "{{title}} entfernen",
+      "assigned": "Modul zugewiesen",
+      "unassigned": "Modul entfernt"
+    },
+    "remove": {
+      "title": "Gruppe {{name}} löschen?",
+      "body": "Die Mitglieder verlassen die Gruppe, ihre Texte bleiben erhalten. Modulzuweisungen werden entfernt.",
+      "confirm": "Gruppe löschen",
+      "done": "Gruppe gelöscht"
+    }
   }
 }
