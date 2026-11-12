@@ -40,6 +40,11 @@ describe('GroupsService', () => {
     expect(prisma.group.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: {} }),
     );
+    // members and assigned modules ride along with every group
+    const [{ include }] = prisma.group.findMany.mock.calls[0] as [
+      { include: Record<string, unknown> },
+    ];
+    expect(Object.keys(include)).toEqual(['members', 'modules']);
     await service.list(psychologist);
     expect(prisma.group.findMany).toHaveBeenLastCalledWith(
       expect.objectContaining({ where: { psychologistId: 'p1' } }),
