@@ -6,7 +6,10 @@ export const usernameSchema = z
   .trim()
   .min(3)
   .max(32)
-  .regex(/^[a-z0-9._-]+$/, 'lowercase letters, digits, dot, underscore, dash');
+  // `params.key` names the translation the web shows for this rule
+  .refine((value) => /^[a-z0-9._-]+$/.test(value), {
+    params: { key: 'username' },
+  });
 
 export const createUserSchema = z.object({
   role: z.enum(['PSYCHOLOGIST', 'USER']),
