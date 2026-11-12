@@ -16,6 +16,12 @@ beforeEach(async () => {
 // Without vitest globals, Testing Library does not unmount between tests on its own.
 afterEach(cleanup);
 
+// jsdom lacks what Radix Select touches on open: pointer capture and scrollIntoView.
+Element.prototype.hasPointerCapture ??= () => false;
+Element.prototype.setPointerCapture ??= () => {};
+Element.prototype.releasePointerCapture ??= () => {};
+Element.prototype.scrollIntoView ??= () => {};
+
 // jsdom has no matchMedia; the theme hook asks it for the device preference.
 window.matchMedia ??= (query: string) =>
   ({
