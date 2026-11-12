@@ -106,7 +106,7 @@ POST   /users/:id/activate | /deactivate | /reset-password    A, P (own)
 DELETE /users/:id                           A, participants only: privacy erasure
 
 POST   /groups  PATCH /groups/:id           P
-GET    /groups  GET /groups/:id             A, P (own)
+GET    /groups  GET /groups/:id             A, P (own); rows carry members and assigned modules in order
 DELETE /groups/:id                          A, P (own); members keep their accounts and content
 POST   /groups/:id/members                  P: add own participant (moves them if in another group)
 DELETE /groups/:id/members/:userId          P
