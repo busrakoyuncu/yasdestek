@@ -49,7 +49,9 @@
     "NETWORK": "Could not connect. Check your internet and try again.",
     "UNKNOWN": "Something went wrong. Please try again.",
     "crashTitle": "Something went wrong",
-    "USERNAME_TAKEN": "That username is taken. Choose another."
+    "USERNAME_TAKEN": "That username is taken. Choose another.",
+    "BASE_MODULE": "Base modules cannot be deleted.",
+    "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead."
   },
   "validation": {
     "required": "This field is required.",
@@ -148,6 +150,44 @@
       "body": "Their writing, recordings, images, comments and messages are erased and cannot be recovered. This is only for privacy requests.",
       "confirm": "Delete permanently",
       "done": "Account deleted"
+    }
+  },
+  "modules": {
+    "scope": {
+      "base": "Base",
+      "global": "Global",
+      "own": "My module"
+    },
+    "by": "added by {{name}}",
+    "questions": "{{count}} questions",
+    "empty": "No modules yet.",
+    "new": "New module",
+    "edit": "Edit",
+    "delete": "Delete",
+    "form": {
+      "createTitle": "New module",
+      "editTitle": "Edit module",
+      "intro": "Participants see the title, description and rules at the top of the module, and the questions beside the writing area.",
+      "title": "Title",
+      "description": "Description",
+      "descriptionHint": "Welcome and purpose text",
+      "rules": "Rules",
+      "rulesHint": "Expectations for this module; required",
+      "questionsLabel": "Guided questions",
+      "question": "Question {{n}}",
+      "addQuestion": "Add a question",
+      "removeQuestion": "Remove question {{n}}",
+      "submitCreate": "Create",
+      "submitEdit": "Save",
+      "submitting": "Saving…",
+      "created": "Module created",
+      "saved": "Module saved"
+    },
+    "remove": {
+      "title": "Delete {{title}}?",
+      "body": "The module is removed from the groups it is assigned to. A module with responses cannot be deleted.",
+      "confirm": "Delete",
+      "done": "Module deleted"
     }
   }
 }
