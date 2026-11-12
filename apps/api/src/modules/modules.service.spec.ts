@@ -61,6 +61,11 @@ describe('ModulesService', () => {
         where: { groups: { some: { groupId: 'g1' } } },
       }),
     );
+    // a participant's list carries their own response state per module
+    const [{ include }] = prisma.module.findMany.mock.calls.at(-1) as [
+      { include: { responses?: { where: { userId: string } } } },
+    ];
+    expect(include.responses?.where.userId).toBe(member.id);
 
     await service.list(loner);
     expect(prisma.module.findMany).toHaveBeenLastCalledWith(
