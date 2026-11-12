@@ -47,11 +47,21 @@ export class ModulesService {
 
   // The creator's name and role ride along so a screen can say whose module
   // it is: seeded (no creator), an admin's (global), or a psychologist's own.
+  // A participant also gets the state of their own response per module, so
+  // their list can say "not started", "draft" or "shared" in one request.
   list(me: CurrentUser) {
     return this.prisma.module.findMany({
       where: visibleTo(me),
       orderBy: [{ order: 'asc' }, { title: 'asc' }],
-      include: { createdBy: { select: { username: true, role: true } } },
+      include: {
+        createdBy: { select: { username: true, role: true } },
+        ...(me.role === 'USER' && {
+          responses: {
+            where: { userId: me.id, deletedAt: null },
+            select: { published: true, updatedAt: true },
+          },
+        }),
+      },
     });
   }
 

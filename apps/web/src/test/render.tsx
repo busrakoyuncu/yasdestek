@@ -11,10 +11,12 @@ import { queryClient } from '@/lib/query';
 // Mounts an element at `path` with the same providers the app uses, inside a
 // memory router with a catch-all route so navigation can be asserted.
 // `children` nest under the element, for layout routes that render an Outlet.
+// `at` is the address to open when `path` has params (`/m/:id` opened at `/m/1`).
 export function renderApp(
   element: ReactNode,
   path = '/',
   children?: RouteObject[],
+  at = path,
 ) {
   queryClient.clear();
   const router = createMemoryRouter(
@@ -22,7 +24,7 @@ export function renderApp(
       { path, element, children },
       { path: '*', element: null },
     ],
-    { initialEntries: [path] },
+    { initialEntries: [at] },
   );
   const result = render(
     <QueryClientProvider client={queryClient}>

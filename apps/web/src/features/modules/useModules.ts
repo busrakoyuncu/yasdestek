@@ -18,8 +18,18 @@ export type Module = {
   isBase: boolean;
   createdById: string | null;
   createdBy: { username: string; role: Role } | null;
+  // a participant's own response state, only in a participant's list
+  responses?: { published: boolean; updatedAt: string }[];
   createdAt: string;
   updatedAt: string;
+};
+
+// Where a participant stands with a module, from the list's response state.
+export type Progress = 'not_started' | 'draft' | 'shared';
+export const progressOf = (module: Module): Progress => {
+  const mine = module.responses?.[0];
+  if (!mine) return 'not_started';
+  return mine.published ? 'shared' : 'draft';
 };
 
 // Where a module comes from: seeded with the platform, made by an admin for
@@ -37,6 +47,12 @@ export const modulesQuery = queryOptions({
   queryKey: ['modules'],
   queryFn: () => api.get<Module[]>('/modules'),
 });
+
+export const moduleQuery = (id: string) =>
+  queryOptions({
+    queryKey: ['modules', id],
+    queryFn: () => api.get<Module>(`/modules/${id}`),
+  });
 
 export function useModuleActions() {
   const queryClient = useQueryClient();
