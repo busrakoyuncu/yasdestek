@@ -49,7 +49,9 @@
     "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
     "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
     "crashTitle": "Bir şeyler ters gitti",
-    "USERNAME_TAKEN": "Bu kullanıcı adı kullanımda. Başka bir ad seçin."
+    "USERNAME_TAKEN": "Bu kullanıcı adı kullanımda. Başka bir ad seçin.",
+    "BASE_MODULE": "Temel modüller silinemez.",
+    "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın."
   },
   "validation": {
     "required": "Bu alan gerekli.",
@@ -148,6 +150,44 @@
       "body": "Yazdıkları, ses kayıtları, görselleri, yorumları ve mesajları geri getirilemez biçimde silinir. Bu işlem yalnızca gizlilik talepleri içindir.",
       "confirm": "Kalıcı olarak sil",
       "done": "Hesap silindi"
+    }
+  },
+  "modules": {
+    "scope": {
+      "base": "Temel",
+      "global": "Genel",
+      "own": "Kendi modülüm"
+    },
+    "by": "{{name}} ekledi",
+    "questions": "{{count}} soru",
+    "empty": "Henüz modül yok.",
+    "new": "Yeni modül",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "form": {
+      "createTitle": "Yeni modül",
+      "editTitle": "Modülü düzenle",
+      "intro": "Katılımcılar başlığı, açıklamayı ve kuralları modülün başında, soruları ise yazı alanının yanında görür.",
+      "title": "Başlık",
+      "description": "Açıklama",
+      "descriptionHint": "Karşılama ve amaç metni",
+      "rules": "Kurallar",
+      "rulesHint": "Bu modüle özgü beklentiler; zorunlu",
+      "questionsLabel": "Yönlendirici sorular",
+      "question": "{{n}}. soru",
+      "addQuestion": "Soru ekle",
+      "removeQuestion": "{{n}}. soruyu kaldır",
+      "submitCreate": "Oluştur",
+      "submitEdit": "Kaydet",
+      "submitting": "Kaydediliyor…",
+      "created": "Modül oluşturuldu",
+      "saved": "Modül kaydedildi"
+    },
+    "remove": {
+      "title": "{{title}} silinsin mi?",
+      "body": "Modül, atandığı gruplardan kaldırılır. Yanıt yazılmış bir modül silinemez.",
+      "confirm": "Sil",
+      "done": "Modül silindi"
     }
   }
 }

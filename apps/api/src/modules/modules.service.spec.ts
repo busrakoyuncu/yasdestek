@@ -43,7 +43,10 @@ describe('ModulesService', () => {
   it('lists by visibility: admin all, psychologist global + own, participant by group', async () => {
     await service.list(admin);
     expect(prisma.module.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({ where: {} }),
+      expect.objectContaining({
+        where: {},
+        include: { createdBy: { select: { username: true, role: true } } },
+      }),
     );
 
     await service.list(psychologist);

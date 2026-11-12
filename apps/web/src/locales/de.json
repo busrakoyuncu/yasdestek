@@ -49,7 +49,9 @@
     "NETWORK": "Keine Verbindung. Prüfen Sie Ihr Internet und versuchen Sie es erneut.",
     "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "crashTitle": "Etwas ist schiefgelaufen",
-    "USERNAME_TAKEN": "Dieser Benutzername ist vergeben. Wählen Sie einen anderen."
+    "USERNAME_TAKEN": "Dieser Benutzername ist vergeben. Wählen Sie einen anderen.",
+    "BASE_MODULE": "Basismodule können nicht gelöscht werden.",
+    "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
@@ -148,6 +150,44 @@
       "body": "Texte, Aufnahmen, Bilder, Kommentare und Nachrichten werden unwiderruflich gelöscht. Nur für Datenschutzanfragen.",
       "confirm": "Endgültig löschen",
       "done": "Konto gelöscht"
+    }
+  },
+  "modules": {
+    "scope": {
+      "base": "Basis",
+      "global": "Global",
+      "own": "Mein Modul"
+    },
+    "by": "hinzugefügt von {{name}}",
+    "questions": "{{count}} Fragen",
+    "empty": "Noch keine Module.",
+    "new": "Neues Modul",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "form": {
+      "createTitle": "Neues Modul",
+      "editTitle": "Modul bearbeiten",
+      "intro": "Teilnehmende sehen Titel, Beschreibung und Regeln oben im Modul, die Fragen neben dem Schreibbereich.",
+      "title": "Titel",
+      "description": "Beschreibung",
+      "descriptionHint": "Begrüßung und Zweck",
+      "rules": "Regeln",
+      "rulesHint": "Erwartungen für dieses Modul; Pflichtfeld",
+      "questionsLabel": "Leitfragen",
+      "question": "Frage {{n}}",
+      "addQuestion": "Frage hinzufügen",
+      "removeQuestion": "Frage {{n}} entfernen",
+      "submitCreate": "Anlegen",
+      "submitEdit": "Speichern",
+      "submitting": "Wird gespeichert…",
+      "created": "Modul angelegt",
+      "saved": "Modul gespeichert"
+    },
+    "remove": {
+      "title": "{{title}} löschen?",
+      "body": "Das Modul wird aus den zugewiesenen Gruppen entfernt. Ein Modul mit Antworten kann nicht gelöscht werden.",
+      "confirm": "Löschen",
+      "done": "Modul gelöscht"
     }
   }
 }

@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router';
 import { ComingSoon } from '@/components/ComingSoon';
 import { RulesPage } from '@/features/pages/RulesPage';
+import { ModulesPage } from '@/features/modules/ModulesPage';
 import { PeoplePage } from '@/features/people/PeoplePage';
 
 // The admin area, one lazily loaded chunk. Screens arrive in step 13.
@@ -11,7 +12,7 @@ export function Component() {
     <Routes>
       <Route index element={<PeoplePage role="PSYCHOLOGIST" admin />} />
       <Route path="participants" element={<PeoplePage role="USER" admin />} />
-      <Route path="modules" element={<ComingSoon title={t('nav.modules')} />} />
+      <Route path="modules" element={<ModulesPage />} />
       <Route
         path="analytics"
         element={<ComingSoon title={t('nav.analytics')} />}
