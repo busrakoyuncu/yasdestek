@@ -189,5 +189,48 @@
       "confirm": "Sil",
       "done": "Modül silindi"
     }
+  },
+  "groups": {
+    "empty": "Henüz grup yok. Katılımcılarınızı 5-6 kişilik gruplara ayırın.",
+    "new": "Yeni grup",
+    "rename": "Adı değiştir",
+    "delete": "Grubu sil",
+    "form": {
+      "createTitle": "Yeni grup",
+      "renameTitle": "Grup adını değiştir",
+      "name": "Grup adı",
+      "submitCreate": "Oluştur",
+      "submitRename": "Kaydet",
+      "submitting": "Kaydediliyor…",
+      "created": "Grup oluşturuldu",
+      "renamed": "Grup adı değiştirildi"
+    },
+    "members": {
+      "title": "Üyeler",
+      "empty": "Henüz üye yok.",
+      "add": "Üye ekle",
+      "placeholder": "Katılımcı seçin",
+      "noneLeft": "Gruba eklenecek boşta katılımcı yok.",
+      "remove": "{{name}} üyelikten çıkar",
+      "added": "Üye eklendi",
+      "removed": "Üye çıkarıldı",
+      "inactive": "etkin değil"
+    },
+    "modules": {
+      "title": "Atanan modüller",
+      "empty": "Henüz modül atanmadı.",
+      "assign": "Modül ata",
+      "placeholder": "Modül seçin",
+      "noneLeft": "Atanacak başka modül yok.",
+      "unassign": "{{title}} modülünü kaldır",
+      "assigned": "Modül atandı",
+      "unassigned": "Modül kaldırıldı"
+    },
+    "remove": {
+      "title": "{{name}} grubu silinsin mi?",
+      "body": "Üyeler gruptan çıkar ama yazdıkları kalır. Modül atamaları kaldırılır.",
+      "confirm": "Grubu sil",
+      "done": "Grup silindi"
+    }
   }
 }
