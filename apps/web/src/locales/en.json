@@ -245,5 +245,35 @@
     "send": "Send",
     "back": "Back to the inbox",
     "unread": "{{count}} unread"
+  },
+  "writing": {
+    "noModules": "No module has been assigned to you yet. It will appear here when your counselor is ready.",
+    "progress": {
+      "not_started": "Not started",
+      "draft": "Draft",
+      "shared": "Shared"
+    },
+    "back": "Back to modules",
+    "rules": "Rules for this module",
+    "questions": "Guided questions",
+    "yourResponse": "Your response",
+    "placeholder": "Write here, at your own pace…",
+    "nothingSaved": "Nothing saved yet.",
+    "savedAt": "Draft saved on {{when}}.",
+    "sharedAt": "Shared with your group on {{when}}.",
+    "unsaved": "unsaved changes",
+    "saveDraft": "Save draft",
+    "share": "Share with the group",
+    "saveShared": "Save changes",
+    "shareNote": "A draft is visible only to you. Once shared, your group can read it and comment.",
+    "sharedNote": "This response is shared with your group. You can edit it any time.",
+    "draftSaved": "Draft saved",
+    "shared": "Your response is shared with your group",
+    "leave": {
+      "title": "You have unsaved writing",
+      "body": "If you leave this page, the latest changes are lost.",
+      "stay": "Stay on the page",
+      "discard": "Leave without saving"
+    }
   }
 }

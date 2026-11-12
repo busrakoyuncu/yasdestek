@@ -245,5 +245,35 @@
     "send": "Gönder",
     "back": "Gelen kutusuna dön",
     "unread": "{{count}} okunmamış"
+  },
+  "writing": {
+    "noModules": "Henüz size atanmış bir modül yok. Danışmanınız hazır olduğunda burada görünecek.",
+    "progress": {
+      "not_started": "Başlamadınız",
+      "draft": "Taslak",
+      "shared": "Paylaşıldı"
+    },
+    "back": "Modüllere dön",
+    "rules": "Bu modülün kuralları",
+    "questions": "Yönlendirici sorular",
+    "yourResponse": "Yanıtınız",
+    "placeholder": "Buraya, kendi hızınızda yazın…",
+    "nothingSaved": "Henüz kaydedilmedi.",
+    "savedAt": "Taslak {{when}} tarihinde kaydedildi.",
+    "sharedAt": "{{when}} tarihinde grubunuzla paylaşıldı.",
+    "unsaved": "kaydedilmemiş değişiklikler var",
+    "saveDraft": "Taslağı kaydet",
+    "share": "Grupla paylaş",
+    "saveShared": "Değişiklikleri kaydet",
+    "shareNote": "Taslak yalnızca size görünür. Paylaştığınızda grup arkadaşlarınız okuyabilir ve yorum yazabilir.",
+    "sharedNote": "Bu yanıt grubunuzla paylaşıldı. Dilediğiniz zaman düzenleyebilirsiniz.",
+    "draftSaved": "Taslak kaydedildi",
+    "shared": "Yanıtınız grubunuzla paylaşıldı",
+    "leave": {
+      "title": "Kaydedilmemiş yazınız var",
+      "body": "Bu sayfadan ayrılırsanız son değişiklikler kaybolur.",
+      "stay": "Sayfada kal",
+      "discard": "Kaydetmeden ayrıl"
+    }
   }
 }

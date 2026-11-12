@@ -245,5 +245,35 @@
     "send": "Senden",
     "back": "Zurück zum Posteingang",
     "unread": "{{count}} ungelesen"
+  },
+  "writing": {
+    "noModules": "Ihnen ist noch kein Modul zugewiesen. Es erscheint hier, sobald Ihre Begleitung so weit ist.",
+    "progress": {
+      "not_started": "Nicht begonnen",
+      "draft": "Entwurf",
+      "shared": "Geteilt"
+    },
+    "back": "Zurück zu den Modulen",
+    "rules": "Regeln für dieses Modul",
+    "questions": "Leitfragen",
+    "yourResponse": "Ihre Antwort",
+    "placeholder": "Schreiben Sie hier, in Ihrem Tempo…",
+    "nothingSaved": "Noch nichts gespeichert.",
+    "savedAt": "Entwurf gespeichert am {{when}}.",
+    "sharedAt": "Mit Ihrer Gruppe geteilt am {{when}}.",
+    "unsaved": "ungespeicherte Änderungen",
+    "saveDraft": "Entwurf speichern",
+    "share": "Mit der Gruppe teilen",
+    "saveShared": "Änderungen speichern",
+    "shareNote": "Ein Entwurf ist nur für Sie sichtbar. Nach dem Teilen kann Ihre Gruppe ihn lesen und kommentieren.",
+    "sharedNote": "Diese Antwort ist mit Ihrer Gruppe geteilt. Sie können sie jederzeit bearbeiten.",
+    "draftSaved": "Entwurf gespeichert",
+    "shared": "Ihre Antwort ist mit Ihrer Gruppe geteilt",
+    "leave": {
+      "title": "Sie haben ungespeicherten Text",
+      "body": "Wenn Sie diese Seite verlassen, gehen die letzten Änderungen verloren.",
+      "stay": "Auf der Seite bleiben",
+      "discard": "Ohne Speichern verlassen"
+    }
   }
 }
