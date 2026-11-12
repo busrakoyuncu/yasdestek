@@ -232,5 +232,18 @@
       "confirm": "Grubu sil",
       "done": "Grup silindi"
     }
+  },
+  "messages": {
+    "myCounselor": "Danışmanım",
+    "emptyParticipant": "Henüz mesaj yok. Danışmanınıza buradan özel olarak yazabilirsiniz; sorular, zor anlar, teknik sorunlar.",
+    "noCounselor": "Henüz bir danışmanınız atanmadı.",
+    "emptyInbox": "Henüz katılımcınız yok.",
+    "emptyThread": "{{name}} ile henüz mesajlaşmadınız.",
+    "pick": "Soldan bir katılımcı seçin.",
+    "placeholder": "Mesajınızı yazın…",
+    "compose": "Mesaj",
+    "send": "Gönder",
+    "back": "Gelen kutusuna dön",
+    "unread": "{{count}} okunmamış"
   }
 }

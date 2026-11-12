@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router';
-import { ComingSoon } from '@/components/ComingSoon';
+import { MessagesPage } from '@/features/messages/MessagesPage';
 import { RulesPage } from '@/features/pages/RulesPage';
 
 // The participant area, one lazily loaded chunk. Screens arrive in step 14.
@@ -19,14 +19,10 @@ function Home() {
 }
 
 export function Component() {
-  const { t } = useTranslation();
   return (
     <Routes>
       <Route index element={<Home />} />
-      <Route
-        path="messages"
-        element={<ComingSoon title={t('nav.messages')} />}
-      />
+      <Route path="messages" element={<MessagesPage />} />
       <Route path="rules" element={<RulesPage />} />
     </Routes>
   );

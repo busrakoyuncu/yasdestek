@@ -232,5 +232,18 @@
       "confirm": "Gruppe löschen",
       "done": "Gruppe gelöscht"
     }
+  },
+  "messages": {
+    "myCounselor": "Meine Begleitung",
+    "emptyParticipant": "Noch keine Nachrichten. Hier können Sie Ihrer Begleitung privat schreiben: Fragen, schwere Momente, technische Probleme.",
+    "noCounselor": "Ihnen ist noch keine Begleitung zugeordnet.",
+    "emptyInbox": "Noch keine Teilnehmenden.",
+    "emptyThread": "Noch keine Nachrichten mit {{name}}.",
+    "pick": "Wählen Sie links eine Person aus.",
+    "placeholder": "Nachricht schreiben…",
+    "compose": "Nachricht",
+    "send": "Senden",
+    "back": "Zurück zum Posteingang",
+    "unread": "{{count}} ungelesen"
   }
 }
