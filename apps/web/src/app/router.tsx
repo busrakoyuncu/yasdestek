@@ -36,8 +36,8 @@ export const router = createBrowserRouter([
   { path: '/', Component: WelcomePage },
   { path: '/login', Component: LoginPage },
   { path: '/change-password', Component: ChangePasswordPage },
-  area('USER', () => import('@/features/app/routes')),
-  area('PSYCHOLOGIST', () => import('@/features/psychologist/routes')),
-  area('ADMIN', () => import('@/features/admin/routes')),
+  area('USER', () => import('./areas/participant')),
+  area('PSYCHOLOGIST', () => import('./areas/psychologist')),
+  area('ADMIN', () => import('./areas/admin')),
   { path: '*', element: <Navigate to="/" replace /> },
 ]);
