@@ -45,10 +45,13 @@ export class ModulesService {
     });
   }
 
+  // The creator's name and role ride along so a screen can say whose module
+  // it is: seeded (no creator), an admin's (global), or a psychologist's own.
   list(me: CurrentUser) {
     return this.prisma.module.findMany({
       where: visibleTo(me),
       orderBy: [{ order: 'asc' }, { title: 'asc' }],
+      include: { createdBy: { select: { username: true, role: true } } },
     });
   }
 
