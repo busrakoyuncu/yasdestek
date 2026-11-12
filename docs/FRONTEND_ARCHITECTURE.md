@@ -31,15 +31,17 @@ Feature-based organization - each feature folder owns its components, queries, a
 ```
 apps/web/src/
 ├── app/                  # app frame: router, RequireAuth, AppShell, AreaError, navigation
+│   └── areas/            # one file per role area: its routes, composed from features (lazy chunks)
 ├── features/
 │   ├── welcome/          # landing page: forest image, firefly canvas, Continue
 │   ├── auth/             # login, password change, session query, role home map
 │   ├── pages/            # editable platform pages (general rules)
-│   ├── app/              # participant area chunk: its routes and screens
+│   ├── people/           # accounts: list, create with one-time password, activate, reset, delete
 │   ├── modules/          # module list/detail, text editor, audio recorder, image upload
 │   ├── forum/            # group forum: posts, comments, moderation actions
-│   ├── psychologist/     # user management, groups, activation, own-module management
-│   └── admin/            # psychologist management, global modules, analytics
+│   ├── groups/           # the counselor's groups and their members
+│   ├── messages/         # participant thread and counselor inbox
+│   └── analytics/        # admin overview of counselors, participants and progress
 ├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, ComingSoon, shadcn primitives under ui/
 ├── lib/                  # api client, i18n setup, query client, error messages, cn
 ├── locales/              # tr.json (source of truth), en.json, de.json
@@ -67,7 +69,7 @@ Rules:
 - The welcome page is a door, not marketing (public pages are a non-goal in the PRD). It has no copy beyond the greeting.
 - `RequireAuth` is a layout route in front of each area: it shows the loading screen while the session is unknown, sends visitors to login with a `redirect` back, sends a pending password change to that screen, and sends the wrong role to its own home.
 - Under the guard, `AppShell` frames every signed-in screen: sidebar and top bar on desktop; for participants a bottom tab bar on phones, for the other roles the sidebar behind a menu button. The user menu holds the theme choice and sign out; the language switch sits beside it.
-- Each area's screens live in `features/<area>/routes.tsx`, one lazily loaded chunk that renders its own `<Routes>`, so participants do not download admin code. The route lists per role are in `app/navigation.ts`.
+- Each area is one file in `app/areas/`, a lazily loaded chunk that renders its own `<Routes>` composed from feature screens, so participants do not download admin code and features never import each other. The nav lists per role are in `app/navigation.ts`.
 - Unknown paths go to the welcome page.
 - The guard is UX only - every permission is enforced again by the API.
 
