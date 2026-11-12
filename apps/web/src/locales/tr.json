@@ -7,7 +7,10 @@
     "menu": "Menü",
     "account": "Hesap menüsü",
     "signOut": "Çıkış yap",
-    "retry": "Tekrar dene"
+    "retry": "Tekrar dene",
+    "cancel": "Vazgeç",
+    "close": "Kapat",
+    "actions": "İşlemler"
   },
   "welcome": {
     "title": "Yasdestek'e hoş geldiniz",
@@ -45,14 +48,16 @@
     "UNAUTHORIZED": "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
     "NETWORK": "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.",
     "UNKNOWN": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
-    "crashTitle": "Bir şeyler ters gitti"
+    "crashTitle": "Bir şeyler ters gitti",
+    "USERNAME_TAKEN": "Bu kullanıcı adı kullanımda. Başka bir ad seçin."
   },
   "validation": {
     "required": "Bu alan gerekli.",
     "minLength": "En az {{n}} karakter olmalı.",
     "maxLength": "En fazla {{n}} karakter olabilir.",
     "invalid": "Geçersiz değer.",
-    "passwordCase": "Büyük ve küçük harf içermeli."
+    "passwordCase": "Büyük ve küçük harf içermeli.",
+    "username": "Yalnızca küçük harf, rakam, nokta, alt çizgi ve tire."
   },
   "area": {
     "comingSoon": "Bu alan yakında hazır olacak."
@@ -82,6 +87,66 @@
     "home": {
       "title": "Anlatmak iyi gelir",
       "intro": "Burada kaybınızı kelimelere dökebilir, duygularınızı adlandırabilir ve sevdiğinizle bağınızı sürdürebilirsiniz."
+    }
+  },
+  "people": {
+    "columns": {
+      "username": "Kullanıcı adı",
+      "status": "Durum",
+      "counselor": "Danışmanı",
+      "created": "Oluşturulma"
+    },
+    "status": {
+      "active": "Aktif",
+      "inactive": "Etkin değil",
+      "pending": "İlk girişini bekliyor"
+    },
+    "empty": {
+      "counselors": "Henüz danışman yok.",
+      "participants": "Henüz katılımcı yok."
+    },
+    "create": {
+      "counselor": "Yeni danışman",
+      "participant": "Yeni katılımcı",
+      "usernameHint": "Küçük harf, rakam, nokta, alt çizgi, tire",
+      "counselorField": "Danışmanı",
+      "counselorPlaceholder": "Danışman seçin",
+      "submit": "Oluştur",
+      "submitting": "Oluşturuluyor…",
+      "created": "Hesap oluşturuldu"
+    },
+    "password": {
+      "title": "Geçici şifre",
+      "note": "Bu şifre bir daha gösterilmeyecek. Kişiye güvenli bir yolla iletin; ilk girişte değiştirmesi istenecek.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "done": "Tamam"
+    },
+    "actions": {
+      "activate": "Etkinleştir",
+      "deactivate": "Devre dışı bırak",
+      "resetPassword": "Şifreyi sıfırla",
+      "delete": "Kalıcı olarak sil"
+    },
+    "deactivate": {
+      "title": "{{name}} devre dışı bırakılsın mı?",
+      "body": "Açık oturumları hemen kapanır ve yeniden etkinleştirilene kadar giriş yapamaz.",
+      "confirm": "Devre dışı bırak",
+      "done": "Hesap devre dışı bırakıldı"
+    },
+    "activate": {
+      "done": "Hesap etkinleştirildi"
+    },
+    "reset": {
+      "title": "{{name}} için şifre sıfırlansın mı?",
+      "body": "Açık oturumları kapanır. Yeni geçici şifreyi kişiye sizin iletmeniz gerekir.",
+      "confirm": "Şifreyi sıfırla"
+    },
+    "delete": {
+      "title": "{{name}} kalıcı olarak silinsin mi?",
+      "body": "Yazdıkları, ses kayıtları, görselleri, yorumları ve mesajları geri getirilemez biçimde silinir. Bu işlem yalnızca gizlilik talepleri içindir.",
+      "confirm": "Kalıcı olarak sil",
+      "done": "Hesap silindi"
     }
   }
 }

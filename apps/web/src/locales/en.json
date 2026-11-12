@@ -7,7 +7,10 @@
     "menu": "Menu",
     "account": "Account menu",
     "signOut": "Sign out",
-    "retry": "Try again"
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "close": "Close",
+    "actions": "Actions"
   },
   "welcome": {
     "title": "Welcome to Yasdestek",
@@ -45,14 +48,16 @@
     "UNAUTHORIZED": "Your session has ended. Please sign in again.",
     "NETWORK": "Could not connect. Check your internet and try again.",
     "UNKNOWN": "Something went wrong. Please try again.",
-    "crashTitle": "Something went wrong"
+    "crashTitle": "Something went wrong",
+    "USERNAME_TAKEN": "That username is taken. Choose another."
   },
   "validation": {
     "required": "This field is required.",
     "minLength": "Must be at least {{n}} characters.",
     "maxLength": "Can be at most {{n}} characters.",
     "invalid": "Invalid value.",
-    "passwordCase": "Needs upper and lower case letters."
+    "passwordCase": "Needs upper and lower case letters.",
+    "username": "Only lowercase letters, digits, dot, underscore and dash."
   },
   "area": {
     "comingSoon": "This area is coming soon."
@@ -82,6 +87,66 @@
     "home": {
       "title": "Telling helps",
       "intro": "Here you can put your loss into words, name your feelings, and keep your bond with the one you love."
+    }
+  },
+  "people": {
+    "columns": {
+      "username": "Username",
+      "status": "Status",
+      "counselor": "Counselor",
+      "created": "Created"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Awaiting first sign-in"
+    },
+    "empty": {
+      "counselors": "No counselors yet.",
+      "participants": "No participants yet."
+    },
+    "create": {
+      "counselor": "New counselor",
+      "participant": "New participant",
+      "usernameHint": "Lowercase letters, digits, dot, underscore, dash",
+      "counselorField": "Counselor",
+      "counselorPlaceholder": "Choose a counselor",
+      "submit": "Create",
+      "submitting": "Creating…",
+      "created": "Account created"
+    },
+    "password": {
+      "title": "Temporary password",
+      "note": "This password will not be shown again. Pass it on securely; they will be asked to change it at first sign-in.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "done": "Done"
+    },
+    "actions": {
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "resetPassword": "Reset password",
+      "delete": "Delete permanently"
+    },
+    "deactivate": {
+      "title": "Deactivate {{name}}?",
+      "body": "Their open sessions end at once and they cannot sign in until reactivated.",
+      "confirm": "Deactivate",
+      "done": "Account deactivated"
+    },
+    "activate": {
+      "done": "Account activated"
+    },
+    "reset": {
+      "title": "Reset the password for {{name}}?",
+      "body": "Their open sessions end. You will need to pass the new temporary password on yourself.",
+      "confirm": "Reset password"
+    },
+    "delete": {
+      "title": "Delete {{name}} permanently?",
+      "body": "Their writing, recordings, images, comments and messages are erased and cannot be recovered. This is only for privacy requests.",
+      "confirm": "Delete permanently",
+      "done": "Account deleted"
     }
   }
 }

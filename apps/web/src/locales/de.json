@@ -7,7 +7,10 @@
     "menu": "Menü",
     "account": "Kontomenü",
     "signOut": "Abmelden",
-    "retry": "Erneut versuchen"
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "actions": "Aktionen"
   },
   "welcome": {
     "title": "Willkommen bei Yasdestek",
@@ -45,14 +48,16 @@
     "UNAUTHORIZED": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "NETWORK": "Keine Verbindung. Prüfen Sie Ihr Internet und versuchen Sie es erneut.",
     "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "crashTitle": "Etwas ist schiefgelaufen"
+    "crashTitle": "Etwas ist schiefgelaufen",
+    "USERNAME_TAKEN": "Dieser Benutzername ist vergeben. Wählen Sie einen anderen."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
     "minLength": "Mindestens {{n}} Zeichen.",
     "maxLength": "Höchstens {{n}} Zeichen.",
     "invalid": "Ungültiger Wert.",
-    "passwordCase": "Braucht Groß- und Kleinbuchstaben."
+    "passwordCase": "Braucht Groß- und Kleinbuchstaben.",
+    "username": "Nur Kleinbuchstaben, Ziffern, Punkt, Unterstrich und Bindestrich."
   },
   "area": {
     "comingSoon": "Dieser Bereich kommt bald."
@@ -82,6 +87,66 @@
     "home": {
       "title": "Erzählen tut gut",
       "intro": "Hier können Sie Ihren Verlust in Worte fassen, Ihre Gefühle benennen und die Verbindung zu dem Menschen, den Sie lieben, bewahren."
+    }
+  },
+  "people": {
+    "columns": {
+      "username": "Benutzername",
+      "status": "Status",
+      "counselor": "Begleitung",
+      "created": "Erstellt"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "pending": "Wartet auf erste Anmeldung"
+    },
+    "empty": {
+      "counselors": "Noch keine Begleitungen.",
+      "participants": "Noch keine Teilnehmenden."
+    },
+    "create": {
+      "counselor": "Neue Begleitung",
+      "participant": "Neue:r Teilnehmer:in",
+      "usernameHint": "Kleinbuchstaben, Ziffern, Punkt, Unterstrich, Bindestrich",
+      "counselorField": "Begleitung",
+      "counselorPlaceholder": "Begleitung wählen",
+      "submit": "Anlegen",
+      "submitting": "Wird angelegt…",
+      "created": "Konto angelegt"
+    },
+    "password": {
+      "title": "Vorläufiges Passwort",
+      "note": "Dieses Passwort wird nicht noch einmal angezeigt. Geben Sie es sicher weiter; bei der ersten Anmeldung muss es geändert werden.",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "done": "Fertig"
+    },
+    "actions": {
+      "activate": "Aktivieren",
+      "deactivate": "Deaktivieren",
+      "resetPassword": "Passwort zurücksetzen",
+      "delete": "Endgültig löschen"
+    },
+    "deactivate": {
+      "title": "{{name}} deaktivieren?",
+      "body": "Offene Sitzungen enden sofort, und eine Anmeldung ist bis zur erneuten Aktivierung nicht möglich.",
+      "confirm": "Deaktivieren",
+      "done": "Konto deaktiviert"
+    },
+    "activate": {
+      "done": "Konto aktiviert"
+    },
+    "reset": {
+      "title": "Passwort für {{name}} zurücksetzen?",
+      "body": "Offene Sitzungen enden. Das neue vorläufige Passwort müssen Sie selbst weitergeben.",
+      "confirm": "Passwort zurücksetzen"
+    },
+    "delete": {
+      "title": "{{name}} endgültig löschen?",
+      "body": "Texte, Aufnahmen, Bilder, Kommentare und Nachrichten werden unwiderruflich gelöscht. Nur für Datenschutzanfragen.",
+      "confirm": "Endgültig löschen",
+      "done": "Konto gelöscht"
     }
   }
 }
