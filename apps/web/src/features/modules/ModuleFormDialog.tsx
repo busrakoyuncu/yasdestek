@@ -41,10 +41,12 @@ const toForm = (module?: Module): FormValues => ({
 type Props = {
   // present: edit this module; absent: create a new one
   module?: Module;
+  // a counselor editing a module that belongs to everyone: saving makes a copy
+  shared?: boolean;
   trigger: ReactNode;
 };
 
-export function ModuleFormDialog({ module, trigger }: Props) {
+export function ModuleFormDialog({ module, shared, trigger }: Props) {
   const { t } = useTranslation();
   const { create, update } = useModuleActions();
   const [open, setOpen] = useState(false);
@@ -102,6 +104,11 @@ export function ModuleFormDialog({ module, trigger }: Props) {
               )}
             </DialogTitle>
             <DialogDescription>{t('modules.form.intro')}</DialogDescription>
+            {shared && (
+              <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-pretty">
+                {t('modules.form.copyNote')}
+              </p>
+            )}
           </DialogHeader>
 
           <div className="flex flex-col gap-2">

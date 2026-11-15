@@ -190,13 +190,20 @@
       "submitEdit": "Kaydet",
       "submitting": "Kaydediliyor…",
       "created": "Modül oluşturuldu",
-      "saved": "Modül kaydedildi"
+      "saved": "Modül kaydedildi",
+      "copyNote": "Bu modül tüm danışmanlarla ortak. Kaydettiğinizde size ait bir sürüm oluşur; gruplarınız ve katılımcılarınızın yazdıkları bu sürüme geçer. Diğer danışmanlar asıl modülü kullanmaya devam eder."
     },
     "remove": {
       "title": "{{title}} silinsin mi?",
       "body": "Modül, atandığı gruplardan kaldırılır. Yanıt yazılmış bir modül silinemez.",
       "confirm": "Sil",
       "done": "Modül silindi"
+    },
+    "hide": {
+      "title": "{{title}} listenizden kaldırılsın mı?",
+      "body": "Modül yalnızca sizin listenizden ve gruplarınızdan kaldırılır; diğer danışmanlar kullanmaya devam eder. Katılımcılarınızın yanıt yazdığı bir modül kaldırılamaz.",
+      "confirm": "Kaldır",
+      "done": "Modül listenizden kaldırıldı"
     }
   },
   "groups": {

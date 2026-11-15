@@ -100,17 +100,54 @@ describe('ModulesPage', () => {
     ).toBeNull();
   });
 
-  it('lets a counselor change only their own module', async () => {
+  it('lets a counselor change every module, shared ones by copy or hide', async () => {
     answer('PSYCHOLOGIST');
+    vi.mocked(api.delete).mockResolvedValueOnce(undefined);
     renderApp(<ModulesPage />, '/psychologist/modules');
     const items = await screen.findAllByRole('listitem');
-    expect(within(items[0]).queryByRole('button')).toBeNull();
-    expect(
+    for (const item of items) {
+      expect(
+        within(item).getByRole('button', { name: /^Düzenle/ }),
+      ).toBeInTheDocument();
+      expect(
+        within(item).getByRole('button', { name: /^Sil/ }),
+      ).toBeInTheDocument();
+    }
+
+    // editing a base module says it makes the counselor's own version
+    await userEvent.click(
+      within(items[0]).getByRole('button', {
+        name: 'Düzenle: Sözcüklerin Gücü',
+      }),
+    );
+    let dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveTextContent(/size ait bir sürüm oluşur/);
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Vazgeç' }),
+    );
+
+    // their own module has no such note
+    await userEvent.click(
       within(items[2]).getByRole('button', { name: 'Düzenle: Kendi modülüm' }),
-    ).toBeInTheDocument();
-    expect(
-      within(items[2]).getByRole('button', { name: 'Sil: Kendi modülüm' }),
-    ).toBeInTheDocument();
+    );
+    dialog = await screen.findByRole('dialog');
+    expect(dialog).not.toHaveTextContent(/size ait bir sürüm/);
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Vazgeç' }),
+    );
+
+    // deleting a shared module only takes it off their list
+    await userEvent.click(
+      within(items[1]).getByRole('button', { name: 'Sil: Genel modül' }),
+    );
+    const confirm = await screen.findByRole('alertdialog');
+    expect(confirm).toHaveTextContent(
+      'Genel modül listenizden kaldırılsın mı?',
+    );
+    await userEvent.click(
+      within(confirm).getByRole('button', { name: 'Kaldır' }),
+    );
+    await waitFor(() => expect(api.delete).toHaveBeenCalledWith('/modules/m2'));
   });
 
   it('refuses a module without rules or questions, then creates one', async () => {

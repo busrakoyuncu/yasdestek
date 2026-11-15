@@ -32,8 +32,9 @@ const scopeStyle = {
 };
 
 // Every module the caller may see, in the order participants get them. The
-// admin owns the global ones, a counselor owns their own; base modules can be
-// edited by the admin but never deleted.
+// admin owns the global ones and edits them for everyone; base modules are
+// never deleted. A counselor may change every module they see: editing a
+// shared one makes their own copy, deleting it hides it for them only.
 export function ModulesPage() {
   const { t } = useTranslation();
   const { user } = useSession();
@@ -42,16 +43,20 @@ export function ModulesPage() {
   const [pending, setPending] = useState<Module | null>(null);
 
   const admin = user?.role === 'ADMIN';
-  const mayEdit = (m: Module) =>
-    admin ? scopeOf(m) !== 'own' : scopeOf(m) === 'own';
-  const mayDelete = (m: Module) => mayEdit(m) && !m.isBase;
+  const mayEdit = (m: Module) => !admin || scopeOf(m) !== 'own';
+  const mayDelete = (m: Module) => !admin || (mayEdit(m) && !m.isBase);
+  // for a counselor, a module that belongs to everyone, not to them
+  const shared = (m: Module) => !admin && scopeOf(m) !== 'own';
 
   const confirmDelete = () => {
     if (!pending) return;
     const module = pending;
     setPending(null);
     remove.mutate(module.id, {
-      onSuccess: () => toastSuccess(t('modules.remove.done')),
+      onSuccess: () =>
+        toastSuccess(
+          t(shared(module) ? 'modules.hide.done' : 'modules.remove.done'),
+        ),
       onError: toastError,
     });
   };
@@ -127,6 +132,7 @@ export function ModulesPage() {
                   {mayEdit(module) && (
                     <ModuleFormDialog
                       module={module}
+                      shared={shared(module)}
                       trigger={
                         <Button
                           variant="ghost"
@@ -165,10 +171,17 @@ export function ModulesPage() {
           <AlertDialogContent className="rounded-2xl">
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {t('modules.remove.title', { title: pending.title })}
+                {t(
+                  shared(pending)
+                    ? 'modules.hide.title'
+                    : 'modules.remove.title',
+                  { title: pending.title },
+                )}
               </AlertDialogTitle>
               <AlertDialogDescription>
-                {t('modules.remove.body')}
+                {t(
+                  shared(pending) ? 'modules.hide.body' : 'modules.remove.body',
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -180,7 +193,11 @@ export function ModulesPage() {
                 className="h-10 rounded-full px-4"
                 onClick={confirmDelete}
               >
-                {t('modules.remove.confirm')}
+                {t(
+                  shared(pending)
+                    ? 'modules.hide.confirm'
+                    : 'modules.remove.confirm',
+                )}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

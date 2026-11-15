@@ -190,13 +190,20 @@
       "submitEdit": "Speichern",
       "submitting": "Wird gespeichert…",
       "created": "Modul angelegt",
-      "saved": "Modul gespeichert"
+      "saved": "Modul gespeichert",
+      "copyNote": "Dieses Modul teilen sich alle Begleitungen. Beim Speichern entsteht Ihre eigene Fassung; Ihre Gruppen und die Antworten Ihrer Teilnehmenden wechseln dorthin. Andere Begleitungen arbeiten weiter mit dem Original."
     },
     "remove": {
       "title": "{{title}} löschen?",
       "body": "Das Modul wird aus den zugewiesenen Gruppen entfernt. Ein Modul mit Antworten kann nicht gelöscht werden.",
       "confirm": "Löschen",
       "done": "Modul gelöscht"
+    },
+    "hide": {
+      "title": "{{title}} aus Ihrer Liste entfernen?",
+      "body": "Das Modul wird nur aus Ihrer Liste und Ihren Gruppen entfernt; andere Begleitungen arbeiten weiter damit. Ein Modul, zu dem Ihre Teilnehmenden geschrieben haben, kann nicht entfernt werden.",
+      "confirm": "Entfernen",
+      "done": "Modul aus Ihrer Liste entfernt"
     }
   },
   "groups": {
