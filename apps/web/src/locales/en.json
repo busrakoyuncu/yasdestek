@@ -51,7 +51,10 @@
     "crashTitle": "Something went wrong",
     "USERNAME_TAKEN": "That username is taken. Choose another.",
     "BASE_MODULE": "Base modules cannot be deleted.",
-    "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead."
+    "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead.",
+    "FILE_TOO_LARGE": "{{name}} is too large. Images may be up to 10 MB, recordings up to 50 MB.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} is not a supported file type. Choose JPEG, PNG, WebP or HEIC.",
+    "FILE_REQUIRED": "No file was chosen."
   },
   "validation": {
     "required": "This field is required.",
@@ -274,6 +277,33 @@
       "body": "If you leave this page, the latest changes are lost.",
       "stay": "Stay on the page",
       "discard": "Leave without saving"
+    }
+  },
+  "attachments": {
+    "title": "Recording and images",
+    "recording": "Recording {{n}}",
+    "image": "Image {{n}}",
+    "removeAction": "Remove",
+    "added": "Added",
+    "removed": "Removed",
+    "uploading": "Uploading {{name}}…",
+    "addImage": "Add image",
+    "imageHint": "JPEG, PNG, WebP or HEIC; up to 10 MB.",
+    "recorder": {
+      "title": "Voice recording",
+      "start": "Start recording",
+      "requesting": "Waiting for microphone permission…",
+      "stop": "Stop recording",
+      "preview": "Listen to your recording",
+      "keep": "Add recording",
+      "again": "Record again",
+      "denied": "The microphone could not be reached. Allow it in the browser settings and try again.",
+      "unsupported": "This browser cannot record audio. Try a current Chrome, Firefox or Safari."
+    },
+    "remove": {
+      "title": "Remove this file?",
+      "body": "A removed file cannot be recovered.",
+      "confirm": "Remove"
     }
   }
 }

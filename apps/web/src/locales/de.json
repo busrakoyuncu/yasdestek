@@ -51,7 +51,10 @@
     "crashTitle": "Etwas ist schiefgelaufen",
     "USERNAME_TAKEN": "Dieser Benutzername ist vergeben. Wählen Sie einen anderen.",
     "BASE_MODULE": "Basismodule können nicht gelöscht werden.",
-    "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe."
+    "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe.",
+    "FILE_TOO_LARGE": "{{name}} ist zu groß. Bilder dürfen bis zu 10 MB, Aufnahmen bis zu 50 MB haben.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} hat einen nicht unterstützten Dateityp. Wählen Sie JPEG, PNG, WebP oder HEIC.",
+    "FILE_REQUIRED": "Keine Datei gewählt."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
@@ -274,6 +277,33 @@
       "body": "Wenn Sie diese Seite verlassen, gehen die letzten Änderungen verloren.",
       "stay": "Auf der Seite bleiben",
       "discard": "Ohne Speichern verlassen"
+    }
+  },
+  "attachments": {
+    "title": "Aufnahme und Bilder",
+    "recording": "Aufnahme {{n}}",
+    "image": "Bild {{n}}",
+    "removeAction": "Entfernen",
+    "added": "Hinzugefügt",
+    "removed": "Entfernt",
+    "uploading": "{{name}} wird hochgeladen…",
+    "addImage": "Bild hinzufügen",
+    "imageHint": "JPEG, PNG, WebP oder HEIC; bis zu 10 MB.",
+    "recorder": {
+      "title": "Sprachaufnahme",
+      "start": "Aufnahme starten",
+      "requesting": "Warte auf Mikrofonfreigabe…",
+      "stop": "Aufnahme beenden",
+      "preview": "Aufnahme anhören",
+      "keep": "Aufnahme hinzufügen",
+      "again": "Neu aufnehmen",
+      "denied": "Das Mikrofon ist nicht erreichbar. Erlauben Sie es in den Browsereinstellungen und versuchen Sie es erneut.",
+      "unsupported": "Dieser Browser kann keinen Ton aufnehmen. Versuchen Sie ein aktuelles Chrome, Firefox oder Safari."
+    },
+    "remove": {
+      "title": "Diese Datei entfernen?",
+      "body": "Eine entfernte Datei kann nicht wiederhergestellt werden.",
+      "confirm": "Entfernen"
     }
   }
 }

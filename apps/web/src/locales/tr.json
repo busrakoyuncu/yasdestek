@@ -51,7 +51,10 @@
     "crashTitle": "Bir şeyler ters gitti",
     "USERNAME_TAKEN": "Bu kullanıcı adı kullanımda. Başka bir ad seçin.",
     "BASE_MODULE": "Temel modüller silinemez.",
-    "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın."
+    "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın.",
+    "FILE_TOO_LARGE": "{{name}} çok büyük. Görseller en fazla 10 MB, ses kayıtları en fazla 50 MB olabilir.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} desteklenmeyen bir dosya türü. JPEG, PNG, WebP veya HEIC seçin.",
+    "FILE_REQUIRED": "Dosya seçilmedi."
   },
   "validation": {
     "required": "Bu alan gerekli.",
@@ -274,6 +277,33 @@
       "body": "Bu sayfadan ayrılırsanız son değişiklikler kaybolur.",
       "stay": "Sayfada kal",
       "discard": "Kaydetmeden ayrıl"
+    }
+  },
+  "attachments": {
+    "title": "Ses kaydı ve görseller",
+    "recording": "{{n}}. ses kaydı",
+    "image": "{{n}}. görsel",
+    "removeAction": "Kaldır",
+    "added": "Eklendi",
+    "removed": "Kaldırıldı",
+    "uploading": "{{name}} yükleniyor…",
+    "addImage": "Görsel ekle",
+    "imageHint": "JPEG, PNG, WebP veya HEIC; en fazla 10 MB.",
+    "recorder": {
+      "title": "Ses kaydı",
+      "start": "Kayda başla",
+      "requesting": "Mikrofon izni bekleniyor…",
+      "stop": "Kaydı bitir",
+      "preview": "Kaydınızı dinleyin",
+      "keep": "Kaydı ekle",
+      "again": "Yeniden kaydet",
+      "denied": "Mikrofona erişilemedi. Tarayıcı ayarlarından izin verip tekrar deneyin.",
+      "unsupported": "Bu tarayıcı ses kaydını desteklemiyor. Güncel bir Chrome, Firefox veya Safari deneyin."
+    },
+    "remove": {
+      "title": "Bu dosya kaldırılsın mı?",
+      "body": "Kaldırılan dosya geri getirilemez.",
+      "confirm": "Kaldır"
     }
   }
 }
