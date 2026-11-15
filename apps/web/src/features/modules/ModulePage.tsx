@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft, CircleCheck } from 'lucide-react';
+import { ChevronDown, ChevronLeft, CircleCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useBlocker, useParams } from 'react-router';
@@ -25,7 +25,6 @@ import { myResponseQuery, useSaveResponse } from './useMyResponse';
 const AUTOSAVE_DELAY = 1500;
 
 // One module for a participant: what it asks, then the page they write on.
-// Text only for now; audio and images join beside it next.
 export function ModulePage() {
   const { t, i18n } = useTranslation();
   const { moduleId = '' } = useParams();
@@ -124,6 +123,21 @@ export function ModulePage() {
     timeStyle: 'short',
   });
 
+  // Shown beside the page on wide screens, and as a strip above it below xl,
+  // so the questions are in reach while writing.
+  const questionList = (
+    <ol className="flex flex-col gap-3">
+      {module.data.questions.map((question, index) => (
+        <li key={index} className="flex gap-3 leading-relaxed">
+          <span className="w-5 shrink-0 text-right font-medium text-secondary-accent tabular-nums">
+            {index + 1}
+          </span>
+          <span className="text-pretty">{question}</span>
+        </li>
+      ))}
+    </ol>
+  );
+
   return (
     <article className="flex flex-col gap-8">
       <Link
@@ -161,21 +175,12 @@ export function ModulePage() {
 
           <section
             aria-labelledby="module-questions"
-            className="flex flex-col gap-3 border-t border-border pt-5"
+            className="hidden flex-col gap-3 border-t border-border pt-5 xl:flex"
           >
             <h2 id="module-questions" className="font-medium">
               {t('writing.questions')}
             </h2>
-            <ol className="flex flex-col gap-3">
-              {module.data.questions.map((question, index) => (
-                <li key={index} className="flex gap-3 leading-relaxed">
-                  <span className="w-5 shrink-0 text-right font-medium text-secondary-accent tabular-nums">
-                    {index + 1}
-                  </span>
-                  <span className="text-pretty">{question}</span>
-                </li>
-              ))}
-            </ol>
+            {questionList}
           </section>
         </div>
 
@@ -188,6 +193,16 @@ export function ModulePage() {
             <h2 id="module-response" className="text-xl font-medium">
               {t('writing.yourResponse')}
             </h2>
+            <details className="group rounded-2xl border border-border px-5 xl:hidden">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 font-medium [&::-webkit-details-marker]:hidden">
+                {t('writing.questions')}
+                <ChevronDown
+                  className="size-4 shrink-0 text-text-secondary transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <div className="pb-4">{questionList}</div>
+            </details>
             <Textarea
               value={draft}
               onChange={(event) => setText(event.target.value)}

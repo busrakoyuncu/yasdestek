@@ -81,7 +81,12 @@ describe('participant modules', () => {
       await screen.findByRole('heading', { name: 'Sözcüklerin Gücü' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Destekleyici olun.')).toBeInTheDocument();
-    expect(screen.getByText('Haberi nasıl aldınız?')).toBeInTheDocument();
+    // twice in the page: beside it on wide screens, in the strip below xl
+    expect(screen.getAllByText('Haberi nasıl aldınız?')).toHaveLength(2);
+    const strip = screen.getByText('Yönlendirici sorular', {
+      selector: 'summary',
+    });
+    expect(strip.closest('details')).not.toHaveAttribute('open');
     const page = screen.getByRole('textbox', { name: 'Yanıtınız' });
     expect(page).toHaveValue('');
     expect(screen.getByText('Henüz kaydedilmedi.')).toBeInTheDocument();
