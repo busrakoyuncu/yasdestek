@@ -59,6 +59,7 @@ The full Turkish prompt texts exist in the thesis (Appendix M) and are used as t
 ### 4.2 Custom modules
 - Admins can create/remove **global** modules.
 - Psychologists can create/remove modules visible **only to their own users**.
+- Psychologists can also edit and remove base and global modules for their own users: editing makes their own copy, removing hides it for them (see section 11).
 - A module is structured as: **title**, **description** (welcome + purpose text), **rules** (module-specific expectations, shown distinctly - **required**: creating a module requires writing its rules), **guided questions** (rendered as a list next to the response area), and the response area.
 
 ### 4.2.0 General rules page
@@ -76,7 +77,7 @@ A user's response to a module can include:
 - **Audio recording** (recorded in the browser), where the module allows it.
 - **Image upload** (required by Module 5), where the module allows it.
 
-Each module has two switches, images and audio, both off by default. Whoever may edit the module sets them: the psychologist for their own modules, the admin for base and global modules.
+Each module has two switches, images and audio, both off by default. Whoever edits the module sets them: the admin for base and global modules (for everyone), a psychologist for their own modules and their copies.
 
 ## 5. Groups and Forums
 
@@ -135,6 +136,7 @@ Decided:
 - **Group lifecycle (2026-10-12):** the owning psychologist or an admin can delete a group at any time. Deleting removes the group and its module assignments. Members keep their accounts and content and simply have no group until placed in another one.
 - **Reassignment (2026-10-12):** a participant is not moved between psychologists. The new psychologist creates a new account and the old psychologist deactivates the old one. The old account's content stays with it.
 - **Attachments per module (2026-11-15):** images and voice recordings are optional per module, each with its own switch, off by default. Turning a switch off blocks new uploads only; files already added stay visible and removable.
+- **Counselors and shared modules (2026-11-15):** a psychologist may edit and remove every module they see. Editing a base or admin module creates their own copy: their groups switch to it and what their participants already wrote moves with it, while other psychologists keep the original. Removing a shared module hides it from their list and groups only, and is refused while their participants have written on it. The admin still edits shared modules for everyone.
 - **Data retention (2026-10-12):** nothing is deleted automatically. A deactivated account keeps its narratives and recordings. Erasure happens only through the explicit admin hard delete for privacy requests.
 
 Open:
