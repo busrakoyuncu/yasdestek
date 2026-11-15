@@ -306,11 +306,10 @@
     "removeAction": "Kaldır",
     "added": "Eklendi",
     "removed": "Kaldırıldı",
-    "uploading": "{{name}} yükleniyor…",
+    "uploadingAudio": "Ses kaydı yükleniyor…",
+    "uploadingImage": "Görsel yükleniyor…",
     "addImage": "Görsel ekle",
-    "imageHint": "JPEG, PNG, WebP veya HEIC; en fazla 10 MB.",
     "recorder": {
-      "title": "Ses kaydı",
       "start": "Kayda başla",
       "requesting": "Mikrofon izni bekleniyor…",
       "stop": "Kaydı bitir",

@@ -119,6 +119,32 @@ describe('Attachments', () => {
     ).toBeVisible();
   });
 
+  it('records, then says what is uploading without the file name', async () => {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: { getUserMedia: vi.fn().mockResolvedValue({}) },
+    });
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: () => 'blob:kayit',
+      revokeObjectURL: vi.fn(),
+    });
+    vi.mocked(api.post).mockReturnValueOnce(new Promise(() => {}));
+    renderApp(
+      <Attachments moduleId="m1" files={[]} allowImages allowAudio />,
+      '/app/modules/m1',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Kayda başla' }));
+    // the image pill stays in the row while the recorder is open
+    expect(screen.getByRole('button', { name: 'Görsel ekle' })).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: 'Kaydı bitir' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Kaydı ekle' }));
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      'Ses kaydı yükleniyor…',
+    );
+    expect(screen.queryByText(/kayit\./)).toBeNull();
+  });
+
   it('uploads a picked image as a form with the module id', async () => {
     vi.mocked(api.post).mockResolvedValueOnce({
       id: 'f1',

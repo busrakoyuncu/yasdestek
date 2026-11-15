@@ -22,6 +22,7 @@ import {
   useFileActions,
 } from './useFiles';
 import type { MediaFile } from './useMyResponse';
+import type { FileKind } from '@yasdestek/shared';
 
 const clock = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
@@ -43,10 +44,15 @@ export function Attachments({
   const { t } = useTranslation();
   const { upload, remove } = useFileActions(moduleId);
   const [pending, setPending] = useState<MediaFile | null>(null);
-  const [uploading, setUploading] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<FileKind | null>(null);
 
-  const send = (blob: Blob, name: string, onDone?: () => void) => {
-    setUploading(name);
+  const send = (
+    blob: Blob,
+    name: string,
+    kind: FileKind,
+    onDone?: () => void,
+  ) => {
+    setUploading(kind);
     upload.mutate(
       { blob, name },
       {
@@ -69,7 +75,7 @@ export function Attachments({
         toastFailure(t(`errors.${refused}`, { name: file.name }));
         continue;
       }
-      send(file, file.name);
+      send(file, file.name, 'image');
     }
   };
 
@@ -95,9 +101,10 @@ export function Attachments({
   return (
     <section
       aria-labelledby="attachments"
-      className="flex max-w-prose flex-col gap-5"
+      className="flex max-w-prose flex-col gap-4"
     >
-      <h2 id="attachments" className="text-xl font-medium">
+      {/* second to the writing: a quiet label, not another big heading */}
+      <h2 id="attachments" className="text-sm font-medium text-text-secondary">
         {t(`attachments.${title}`)}
       </h2>
 
@@ -144,26 +151,35 @@ export function Attachments({
         </ul>
       )}
 
-      {allowAudio && (
-        <Recorder
-          busy={uploading !== null}
-          onKeep={(blob, done) =>
-            send(
-              blob,
-              `kayit.${blob.type.includes('mp4') ? 'm4a' : 'webm'}`,
-              done,
-            )
-          }
-        />
-      )}
-
-      {allowImages && (
-        <ImagePicker busy={uploading !== null} onPick={onPickImages} />
+      {/* one row of small pills; the recorder opens below it while in use */}
+      {(allowAudio || allowImages) && (
+        <div className="flex flex-wrap items-center gap-3">
+          {allowAudio && (
+            <Recorder
+              busy={uploading !== null}
+              onKeep={(blob, done) =>
+                send(
+                  blob,
+                  `kayit.${blob.type.includes('mp4') ? 'm4a' : 'webm'}`,
+                  'audio',
+                  done,
+                )
+              }
+            />
+          )}
+          {allowImages && (
+            <ImagePicker busy={uploading !== null} onPick={onPickImages} />
+          )}
+        </div>
       )}
 
       {uploading && (
         <p className="text-sm text-text-secondary" role="status">
-          {t('attachments.uploading', { name: uploading })}
+          {t(
+            uploading === 'audio'
+              ? 'attachments.uploadingAudio'
+              : 'attachments.uploadingImage',
+          )}
         </p>
       )}
 
@@ -220,7 +236,8 @@ function RemoveButton({
   );
 }
 
-// Record, listen, keep or start over.
+// Record, listen, keep or start over. Idle it is one pill in the row;
+// recording and listening back take the full width below the row.
 function Recorder({
   busy,
   onKeep,
@@ -230,31 +247,26 @@ function Recorder({
 }) {
   const { t } = useTranslation();
   const rec = useAudioRecorder();
+  const below = 'order-last w-full';
 
   if (rec.state === 'unsupported') {
     return (
-      <p className="text-sm text-text-secondary">
+      <p className={`${below} text-sm text-text-secondary`}>
         {t('attachments.recorder.unsupported')}
       </p>
     );
   }
 
-  return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-border p-4">
-      <h3 className="text-sm font-medium text-text-secondary">
-        {t('attachments.recorder.title')}
-      </h3>
-      {rec.state === 'denied' && (
-        <p className="text-sm text-destructive" role="alert">
-          {t('attachments.recorder.denied')}
-        </p>
-      )}
-      {(rec.state === 'idle' ||
-        rec.state === 'denied' ||
-        rec.state === 'requesting') && (
+  if (
+    rec.state === 'idle' ||
+    rec.state === 'denied' ||
+    rec.state === 'requesting'
+  ) {
+    return (
+      <>
         <Button
           variant="outline"
-          className="h-11 self-start rounded-full px-5 text-base"
+          className="h-11 rounded-full px-5 text-base"
           disabled={rec.state === 'requesting' || busy}
           onClick={() => void rec.start()}
         >
@@ -265,7 +277,19 @@ function Recorder({
               : 'attachments.recorder.start',
           )}
         </Button>
-      )}
+        {rec.state === 'denied' && (
+          <p className={`${below} text-sm text-destructive`} role="alert">
+            {t('attachments.recorder.denied')}
+          </p>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <div
+      className={`${below} flex flex-col gap-3 rounded-2xl border border-border p-4`}
+    >
       {rec.state === 'recording' && (
         <div className="flex flex-wrap items-center gap-3">
           <span
@@ -329,7 +353,7 @@ function ImagePicker({
   const { t } = useTranslation();
   const input = useRef<HTMLInputElement>(null);
   return (
-    <div className="flex flex-col gap-2">
+    <>
       <input
         ref={input}
         type="file"
@@ -341,16 +365,13 @@ function ImagePicker({
       />
       <Button
         variant="outline"
-        className="h-11 self-start rounded-full px-5 text-base"
+        className="h-11 rounded-full px-5 text-base"
         disabled={busy}
         onClick={() => input.current?.click()}
       >
         <ImagePlus className="size-5" aria-hidden="true" />
         {t('attachments.addImage')}
       </Button>
-      <p className="text-sm text-text-secondary">
-        {t('attachments.imageHint')}
-      </p>
-    </div>
+    </>
   );
 }

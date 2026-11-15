@@ -306,11 +306,10 @@
     "removeAction": "Entfernen",
     "added": "Hinzugefügt",
     "removed": "Entfernt",
-    "uploading": "{{name}} wird hochgeladen…",
+    "uploadingAudio": "Aufnahme wird hochgeladen…",
+    "uploadingImage": "Bild wird hochgeladen…",
     "addImage": "Bild hinzufügen",
-    "imageHint": "JPEG, PNG, WebP oder HEIC; bis zu 10 MB.",
     "recorder": {
-      "title": "Sprachaufnahme",
       "start": "Aufnahme starten",
       "requesting": "Warte auf Mikrofonfreigabe…",
       "stop": "Aufnahme beenden",
