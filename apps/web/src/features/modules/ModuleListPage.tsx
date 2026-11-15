@@ -20,7 +20,7 @@ export function ModuleListPage() {
   const modules = useQuery(modulesQuery);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
       <div className="flex flex-col gap-3">
         <h1 className="text-3xl font-semibold tracking-tight text-balance">
           {t('app.home.title')}
