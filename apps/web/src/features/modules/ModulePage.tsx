@@ -312,7 +312,9 @@ export function ModulePage() {
               {t('writing.leave.body')}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          {/* On a phone the buttons stack: the kind ways out on top, leaving
+              without saving last, away from a quick tap. */}
+          <AlertDialogFooter className="flex-col">
             <AlertDialogCancel
               className="h-10 rounded-full px-4"
               onClick={() => blocker.reset?.()}
@@ -328,7 +330,7 @@ export function ModulePage() {
             </AlertDialogAction>
             {!published && (
               <Button
-                className="h-10 rounded-full px-4"
+                className="order-first h-10 rounded-full px-4 sm:order-none"
                 disabled={save.isPending}
                 aria-busy={save.isPending}
                 onClick={saveAndLeave}

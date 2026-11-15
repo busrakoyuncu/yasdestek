@@ -178,7 +178,8 @@ export function Attachments({
               {t('attachments.remove.body')}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          {/* on a phone "Vazgeç" stacks on top, away from removing by accident */}
+          <AlertDialogFooter className="flex-col">
             <AlertDialogCancel className="h-10 rounded-full px-4">
               {t('common.cancel')}
             </AlertDialogCancel>
