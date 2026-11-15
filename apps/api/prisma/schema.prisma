@@ -64,6 +64,9 @@ model Module {
   questions   String[]
   order       Int
   isBase      Boolean  @default(false)
+  // What a response may carry besides text. Decided by whoever edits the module.
+  allowImages Boolean  @default(false)
+  allowAudio  Boolean  @default(false)
   createdById String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
