@@ -51,7 +51,7 @@ One `User` table for all roles.
 
 - **User** - `role` (`admin` | `psychologist` | `user`), `username` (unique), `passwordHash`, `active` (default false), `mustChangePassword`, `psychologistId?` (owner, for participants), `groupId?` (for participants).
 - **Group** - name, `psychologistId`.
-- **Module** - title, `description` (welcome/purpose text), `rules` (module-specific expectations - required at creation), `questions` (ordered list of guided questions), order, `isBase`, `createdById`; scope derives from creator: base/admin → global, psychologist → visible only to their own users.
+- **Module** - title, `description` (welcome/purpose text), `rules` (module-specific expectations - required at creation), `questions` (ordered list of guided questions), order, `isBase`, `allowImages` and `allowAudio` (whether responses may carry images or voice recordings; both off by default, set by whoever may edit the module), `createdById`; scope derives from creator: base/admin → global, psychologist → visible only to their own users.
 - **ContentPage** - slug + content for editable platform pages; seeded with `general-rules` ("Genel Kurallar"), admin-editable, readable by all roles.
 - **GroupModule** - assignment of a module to a group (modules are assigned group-level, not per user).
 - **Response** - one per user per module: text, published state, timestamps, `deletedAt?`.
@@ -122,7 +122,7 @@ PUT    /pages/:slug                         A, existing slugs only
 GET    /modules/:moduleId/response          U: my response with its files
 PUT    /modules/:moduleId/response          U: create or update, { text, published }
 
-POST   /files                               U: multipart { file, moduleId }; creates my draft if missing
+POST   /files                               U: multipart { file, moduleId }; creates my draft if missing; 403 when the module has that kind switched off
 GET    /files/:id                           permission-checked stream, byte ranges (206/416)
 DELETE /files/:id                           U: uploader only
 
@@ -145,7 +145,7 @@ GET    /analytics/users/:id                 A: assigned modules with status not_
 
 ## 7. File Handling
 
-- **Upload:** browser → API (`multipart`, held in memory by multer up to the largest limit) → type and size checked against the rules in `packages/shared` (images ≤ 10MB jpeg/png/webp/heic, audio ≤ 50MB webm/opus, mp4/aac - Safari records aac) → object written to Garage under `responses/<responseId>/<uuid>` → `MediaFile` row. Object first, row second, so a failed write never leaves a row pointing at nothing. The participant's draft response is created if they upload before writing any text.
+- **Upload:** browser → API (`multipart`, held in memory by multer up to the largest limit) → type and size checked against the rules in `packages/shared` (images ≤ 10MB jpeg/png/webp/heic, audio ≤ 50MB webm/opus, mp4/aac - Safari records aac) → the module's switch for that kind checked (`IMAGES_NOT_ALLOWED` / `AUDIO_NOT_ALLOWED`, 403; turning a switch off blocks new uploads only, files already saved stay) → object written to Garage under `responses/<responseId>/<uuid>` → `MediaFile` row. Object first, row second, so a failed write never leaves a row pointing at nothing. The participant's draft response is created if they upload before writing any text.
 - **Download:** browser → `GET /files/:id` → API runs the permission query → streams from Garage with `Content-Type`, `Content-Length`, `Accept-Ranges`. `Range: bytes=start-end` answers 206 with `Content-Range`; a start past the end answers 416.
 - **Delete:** uploader only; row first, then the object. A leftover object is harmless, a dangling row is not.
 - **Garage is never exposed publicly** - only `StorageService` talks to it, and the storage key never leaves the API. No presigned URLs in v1. The bucket is created on startup if missing.

@@ -73,8 +73,10 @@ The full Turkish prompt texts exist in the thesis (Appendix M) and are used as t
 ### 4.3 Module responses
 A user's response to a module can include:
 - **Text** (primary form; guided free writing).
-- **Audio recording** (recorded in the browser).
-- **Image upload** (required by Module 5, available where relevant).
+- **Audio recording** (recorded in the browser), where the module allows it.
+- **Image upload** (required by Module 5), where the module allows it.
+
+Each module has two switches, images and audio, both off by default. Whoever may edit the module sets them: the psychologist for their own modules, the admin for base and global modules.
 
 ## 5. Groups and Forums
 
@@ -132,6 +134,7 @@ Decided:
 - **Group change (2026-10-12):** a participant's responses follow them to the new group, because a forum shows the current members' published responses for a module. Comments they wrote on other people's responses stay where they were written. Nothing is hidden or deleted.
 - **Group lifecycle (2026-10-12):** the owning psychologist or an admin can delete a group at any time. Deleting removes the group and its module assignments. Members keep their accounts and content and simply have no group until placed in another one.
 - **Reassignment (2026-10-12):** a participant is not moved between psychologists. The new psychologist creates a new account and the old psychologist deactivates the old one. The old account's content stays with it.
+- **Attachments per module (2026-11-15):** images and voice recordings are optional per module, each with its own switch, off by default. Turning a switch off blocks new uploads only; files already added stay visible and removable.
 - **Data retention (2026-10-12):** nothing is deleted automatically. A deactivated account keeps its narratives and recordings. Erasure happens only through the explicit admin hard delete for privacy requests.
 
 Open:
