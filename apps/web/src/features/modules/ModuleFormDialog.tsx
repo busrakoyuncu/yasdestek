@@ -34,15 +34,19 @@ const toForm = (module?: Module): FormValues => ({
   description: module?.description ?? '',
   rules: module?.rules ?? '',
   questions: (module?.questions ?? ['']).map((text) => ({ text })),
+  allowImages: module?.allowImages ?? false,
+  allowAudio: module?.allowAudio ?? false,
 });
 
 type Props = {
   // present: edit this module; absent: create a new one
   module?: Module;
+  // a counselor editing a module that belongs to everyone: saving makes a copy
+  shared?: boolean;
   trigger: ReactNode;
 };
 
-export function ModuleFormDialog({ module, trigger }: Props) {
+export function ModuleFormDialog({ module, shared, trigger }: Props) {
   const { t } = useTranslation();
   const { create, update } = useModuleActions();
   const [open, setOpen] = useState(false);
@@ -100,6 +104,11 @@ export function ModuleFormDialog({ module, trigger }: Props) {
               )}
             </DialogTitle>
             <DialogDescription>{t('modules.form.intro')}</DialogDescription>
+            {shared && (
+              <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-pretty">
+                {t('modules.form.copyNote')}
+              </p>
+            )}
           </DialogHeader>
 
           <div className="flex flex-col gap-2">
@@ -187,6 +196,28 @@ export function ModuleFormDialog({ module, trigger }: Props) {
               <Plus className="size-4" aria-hidden="true" />
               {t('modules.form.addQuestion')}
             </Button>
+          </fieldset>
+
+          <fieldset className="flex flex-col gap-1">
+            <legend className="mb-1 text-sm font-medium">
+              {t('modules.form.attachmentsLabel')}
+            </legend>
+            {(['allowImages', 'allowAudio'] as const).map((name) => (
+              <label
+                key={name}
+                className="flex min-h-11 items-center gap-3 text-base"
+              >
+                <input
+                  type="checkbox"
+                  className="size-5 shrink-0 accent-primary"
+                  {...register(name)}
+                />
+                {t(`modules.form.${name}`)}
+              </label>
+            ))}
+            <p className="text-sm text-pretty text-text-secondary">
+              {t('modules.form.attachmentsHint')}
+            </p>
           </fieldset>
 
           {mutation.isError && message(errorMessage(mutation.error))}

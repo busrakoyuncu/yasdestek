@@ -302,9 +302,9 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Modül 7 - Örnek\",\n  \"description\": \"Bu modülde ...\",\n  \"rules\": \"Kurallar ...\",\n  \"questions\": [\n    \"Soru 1\",\n    \"Soru 2\"\n  ]\n}"
+              "raw": "{\n  \"title\": \"Modül 7 - Örnek\",\n  \"description\": \"Bu modülde ...\",\n  \"rules\": \"Kurallar ...\",\n  \"questions\": [\n    \"Soru 1\",\n    \"Soru 2\"\n  ],\n  \"allowImages\": true,\n  \"allowAudio\": true\n}"
             },
-            "description": "Admin or psychologist. rules and at least one question are required. order defaults to the end."
+            "description": "Admin or psychologist. rules and at least one question are required. order defaults to the end. allowImages and allowAudio say whether responses may carry images or voice recordings; both are false when omitted."
           }
         },
         {
@@ -312,7 +312,7 @@
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/modules",
-            "description": "Visible modules in order. Participants: their group's assigned modules."
+            "description": "Visible modules in order. Participants: their group's assigned modules. Psychologists: shared modules minus the ones they copied or removed, plus their own (copies carry copiedFromId)."
           }
         },
         {
@@ -338,7 +338,7 @@
               "mode": "raw",
               "raw": "{\n  \"title\": \"Yeni başlık\"\n}"
             },
-            "description": "Partial. Admin: global modules. Psychologist: own. 204."
+            "description": "Partial: fields left out are left alone, including allowImages and allowAudio. Admin: global modules, changed for everyone. Psychologist: own modules; on a shared (base or admin) module the edit creates the psychologist's own copy instead, moves their groups and their participants' responses to it, and leaves the original for everyone else (find the copy in List by copiedFromId). 204."
           }
         },
         {
@@ -346,7 +346,7 @@
           "request": {
             "method": "DELETE",
             "url": "{{baseUrl}}/modules/{{moduleId}}",
-            "description": "204. 403 BASE_MODULE for base modules, 409 MODULE_IN_USE once responses exist."
+            "description": "204. 403 BASE_MODULE for base modules, 409 MODULE_IN_USE once responses exist. Psychologist on a shared module: only removes it from their own list and groups (base modules too); 409 MODULE_IN_USE while their participants have responses on it."
           }
         },
         {
@@ -465,7 +465,7 @@
                 }
               ]
             },
-            "description": "multipart/form-data. Creates your draft response for the module if you have none. 400 UNSUPPORTED_FILE_TYPE / FILE_TOO_LARGE / FILE_REQUIRED, 404 when the module is not assigned to your group."
+            "description": "multipart/form-data. Creates your draft response for the module if you have none. 400 UNSUPPORTED_FILE_TYPE / FILE_TOO_LARGE / FILE_REQUIRED, 403 IMAGES_NOT_ALLOWED / AUDIO_NOT_ALLOWED when the module has that kind switched off (see allowImages and allowAudio on the module), 404 when the module is not assigned to your group."
           }
         },
         {

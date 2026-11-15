@@ -51,7 +51,12 @@
     "crashTitle": "Bir şeyler ters gitti",
     "USERNAME_TAKEN": "Bu kullanıcı adı kullanımda. Başka bir ad seçin.",
     "BASE_MODULE": "Temel modüller silinemez.",
-    "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın."
+    "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın.",
+    "FILE_TOO_LARGE": "{{name}} çok büyük. Görseller en fazla 10 MB, ses kayıtları en fazla 50 MB olabilir.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} desteklenmeyen bir dosya türü. JPEG, PNG, WebP veya HEIC seçin.",
+    "FILE_REQUIRED": "Dosya seçilmedi.",
+    "IMAGES_NOT_ALLOWED": "Bu modüle görsel eklenemiyor.",
+    "AUDIO_NOT_ALLOWED": "Bu modüle ses kaydı eklenemiyor."
   },
   "validation": {
     "required": "Bu alan gerekli.",
@@ -177,17 +182,28 @@
       "question": "{{n}}. soru",
       "addQuestion": "Soru ekle",
       "removeQuestion": "{{n}}. soruyu kaldır",
+      "attachmentsLabel": "Yazıya ek olarak",
+      "allowImages": "Katılımcılar görsel ekleyebilsin",
+      "allowAudio": "Katılımcılar ses kaydı ekleyebilsin",
+      "attachmentsHint": "Birini kapattığınızda daha önce eklenenler kalır; yalnızca yenileri eklenemez.",
       "submitCreate": "Oluştur",
       "submitEdit": "Kaydet",
       "submitting": "Kaydediliyor…",
       "created": "Modül oluşturuldu",
-      "saved": "Modül kaydedildi"
+      "saved": "Modül kaydedildi",
+      "copyNote": "Bu modül tüm danışmanlarla ortak. Kaydettiğinizde size ait bir sürüm oluşur; gruplarınız ve katılımcılarınızın yazdıkları bu sürüme geçer. Diğer danışmanlar asıl modülü kullanmaya devam eder."
     },
     "remove": {
       "title": "{{title}} silinsin mi?",
       "body": "Modül, atandığı gruplardan kaldırılır. Yanıt yazılmış bir modül silinemez.",
       "confirm": "Sil",
       "done": "Modül silindi"
+    },
+    "hide": {
+      "title": "{{title}} listenizden kaldırılsın mı?",
+      "body": "Modül yalnızca sizin listenizden ve gruplarınızdan kaldırılır; diğer danışmanlar kullanmaya devam eder. Katılımcılarınızın yanıt yazdığı bir modül kaldırılamaz.",
+      "confirm": "Kaldır",
+      "done": "Modül listenizden kaldırıldı"
     }
   },
   "groups": {
@@ -268,12 +284,52 @@
     "shareNote": "Taslak yalnızca size görünür. Paylaştığınızda grup arkadaşlarınız okuyabilir ve yorum yazabilir.",
     "sharedNote": "Bu yanıt grubunuzla paylaşıldı. Dilediğiniz zaman düzenleyebilirsiniz.",
     "draftSaved": "Taslak kaydedildi",
+    "autosave": {
+      "saving": "Kaydediliyor…",
+      "saved": "Kaydedildi",
+      "failed": "Taslak kaydedilemedi. Yazmaya devam edebilir veya “Taslağı kaydet” ile yeniden deneyebilirsiniz."
+    },
     "shared": "Yanıtınız grubunuzla paylaşıldı",
+    "justShared": "Yanıtınız grubunuzla paylaşıldı. Grup arkadaşlarınız ve danışmanınız artık okuyabilir.",
+    "confirmShare": {
+      "title": "Yanıtınız grubunuzla paylaşılsın mı?",
+      "body": "Grubunuzdaki herkes ve danışmanınız okuyabilecek, grup arkadaşlarınız yorum yazabilecek. Paylaştıktan sonra da düzenleyebilirsiniz.",
+      "confirm": "Paylaş"
+    },
     "leave": {
       "title": "Kaydedilmemiş yazınız var",
       "body": "Bu sayfadan ayrılırsanız son değişiklikler kaybolur.",
       "stay": "Sayfada kal",
-      "discard": "Kaydetmeden ayrıl"
+      "discard": "Kaydetmeden ayrıl",
+      "saveAndLeave": "Taslağı kaydet ve ayrıl"
+    }
+  },
+  "attachments": {
+    "title": "Ses kaydı ve görseller",
+    "titleAudio": "Ses kaydı",
+    "titleImages": "Görseller",
+    "recording": "{{n}}. ses kaydı",
+    "image": "{{n}}. görsel",
+    "removeAction": "Kaldır",
+    "added": "Eklendi",
+    "removed": "Kaldırıldı",
+    "uploadingAudio": "Ses kaydı yükleniyor…",
+    "uploadingImage": "Görsel yükleniyor…",
+    "addImage": "Görsel ekle",
+    "recorder": {
+      "start": "Kayda başla",
+      "requesting": "Mikrofon izni bekleniyor…",
+      "stop": "Kaydı bitir",
+      "preview": "Kaydınızı dinleyin",
+      "keep": "Kaydı ekle",
+      "again": "Yeniden kaydet",
+      "denied": "Mikrofona erişilemedi. Tarayıcı ayarlarından izin verip tekrar deneyin.",
+      "unsupported": "Bu tarayıcı ses kaydını desteklemiyor. Güncel bir Chrome, Firefox veya Safari deneyin."
+    },
+    "remove": {
+      "title": "Bu dosya kaldırılsın mı?",
+      "body": "Kaldırılan dosya geri getirilemez.",
+      "confirm": "Kaldır"
     }
   }
 }

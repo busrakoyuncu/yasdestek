@@ -8,7 +8,7 @@ export function MessagesPage() {
   const { user } = useSession();
 
   return (
-    <div className="flex min-h-[calc(100svh-10rem)] flex-col gap-4 md:min-h-[calc(100svh-7rem)]">
+    <div className="mx-auto flex min-h-[calc(100svh-10rem)] w-full max-w-2xl flex-col gap-4 md:min-h-[calc(100svh-7rem)]">
       <h1 className="text-2xl font-semibold tracking-tight">
         {t('messages.myCounselor')}
       </h1>

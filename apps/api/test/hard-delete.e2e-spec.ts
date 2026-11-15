@@ -94,6 +94,7 @@ describe('Hard delete (e2e)', () => {
         rules: 'r',
         questions: ['q'],
         order: 99,
+        allowImages: true,
         createdById: ids.p1,
       },
     });

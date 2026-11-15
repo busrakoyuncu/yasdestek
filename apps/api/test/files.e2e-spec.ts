@@ -107,6 +107,7 @@ describe('Files (e2e)', () => {
         rules: 'r',
         questions: ['q'],
         order: 99,
+        allowImages: true,
         createdById: ids.p1,
       },
     });
@@ -166,6 +167,12 @@ describe('Files (e2e)', () => {
         expect(res.body).toMatchObject({ code: 'FILE_TOO_LARGE' }),
       );
     await upload(cookies.u1, ids.unassigned).expect(404);
+    // the test module takes images but has recordings switched off
+    await upload(cookies.u1, ids.module, 'audio/webm')
+      .expect(403)
+      .expect((res) =>
+        expect(res.body).toMatchObject({ code: 'AUDIO_NOT_ALLOWED' }),
+      );
     await upload(cookies.p1, ids.module).expect(403);
     await api()
       .post('/files')

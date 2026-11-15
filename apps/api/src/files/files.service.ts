@@ -1,9 +1,10 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { FILE_RULES, fileKind } from '@yasdestek/shared';
+import { FILE_RULES, type FileKind, fileKind } from '@yasdestek/shared';
 import { randomUUID } from 'node:crypto';
 import { CurrentUser } from '../common/current-user';
 import { Prisma } from '../generated/prisma/client';
@@ -47,8 +48,8 @@ export class FilesService {
     private readonly responses: ResponsesService,
   ) {}
 
-  // Checks type and size, stores the bytes, then records the row, so a
-  // failed store never leaves a row pointing at nothing.
+  // Checks type, size and the module's switches, stores the bytes, then
+  // records the row, so a failed store never leaves a row pointing at nothing.
   async upload(me: CurrentUser, moduleId: string, file: Upload) {
     const mimeType = file.mimetype.split(';')[0].trim().toLowerCase();
     const kind = fileKind(mimeType);
@@ -64,6 +65,7 @@ export class FilesService {
         message: `${kind} files may be at most ${FILE_RULES[kind].maxBytes} bytes`,
       });
     }
+    await this.assertAllowed(me, moduleId, kind);
     const response = await this.responses.ensure(me, moduleId);
     const storageKey = `responses/${response.id}/${randomUUID()}`;
     await this.storage.put(storageKey, file.buffer, mimeType);
@@ -77,6 +79,34 @@ export class FilesService {
       },
       omit: { storageKey: true },
     });
+  }
+
+  // Each module says whether its responses may carry images or recordings.
+  // The lookup is scoped to my group, so a module that is not mine is a 404
+  // here too, never a hint that it exists.
+  private async assertAllowed(
+    me: CurrentUser,
+    moduleId: string,
+    kind: FileKind,
+  ) {
+    if (!me.groupId) throw new NotFoundException();
+    const module = await this.prisma.module.findFirst({
+      where: { id: moduleId, groups: { some: { groupId: me.groupId } } },
+      select: { allowImages: true, allowAudio: true },
+    });
+    if (!module) throw new NotFoundException();
+    if (kind === 'image' && !module.allowImages) {
+      throw new ForbiddenException({
+        code: 'IMAGES_NOT_ALLOWED',
+        message: 'This module does not accept images',
+      });
+    }
+    if (kind === 'audio' && !module.allowAudio) {
+      throw new ForbiddenException({
+        code: 'AUDIO_NOT_ALLOWED',
+        message: 'This module does not accept recordings',
+      });
+    }
   }
 
   async find(me: CurrentUser, id: string) {

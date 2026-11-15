@@ -15,7 +15,7 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 | `surface-raised` | `#FBFBF8` | `#1A2A4D` | comments, letters, modals |
 | `border` | `#CFD6E3` | `#2B3B61` | hairlines, card borders |
 | `primary` | `#3D5A8A` | `#9DB5E1` | buttons, links, active states |
-| `secondary` | `#8F6F12` | `#FFD24D` | tags, subtle accents (firefly gold) |
+| `secondary` | `#7A5E10` | `#FFD24D` | tags, subtle accents (firefly gold) |
 | `text` | `#1B2540` | `#EEF2FF` | body text, headings |
 | `text-secondary` | `#3A4661` | `#C5CFE6` | card body text |
 | `muted` | `#5F6A84` | `#8E9BBA` | timestamps, hints, placeholders |
@@ -25,8 +25,8 @@ Implemented as CSS variables consumed by Tailwind/shadcn; components never hardc
 Rules:
 
 - **Never pure black or pure white.** Text is night ink on cream (light) and soft cream on night blue (dark) - the woods survive both modes.
-- Dark mode is **the same woods at night**, not an inversion: accents brighten (`primary` `#3D5A8A → #9DB5E1`, `secondary` `#8F6F12 → #FFD24D`, `danger` `#B3392F → #F08A80`) so they stay visible on dark ground; backgrounds stay blue-toned, never neutral gray or `#000`.
-- `secondary` gold reaches AA only for large text on the light ground; use it for tags, icons, and accents, not for small body text.
+- Dark mode is **the same woods at night**, not an inversion: accents brighten (`primary` `#3D5A8A → #9DB5E1`, `secondary` `#7A5E10 → #FFD24D`, `danger` `#B3392F → #F08A80`) so they stay visible on dark ground; backgrounds stay blue-toned, never neutral gray or `#000`.
+- `secondary` gold in light mode was darkened from `#8F6F12` (4.2:1) to `#7A5E10` on 2026-11-15 so small gold text (question numbers, tags) reaches AA on every light ground: 5.5:1 on `background`, 5.0:1 on `surface`, 5.9:1 on `surface-raised`. Still use it for tags, icons, and accents, not for body text.
 - `danger` is visually distinct from `primary` blue - destructive actions must never look like ordinary primary actions.
 
 ## 2. Theme Behavior

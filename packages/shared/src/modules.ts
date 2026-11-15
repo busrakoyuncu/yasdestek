@@ -8,6 +8,9 @@ export const moduleSchema = z.object({
   questions: z.array(z.string().trim().min(1)).min(1).max(20),
   // Position in the participant's list. Defaults to the end when omitted.
   order: z.number().int().min(0).optional(),
+  // What a response may carry besides text. Off when omitted.
+  allowImages: z.boolean().optional(),
+  allowAudio: z.boolean().optional(),
 });
 export type ModuleInput = z.infer<typeof moduleSchema>;
 

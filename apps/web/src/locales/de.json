@@ -51,7 +51,12 @@
     "crashTitle": "Etwas ist schiefgelaufen",
     "USERNAME_TAKEN": "Dieser Benutzername ist vergeben. Wählen Sie einen anderen.",
     "BASE_MODULE": "Basismodule können nicht gelöscht werden.",
-    "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe."
+    "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe.",
+    "FILE_TOO_LARGE": "{{name}} ist zu groß. Bilder dürfen bis zu 10 MB, Aufnahmen bis zu 50 MB haben.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} hat einen nicht unterstützten Dateityp. Wählen Sie JPEG, PNG, WebP oder HEIC.",
+    "FILE_REQUIRED": "Keine Datei gewählt.",
+    "IMAGES_NOT_ALLOWED": "Zu diesem Modul können keine Bilder hinzugefügt werden.",
+    "AUDIO_NOT_ALLOWED": "Zu diesem Modul können keine Sprachaufnahmen hinzugefügt werden."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
@@ -177,17 +182,28 @@
       "question": "Frage {{n}}",
       "addQuestion": "Frage hinzufügen",
       "removeQuestion": "Frage {{n}} entfernen",
+      "attachmentsLabel": "Zusätzlich zum Text",
+      "allowImages": "Teilnehmende dürfen Bilder hinzufügen",
+      "allowAudio": "Teilnehmende dürfen Sprachaufnahmen hinzufügen",
+      "attachmentsHint": "Beim Ausschalten bleibt bereits Hinzugefügtes erhalten. Nur Neues ist nicht mehr möglich.",
       "submitCreate": "Anlegen",
       "submitEdit": "Speichern",
       "submitting": "Wird gespeichert…",
       "created": "Modul angelegt",
-      "saved": "Modul gespeichert"
+      "saved": "Modul gespeichert",
+      "copyNote": "Dieses Modul teilen sich alle Begleitungen. Beim Speichern entsteht Ihre eigene Fassung; Ihre Gruppen und die Antworten Ihrer Teilnehmenden wechseln dorthin. Andere Begleitungen arbeiten weiter mit dem Original."
     },
     "remove": {
       "title": "{{title}} löschen?",
       "body": "Das Modul wird aus den zugewiesenen Gruppen entfernt. Ein Modul mit Antworten kann nicht gelöscht werden.",
       "confirm": "Löschen",
       "done": "Modul gelöscht"
+    },
+    "hide": {
+      "title": "{{title}} aus Ihrer Liste entfernen?",
+      "body": "Das Modul wird nur aus Ihrer Liste und Ihren Gruppen entfernt; andere Begleitungen arbeiten weiter damit. Ein Modul, zu dem Ihre Teilnehmenden geschrieben haben, kann nicht entfernt werden.",
+      "confirm": "Entfernen",
+      "done": "Modul aus Ihrer Liste entfernt"
     }
   },
   "groups": {
@@ -268,12 +284,52 @@
     "shareNote": "Ein Entwurf ist nur für Sie sichtbar. Nach dem Teilen kann Ihre Gruppe ihn lesen und kommentieren.",
     "sharedNote": "Diese Antwort ist mit Ihrer Gruppe geteilt. Sie können sie jederzeit bearbeiten.",
     "draftSaved": "Entwurf gespeichert",
+    "autosave": {
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "failed": "Der Entwurf konnte nicht gespeichert werden. Schreiben Sie weiter oder versuchen Sie es mit „Entwurf speichern“ erneut."
+    },
     "shared": "Ihre Antwort ist mit Ihrer Gruppe geteilt",
+    "justShared": "Ihre Antwort ist mit Ihrer Gruppe geteilt. Ihre Gruppenmitglieder und Ihre Begleitung können sie jetzt lesen.",
+    "confirmShare": {
+      "title": "Ihre Antwort mit der Gruppe teilen?",
+      "body": "Alle in Ihrer Gruppe und Ihre Begleitung können sie lesen, Ihre Gruppenmitglieder können sie kommentieren. Sie können sie auch nach dem Teilen noch bearbeiten.",
+      "confirm": "Teilen"
+    },
     "leave": {
       "title": "Sie haben ungespeicherten Text",
       "body": "Wenn Sie diese Seite verlassen, gehen die letzten Änderungen verloren.",
       "stay": "Auf der Seite bleiben",
-      "discard": "Ohne Speichern verlassen"
+      "discard": "Ohne Speichern verlassen",
+      "saveAndLeave": "Entwurf speichern und verlassen"
+    }
+  },
+  "attachments": {
+    "title": "Aufnahme und Bilder",
+    "titleAudio": "Sprachaufnahme",
+    "titleImages": "Bilder",
+    "recording": "Aufnahme {{n}}",
+    "image": "Bild {{n}}",
+    "removeAction": "Entfernen",
+    "added": "Hinzugefügt",
+    "removed": "Entfernt",
+    "uploadingAudio": "Aufnahme wird hochgeladen…",
+    "uploadingImage": "Bild wird hochgeladen…",
+    "addImage": "Bild hinzufügen",
+    "recorder": {
+      "start": "Aufnahme starten",
+      "requesting": "Warte auf Mikrofonfreigabe…",
+      "stop": "Aufnahme beenden",
+      "preview": "Aufnahme anhören",
+      "keep": "Aufnahme hinzufügen",
+      "again": "Neu aufnehmen",
+      "denied": "Das Mikrofon ist nicht erreichbar. Erlauben Sie es in den Browsereinstellungen und versuchen Sie es erneut.",
+      "unsupported": "Dieser Browser kann keinen Ton aufnehmen. Versuchen Sie ein aktuelles Chrome, Firefox oder Safari."
+    },
+    "remove": {
+      "title": "Diese Datei entfernen?",
+      "body": "Eine entfernte Datei kann nicht wiederhergestellt werden.",
+      "confirm": "Entfernen"
     }
   }
 }

@@ -15,6 +15,7 @@ const png = { buffer: Buffer.from('png'), mimetype: 'image/png', size: 3 };
 describe('FilesService', () => {
   const prisma = {
     mediaFile: { create: jest.fn(), findFirst: jest.fn(), delete: jest.fn() },
+    module: { findFirst: jest.fn() },
   };
   const storage = { put: jest.fn(), remove: jest.fn() };
   const responses = { ensure: jest.fn() };
@@ -30,7 +31,13 @@ describe('FilesService', () => {
         (error.getResponse() as { code: string }).code,
     );
 
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    prisma.module.findFirst.mockResolvedValue({
+      allowImages: true,
+      allowAudio: true,
+    });
+  });
 
   it('rejects unsupported types and oversized files before touching storage', async () => {
     await expect(
@@ -42,6 +49,36 @@ describe('FilesService', () => {
       ),
     ).resolves.toBe('FILE_TOO_LARGE');
     expect(storage.put).not.toHaveBeenCalled();
+    expect(responses.ensure).not.toHaveBeenCalled();
+  });
+
+  it('rejects a kind the module has switched off, before touching storage', async () => {
+    prisma.module.findFirst.mockResolvedValue({
+      allowImages: false,
+      allowAudio: false,
+    });
+    await expect(codeOf(service.upload(member, 'm1', png))).resolves.toBe(
+      'IMAGES_NOT_ALLOWED',
+    );
+    await expect(
+      codeOf(service.upload(member, 'm1', { ...png, mimetype: 'audio/mp4' })),
+    ).resolves.toBe('AUDIO_NOT_ALLOWED');
+    expect(prisma.module.findFirst).toHaveBeenLastCalledWith({
+      where: { id: 'm1', groups: { some: { groupId: 'g1' } } },
+      select: { allowImages: true, allowAudio: true },
+    });
+    expect(storage.put).not.toHaveBeenCalled();
+    expect(responses.ensure).not.toHaveBeenCalled();
+  });
+
+  it('answers 404 for a module outside my group, whatever its switches', async () => {
+    prisma.module.findFirst.mockResolvedValue(null);
+    await expect(service.upload(member, 'm9', png)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    await expect(service.upload(loner, 'm1', png)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
     expect(responses.ensure).not.toHaveBeenCalled();
   });
 

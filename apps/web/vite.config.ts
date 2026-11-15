@@ -12,6 +12,8 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['src/test/setup.ts'],
+    // .env is not committed, so CI has none; tests use the dev value
+    env: { VITE_API_URL: '/api' },
   },
   server: {
     // Same shape as production: the app calls /api, Caddy (here: Vite) forwards to the api.

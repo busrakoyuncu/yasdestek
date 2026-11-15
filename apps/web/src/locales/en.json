@@ -51,7 +51,12 @@
     "crashTitle": "Something went wrong",
     "USERNAME_TAKEN": "That username is taken. Choose another.",
     "BASE_MODULE": "Base modules cannot be deleted.",
-    "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead."
+    "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead.",
+    "FILE_TOO_LARGE": "{{name}} is too large. Images may be up to 10 MB, recordings up to 50 MB.",
+    "UNSUPPORTED_FILE_TYPE": "{{name}} is not a supported file type. Choose JPEG, PNG, WebP or HEIC.",
+    "FILE_REQUIRED": "No file was chosen.",
+    "IMAGES_NOT_ALLOWED": "This module does not take images.",
+    "AUDIO_NOT_ALLOWED": "This module does not take voice recordings."
   },
   "validation": {
     "required": "This field is required.",
@@ -177,17 +182,28 @@
       "question": "Question {{n}}",
       "addQuestion": "Add a question",
       "removeQuestion": "Remove question {{n}}",
+      "attachmentsLabel": "Besides the text",
+      "allowImages": "Participants may add images",
+      "allowAudio": "Participants may add voice recordings",
+      "attachmentsHint": "Turning one off keeps what was already added. Only new ones are blocked.",
       "submitCreate": "Create",
       "submitEdit": "Save",
       "submitting": "Saving…",
       "created": "Module created",
-      "saved": "Module saved"
+      "saved": "Module saved",
+      "copyNote": "This module is shared by all counselors. Saving creates your own version; your groups and what your participants wrote move to it. Other counselors keep using the original."
     },
     "remove": {
       "title": "Delete {{title}}?",
       "body": "The module is removed from the groups it is assigned to. A module with responses cannot be deleted.",
       "confirm": "Delete",
       "done": "Module deleted"
+    },
+    "hide": {
+      "title": "Remove {{title}} from your list?",
+      "body": "The module is removed from your list and your groups only; other counselors keep using it. A module your participants have written on cannot be removed.",
+      "confirm": "Remove",
+      "done": "Module removed from your list"
     }
   },
   "groups": {
@@ -268,12 +284,52 @@
     "shareNote": "A draft is visible only to you. Once shared, your group can read it and comment.",
     "sharedNote": "This response is shared with your group. You can edit it any time.",
     "draftSaved": "Draft saved",
+    "autosave": {
+      "saving": "Saving…",
+      "saved": "Saved",
+      "failed": "The draft could not be saved. Keep writing, or try again with “Save draft”."
+    },
     "shared": "Your response is shared with your group",
+    "justShared": "Your response is shared with your group. Your group mates and your counselor can read it now.",
+    "confirmShare": {
+      "title": "Share your response with your group?",
+      "body": "Everyone in your group and your counselor will be able to read it, and your group mates can comment. You can still edit it after sharing.",
+      "confirm": "Share"
+    },
     "leave": {
       "title": "You have unsaved writing",
       "body": "If you leave this page, the latest changes are lost.",
       "stay": "Stay on the page",
-      "discard": "Leave without saving"
+      "discard": "Leave without saving",
+      "saveAndLeave": "Save draft and leave"
+    }
+  },
+  "attachments": {
+    "title": "Recording and images",
+    "titleAudio": "Voice recording",
+    "titleImages": "Images",
+    "recording": "Recording {{n}}",
+    "image": "Image {{n}}",
+    "removeAction": "Remove",
+    "added": "Added",
+    "removed": "Removed",
+    "uploadingAudio": "Uploading the recording…",
+    "uploadingImage": "Uploading the image…",
+    "addImage": "Add image",
+    "recorder": {
+      "start": "Start recording",
+      "requesting": "Waiting for microphone permission…",
+      "stop": "Stop recording",
+      "preview": "Listen to your recording",
+      "keep": "Add recording",
+      "again": "Record again",
+      "denied": "The microphone could not be reached. Allow it in the browser settings and try again.",
+      "unsupported": "This browser cannot record audio. Try a current Chrome, Firefox or Safari."
+    },
+    "remove": {
+      "title": "Remove this file?",
+      "body": "A removed file cannot be recovered.",
+      "confirm": "Remove"
     }
   }
 }

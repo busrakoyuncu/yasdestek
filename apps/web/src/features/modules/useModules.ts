@@ -16,6 +16,9 @@ export type Module = {
   questions: string[];
   order: number;
   isBase: boolean;
+  // what a response may carry besides text
+  allowImages: boolean;
+  allowAudio: boolean;
   createdById: string | null;
   createdBy: { username: string; role: Role } | null;
   // a participant's own response state, only in a participant's list

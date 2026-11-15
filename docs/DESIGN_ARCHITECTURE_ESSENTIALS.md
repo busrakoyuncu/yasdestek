@@ -24,7 +24,7 @@ Companion to `DESIGN_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 ## Dark mode as "the woods at night"
 
-**Chosen:** night-blue grounds taken from the forest's darkest values (never `#000`, never neutral gray), soft-cream text (never `#FFF`), same accents brightened (`#3D5A8A → #9DB5E1`, `#8F6F12 → #FFD24D`).
+**Chosen:** night-blue grounds taken from the forest's darkest values (never `#000`, never neutral gray), soft-cream text (never `#FFF`), same accents brightened (`#3D5A8A → #9DB5E1`, `#7A5E10 → #FFD24D`).
 
 **Why:** naive inversion or standard gray dark modes make the product feel like a different, colder app at night. Keeping the blue hue in the darks and brightening (not reusing) the accents preserves identity and legibility. Pure white text on dark glares; soft cream doesn't. The landing page is always rendered in this theme, so dark mode is literally its colors.
 
