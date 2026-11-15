@@ -37,6 +37,8 @@ const module = (over: Partial<Record<string, unknown>>) => ({
   questions: ['Soru 1', 'Soru 2'],
   order: 0,
   isBase: false,
+  allowImages: false,
+  allowAudio: false,
   createdById: null,
   createdBy: null,
   createdAt: '',
@@ -147,6 +149,11 @@ describe('ModulesPage', () => {
       'Sonra ne oldu?',
     );
     await userEvent.click(
+      within(dialog).getByRole('checkbox', {
+        name: 'Katılımcılar görsel ekleyebilsin',
+      }),
+    );
+    await userEvent.click(
       within(dialog).getByRole('button', { name: 'Oluştur' }),
     );
     await waitFor(() =>
@@ -155,6 +162,8 @@ describe('ModulesPage', () => {
         description: 'Hoş geldiniz',
         rules: 'Nazik olun',
         questions: ['Ne hissettiniz?', 'Sonra ne oldu?'],
+        allowImages: true,
+        allowAudio: false,
       }),
     );
   });

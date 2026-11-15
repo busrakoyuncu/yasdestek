@@ -34,6 +34,8 @@ const toForm = (module?: Module): FormValues => ({
   description: module?.description ?? '',
   rules: module?.rules ?? '',
   questions: (module?.questions ?? ['']).map((text) => ({ text })),
+  allowImages: module?.allowImages ?? false,
+  allowAudio: module?.allowAudio ?? false,
 });
 
 type Props = {
@@ -187,6 +189,28 @@ export function ModuleFormDialog({ module, trigger }: Props) {
               <Plus className="size-4" aria-hidden="true" />
               {t('modules.form.addQuestion')}
             </Button>
+          </fieldset>
+
+          <fieldset className="flex flex-col gap-1">
+            <legend className="mb-1 text-sm font-medium">
+              {t('modules.form.attachmentsLabel')}
+            </legend>
+            {(['allowImages', 'allowAudio'] as const).map((name) => (
+              <label
+                key={name}
+                className="flex min-h-11 items-center gap-3 text-base"
+              >
+                <input
+                  type="checkbox"
+                  className="size-5 shrink-0 accent-primary"
+                  {...register(name)}
+                />
+                {t(`modules.form.${name}`)}
+              </label>
+            ))}
+            <p className="text-sm text-pretty text-text-secondary">
+              {t('modules.form.attachmentsHint')}
+            </p>
           </fieldset>
 
           {mutation.isError && message(errorMessage(mutation.error))}
