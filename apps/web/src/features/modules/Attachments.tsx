@@ -28,12 +28,17 @@ const clock = (seconds: number) =>
 
 // The recordings and images that go with a response: what is already saved,
 // a recorder, and a picker. Uploads create the draft when there is none.
+// The module decides which of the two may be added; saved files always show.
 export function Attachments({
   moduleId,
   files,
+  allowImages,
+  allowAudio,
 }: {
   moduleId: string;
   files: MediaFile[];
+  allowImages: boolean;
+  allowAudio: boolean;
 }) {
   const { t } = useTranslation();
   const { upload, remove } = useFileActions(moduleId);
@@ -80,6 +85,12 @@ export function Attachments({
 
   const audio = files.filter((f) => kindOf(f) === 'audio');
   const images = files.filter((f) => kindOf(f) === 'image');
+  // The heading names only what this block can hold: what the module allows,
+  // plus what was saved before a switch was turned off.
+  const hasAudio = allowAudio || audio.length > 0;
+  const hasImages = allowImages || images.length > 0;
+  const title =
+    hasAudio && hasImages ? 'title' : hasAudio ? 'titleAudio' : 'titleImages';
 
   return (
     <section
@@ -87,7 +98,7 @@ export function Attachments({
       className="flex max-w-prose flex-col gap-5"
     >
       <h2 id="attachments" className="text-xl font-medium">
-        {t('attachments.title')}
+        {t(`attachments.${title}`)}
       </h2>
 
       {audio.length > 0 && (
@@ -133,18 +144,22 @@ export function Attachments({
         </ul>
       )}
 
-      <Recorder
-        busy={uploading !== null}
-        onKeep={(blob, done) =>
-          send(
-            blob,
-            `kayit.${blob.type.includes('mp4') ? 'm4a' : 'webm'}`,
-            done,
-          )
-        }
-      />
+      {allowAudio && (
+        <Recorder
+          busy={uploading !== null}
+          onKeep={(blob, done) =>
+            send(
+              blob,
+              `kayit.${blob.type.includes('mp4') ? 'm4a' : 'webm'}`,
+              done,
+            )
+          }
+        />
+      )}
 
-      <ImagePicker busy={uploading !== null} onPick={onPickImages} />
+      {allowImages && (
+        <ImagePicker busy={uploading !== null} onPick={onPickImages} />
+      )}
 
       {uploading && (
         <p className="text-sm text-text-secondary" role="status">

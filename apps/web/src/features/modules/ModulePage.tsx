@@ -100,6 +100,7 @@ export function ModulePage() {
     );
   }
 
+  const files = mine.data?.files ?? [];
   const when = new Intl.DateTimeFormat(i18n.language, {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -192,7 +193,16 @@ export function ModulePage() {
             )}
           </section>
 
-          <Attachments moduleId={moduleId} files={mine.data?.files ?? []} />
+          {(module.data.allowImages ||
+            module.data.allowAudio ||
+            files.length > 0) && (
+            <Attachments
+              moduleId={moduleId}
+              files={files}
+              allowImages={module.data.allowImages}
+              allowAudio={module.data.allowAudio}
+            />
+          )}
 
           {/* the way out of the page: where it stands, then what to do with it */}
           <footer className="flex flex-col gap-4 border-t border-border pt-6">

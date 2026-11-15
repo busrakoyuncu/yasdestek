@@ -54,7 +54,9 @@
     "MODULE_IN_USE": "This module already has responses and cannot be deleted. Remove it from the group instead.",
     "FILE_TOO_LARGE": "{{name}} is too large. Images may be up to 10 MB, recordings up to 50 MB.",
     "UNSUPPORTED_FILE_TYPE": "{{name}} is not a supported file type. Choose JPEG, PNG, WebP or HEIC.",
-    "FILE_REQUIRED": "No file was chosen."
+    "FILE_REQUIRED": "No file was chosen.",
+    "IMAGES_NOT_ALLOWED": "This module does not take images.",
+    "AUDIO_NOT_ALLOWED": "This module does not take voice recordings."
   },
   "validation": {
     "required": "This field is required.",
@@ -290,6 +292,8 @@
   },
   "attachments": {
     "title": "Recording and images",
+    "titleAudio": "Voice recording",
+    "titleImages": "Images",
     "recording": "Recording {{n}}",
     "image": "Image {{n}}",
     "removeAction": "Remove",

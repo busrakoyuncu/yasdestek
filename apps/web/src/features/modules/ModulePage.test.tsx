@@ -20,6 +20,8 @@ const module = (id: string, title: string, responses?: unknown[]) => ({
   questions: ['Haberi nasıl aldınız?', 'Sonraki günler nasıldı?'],
   order: 0,
   isBase: true,
+  allowImages: false,
+  allowAudio: false,
   createdById: null,
   createdBy: null,
   responses,
@@ -94,6 +96,14 @@ describe('participant modules', () => {
       }),
     );
     expect(await screen.findByText(/Taslak .* kaydedildi/)).toBeInTheDocument();
+  });
+
+  it('leaves out the attachments when the module takes none and none are saved', async () => {
+    openModule(draft);
+    await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    expect(
+      screen.queryByRole('heading', { name: 'Ses kaydı ve görseller' }),
+    ).toBeNull();
   });
 
   it('saves a draft by itself once the typing rests', async () => {

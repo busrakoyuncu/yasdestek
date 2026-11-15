@@ -54,7 +54,9 @@
     "MODULE_IN_USE": "Bu modüle yanıt yazılmış, silinemez. Bunun yerine gruptan kaldırın.",
     "FILE_TOO_LARGE": "{{name}} çok büyük. Görseller en fazla 10 MB, ses kayıtları en fazla 50 MB olabilir.",
     "UNSUPPORTED_FILE_TYPE": "{{name}} desteklenmeyen bir dosya türü. JPEG, PNG, WebP veya HEIC seçin.",
-    "FILE_REQUIRED": "Dosya seçilmedi."
+    "FILE_REQUIRED": "Dosya seçilmedi.",
+    "IMAGES_NOT_ALLOWED": "Bu modüle görsel eklenemiyor.",
+    "AUDIO_NOT_ALLOWED": "Bu modüle ses kaydı eklenemiyor."
   },
   "validation": {
     "required": "Bu alan gerekli.",
@@ -290,6 +292,8 @@
   },
   "attachments": {
     "title": "Ses kaydı ve görseller",
+    "titleAudio": "Ses kaydı",
+    "titleImages": "Görseller",
     "recording": "{{n}}. ses kaydı",
     "image": "{{n}}. görsel",
     "removeAction": "Kaldır",

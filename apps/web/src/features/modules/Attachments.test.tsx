@@ -92,6 +92,31 @@ describe('Attachments', () => {
   beforeEach(() => {
     vi.mocked(api.post).mockReset();
     vi.mocked(api.delete).mockReset();
+    // without it the recorder shows its "unsupported" note, not its button
+    vi.stubGlobal('MediaRecorder', FakeRecorder);
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('offers only what the module allows', () => {
+    renderApp(
+      <Attachments moduleId="m1" files={[]} allowImages={false} allowAudio />,
+      '/app/modules/m1',
+    );
+    expect(screen.getByRole('button', { name: 'Kayda başla' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Görsel ekle' })).toBeNull();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Ses kaydı' }),
+    ).toBeVisible();
+  });
+
+  it('names images alone when only images are allowed', () => {
+    renderApp(
+      <Attachments moduleId="m1" files={[]} allowImages allowAudio={false} />,
+      '/app/modules/m1',
+    );
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Görseller' }),
+    ).toBeVisible();
   });
 
   it('uploads a picked image as a form with the module id', async () => {
@@ -101,7 +126,10 @@ describe('Attachments', () => {
       size: 1,
       createdAt: '',
     });
-    renderApp(<Attachments moduleId="m1" files={[]} />, '/app/modules/m1');
+    renderApp(
+      <Attachments moduleId="m1" files={[]} allowImages allowAudio />,
+      '/app/modules/m1',
+    );
     const input = screen.getByLabelText('Görsel ekle', { selector: 'input' });
     await userEvent.upload(
       input,
@@ -126,9 +154,17 @@ describe('Attachments', () => {
           { id: 'f1', mimeType: 'audio/webm', size: 1, createdAt: '' },
           { id: 'f2', mimeType: 'image/jpeg', size: 1, createdAt: '' },
         ]}
+        allowImages={false}
+        allowAudio={false}
       />,
       '/app/modules/m1',
     );
+    // both switched off: saved files stay, nothing new can be added
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Ses kaydı ve görseller' }),
+    ).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Görsel ekle' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Kayda başla' })).toBeNull();
     expect(screen.getByLabelText('1. ses kaydı')).toHaveAttribute(
       'src',
       '/api/files/f1',

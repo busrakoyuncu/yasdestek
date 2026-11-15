@@ -54,7 +54,9 @@
     "MODULE_IN_USE": "Zu diesem Modul gibt es bereits Antworten; es kann nicht gelöscht werden. Entfernen Sie es stattdessen aus der Gruppe.",
     "FILE_TOO_LARGE": "{{name}} ist zu groß. Bilder dürfen bis zu 10 MB, Aufnahmen bis zu 50 MB haben.",
     "UNSUPPORTED_FILE_TYPE": "{{name}} hat einen nicht unterstützten Dateityp. Wählen Sie JPEG, PNG, WebP oder HEIC.",
-    "FILE_REQUIRED": "Keine Datei gewählt."
+    "FILE_REQUIRED": "Keine Datei gewählt.",
+    "IMAGES_NOT_ALLOWED": "Zu diesem Modul können keine Bilder hinzugefügt werden.",
+    "AUDIO_NOT_ALLOWED": "Zu diesem Modul können keine Sprachaufnahmen hinzugefügt werden."
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
@@ -290,6 +292,8 @@
   },
   "attachments": {
     "title": "Aufnahme und Bilder",
+    "titleAudio": "Sprachaufnahme",
+    "titleImages": "Bilder",
     "recording": "Aufnahme {{n}}",
     "image": "Bild {{n}}",
     "removeAction": "Entfernen",
