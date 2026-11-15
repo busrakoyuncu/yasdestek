@@ -29,18 +29,19 @@ model User {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  psychologist     User?       @relation("PsychologistUsers", fields: [psychologistId], references: [id])
-  users            User[]      @relation("PsychologistUsers")
-  group            Group?      @relation(fields: [groupId], references: [id])
-  groups           Group[]     @relation("PsychologistGroups")
+  psychologist     User?          @relation("PsychologistUsers", fields: [psychologistId], references: [id])
+  users            User[]         @relation("PsychologistUsers")
+  group            Group?         @relation(fields: [groupId], references: [id])
+  groups           Group[]        @relation("PsychologistGroups")
   createdModules   Module[]
   responses        Response[]
   uploads          MediaFile[]
   comments         Comment[]
-  deletedComments  Comment[]   @relation("CommentDeletedBy")
-  sentMessages     Message[]   @relation("MessageSender")
-  receivedMessages Message[]   @relation("MessageRecipient")
+  deletedComments  Comment[]      @relation("CommentDeletedBy")
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageRecipient")
   sessions         Session[]
+  hiddenModules    HiddenModule[]
 }
 
 model Group {
@@ -57,23 +58,42 @@ model Group {
 // Scope derives from the creator: base or admin-created modules are global,
 // psychologist-created modules are visible only to that psychologist's users.
 model Module {
-  id          String   @id @default(uuid(7))
-  title       String
-  description String
-  rules       String
-  questions   String[]
-  order       Int
-  isBase      Boolean  @default(false)
+  id           String   @id @default(uuid(7))
+  title        String
+  description  String
+  rules        String
+  questions    String[]
+  order        Int
+  isBase       Boolean  @default(false)
   // What a response may carry besides text. Decided by whoever edits the module.
-  allowImages Boolean  @default(false)
-  allowAudio  Boolean  @default(false)
-  createdById String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  allowImages  Boolean  @default(false)
+  allowAudio   Boolean  @default(false)
+  createdById  String?
+  // Set on a psychologist's edited copy of a shared module. The original
+  // stays as it was for everyone else.
+  copiedFromId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  createdBy User?         @relation(fields: [createdById], references: [id])
-  groups    GroupModule[]
-  responses Response[]
+  createdBy  User?          @relation(fields: [createdById], references: [id])
+  copiedFrom Module?        @relation("ModuleCopies", fields: [copiedFromId], references: [id], onDelete: SetNull)
+  copies     Module[]       @relation("ModuleCopies")
+  groups     GroupModule[]
+  responses  Response[]
+  hiddenBy   HiddenModule[]
+}
+
+// A shared module a psychologist removed from their own list. Everyone else
+// keeps it; nothing about the module itself changes.
+model HiddenModule {
+  psychologistId String
+  moduleId       String
+  createdAt      DateTime @default(now())
+
+  psychologist User   @relation(fields: [psychologistId], references: [id])
+  module       Module @relation(fields: [moduleId], references: [id])
+
+  @@id([psychologistId, moduleId])
 }
 
 // Editable platform pages, e.g. slug "general-rules".
