@@ -96,6 +96,43 @@ describe('participant modules', () => {
     expect(await screen.findByText(/Taslak .* kaydedildi/)).toBeInTheDocument();
   });
 
+  it('saves a draft by itself once the typing rests', async () => {
+    vi.mocked(api.put).mockResolvedValueOnce({ ...draft, text: 'Bir salı' });
+    openModule(null);
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, 'Bir salı ');
+    expect(api.put).not.toHaveBeenCalled();
+    expect(
+      await screen.findByText('Kaydedildi', {}, { timeout: 3000 }),
+    ).toBeInTheDocument();
+    expect(api.put).toHaveBeenCalledExactlyOnceWith('/modules/m1/response', {
+      text: 'Bir salı ',
+      published: false,
+    });
+    // the words stay as typed, trailing space included
+    expect(page).toHaveValue('Bir salı ');
+  });
+
+  it('says so when a draft could not save itself, and does not retry', async () => {
+    vi.mocked(api.put).mockRejectedValue(new ApiError(500, 'INTERNAL', ''));
+    openModule(draft);
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, ' Yağmur vardı.');
+    expect(
+      await screen.findByText(/Taslak kaydedilemedi/, {}, { timeout: 3000 }),
+    ).toBeInTheDocument();
+    await new Promise((resolve) => setTimeout(resolve, 1800));
+    expect(api.put).toHaveBeenCalledTimes(1);
+  });
+
+  it('never saves shared text by itself', async () => {
+    openModule({ ...draft, published: true });
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, ' Yağmur vardı.');
+    await new Promise((resolve) => setTimeout(resolve, 1800));
+    expect(api.put).not.toHaveBeenCalled();
+  });
+
   it('shares a saved draft with the group', async () => {
     vi.mocked(api.put).mockResolvedValueOnce({ ...draft, published: true });
     openModule(draft);

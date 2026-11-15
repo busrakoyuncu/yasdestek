@@ -271,6 +271,11 @@
     "shareNote": "A draft is visible only to you. Once shared, your group can read it and comment.",
     "sharedNote": "This response is shared with your group. You can edit it any time.",
     "draftSaved": "Draft saved",
+    "autosave": {
+      "saving": "Saving…",
+      "saved": "Saved",
+      "failed": "The draft could not be saved. Keep writing, or try again with “Save draft”."
+    },
     "shared": "Your response is shared with your group",
     "leave": {
       "title": "You have unsaved writing",

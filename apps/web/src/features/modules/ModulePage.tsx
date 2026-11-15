@@ -21,6 +21,9 @@ import { Attachments } from './Attachments';
 import { moduleQuery } from './useModules';
 import { myResponseQuery, useSaveResponse } from './useMyResponse';
 
+// How long the typing must rest before a draft saves itself.
+const AUTOSAVE_DELAY = 1500;
+
 // One module for a participant: what it asks, then the page they write on.
 // Text only for now; audio and images join beside it next.
 export function ModulePage() {
@@ -34,7 +37,27 @@ export function ModulePage() {
   // The draft starts from what is saved; typing takes over from there.
   const saved = mine.data?.text ?? '';
   const draft = text ?? saved;
-  const dirty = draft !== saved;
+  // The api trims what it stores, so spaces at the ends are not a change.
+  const dirty = draft.trim() !== saved;
+  const published = mine.data?.published ?? false;
+
+  // A private draft saves itself once the typing rests. Shared text never
+  // does: what the group reads changes only when the writer says so. A draft
+  // that failed to save waits for the next change instead of retrying.
+  const [failed, setFailed] = useState<string | null>(null);
+  const { mutate: saveResponse, isPending: saving } = save;
+  useEffect(() => {
+    if (!dirty || published || saving || draft === failed) return;
+    const timer = setTimeout(
+      () =>
+        saveResponse(
+          { text: draft, published: false },
+          { onError: () => setFailed(draft) },
+        ),
+      AUTOSAVE_DELAY,
+    );
+    return () => clearTimeout(timer);
+  }, [draft, dirty, published, saving, failed, saveResponse]);
 
   // Leaving with unsaved words asks first, both inside the app and on close.
   const blocker = useBlocker(dirty);
@@ -81,7 +104,6 @@ export function ModulePage() {
     dateStyle: 'medium',
     timeStyle: 'short',
   });
-  const published = mine.data?.published ?? false;
 
   return (
     <article className="flex flex-col gap-8">
@@ -156,6 +178,18 @@ export function ModulePage() {
               aria-label={t('writing.yourResponse')}
               className="min-h-64 w-full resize-y rounded-2xl border-border bg-surface-raised px-6 py-5 font-body text-[17px] leading-8 dark:bg-surface"
             />
+            {!published && (
+              <p
+                className="min-h-5 text-sm text-text-secondary"
+                aria-live="polite"
+              >
+                {saving
+                  ? t('writing.autosave.saving')
+                  : dirty
+                    ? draft === failed && t('writing.autosave.failed')
+                    : mine.data && t('writing.autosave.saved')}
+              </p>
+            )}
           </section>
 
           <Attachments moduleId={moduleId} files={mine.data?.files ?? []} />

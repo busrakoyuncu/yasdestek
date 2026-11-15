@@ -271,6 +271,11 @@
     "shareNote": "Taslak yalnızca size görünür. Paylaştığınızda grup arkadaşlarınız okuyabilir ve yorum yazabilir.",
     "sharedNote": "Bu yanıt grubunuzla paylaşıldı. Dilediğiniz zaman düzenleyebilirsiniz.",
     "draftSaved": "Taslak kaydedildi",
+    "autosave": {
+      "saving": "Kaydediliyor…",
+      "saved": "Kaydedildi",
+      "failed": "Taslak kaydedilemedi. Yazmaya devam edebilir veya “Taslağı kaydet” ile yeniden deneyebilirsiniz."
+    },
     "shared": "Yanıtınız grubunuzla paylaşıldı",
     "leave": {
       "title": "Kaydedilmemiş yazınız var",

@@ -271,6 +271,11 @@
     "shareNote": "Ein Entwurf ist nur für Sie sichtbar. Nach dem Teilen kann Ihre Gruppe ihn lesen und kommentieren.",
     "sharedNote": "Diese Antwort ist mit Ihrer Gruppe geteilt. Sie können sie jederzeit bearbeiten.",
     "draftSaved": "Entwurf gespeichert",
+    "autosave": {
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "failed": "Der Entwurf konnte nicht gespeichert werden. Schreiben Sie weiter oder versuchen Sie es mit „Entwurf speichern“ erneut."
+    },
     "shared": "Ihre Antwort ist mit Ihrer Gruppe geteilt",
     "leave": {
       "title": "Sie haben ungespeicherten Text",
