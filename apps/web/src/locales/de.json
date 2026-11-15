@@ -283,6 +283,12 @@
       "failed": "Der Entwurf konnte nicht gespeichert werden. Schreiben Sie weiter oder versuchen Sie es mit „Entwurf speichern“ erneut."
     },
     "shared": "Ihre Antwort ist mit Ihrer Gruppe geteilt",
+    "justShared": "Ihre Antwort ist mit Ihrer Gruppe geteilt. Ihre Gruppenmitglieder und Ihre Begleitung können sie jetzt lesen.",
+    "confirmShare": {
+      "title": "Ihre Antwort mit der Gruppe teilen?",
+      "body": "Alle in Ihrer Gruppe und Ihre Begleitung können sie lesen, Ihre Gruppenmitglieder können sie kommentieren. Sie können sie auch nach dem Teilen noch bearbeiten.",
+      "confirm": "Teilen"
+    },
     "leave": {
       "title": "Sie haben ungespeicherten Text",
       "body": "Wenn Sie diese Seite verlassen, gehen die letzten Änderungen verloren.",

@@ -283,6 +283,12 @@
       "failed": "The draft could not be saved. Keep writing, or try again with “Save draft”."
     },
     "shared": "Your response is shared with your group",
+    "justShared": "Your response is shared with your group. Your group mates and your counselor can read it now.",
+    "confirmShare": {
+      "title": "Share your response with your group?",
+      "body": "Everyone in your group and your counselor will be able to read it, and your group mates can comment. You can still edit it after sharing.",
+      "confirm": "Share"
+    },
     "leave": {
       "title": "You have unsaved writing",
       "body": "If you leave this page, the latest changes are lost.",

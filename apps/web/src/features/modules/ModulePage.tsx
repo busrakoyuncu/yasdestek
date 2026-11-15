@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, CircleCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useBlocker, useParams } from 'react-router';
@@ -33,6 +33,9 @@ export function ModulePage() {
   const mine = useQuery(myResponseQuery(moduleId));
   const save = useSaveResponse(moduleId);
   const [text, setText] = useState<string | null>(null);
+  // First share asks first; afterwards a note stays to say it happened.
+  const [confirmShare, setConfirmShare] = useState(false);
+  const [justShared, setJustShared] = useState(false);
 
   // The draft starts from what is saved; typing takes over from there.
   const saved = mine.data?.text ?? '';
@@ -76,17 +79,24 @@ export function ModulePage() {
       { onSuccess: () => blocker.proceed?.(), onError: toastError },
     );
 
-  const persist = (published: boolean) =>
+  const persist = (published: boolean) => {
+    // decided before saving: once saved, the response already reads as shared
+    const firstShare = published && !mine.data?.published;
     save.mutate(
       { text: draft, published },
       {
         onSuccess: () => {
           setText(null);
-          toastSuccess(t(published ? 'writing.shared' : 'writing.draftSaved'));
+          if (firstShare) setJustShared(true);
+          else
+            toastSuccess(
+              t(published ? 'writing.shared' : 'writing.draftSaved'),
+            );
         },
         onError: toastError,
       },
     );
+  };
 
   if (module.isPending || mine.isPending) {
     return (
@@ -226,6 +236,22 @@ export function ModulePage() {
                   : t('writing.nothingSaved')}
               {dirty && ` · ${t('writing.unsaved')}`}
             </p>
+            {justShared ? (
+              <p
+                role="status"
+                className="flex items-start gap-3 rounded-2xl border border-border bg-surface-raised px-5 py-4 text-pretty dark:bg-surface"
+              >
+                <CircleCheck
+                  className="mt-0.5 size-5 shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                {t('writing.justShared')}
+              </p>
+            ) : (
+              <p className="text-sm text-pretty text-text-secondary">
+                {t(published ? 'writing.sharedNote' : 'writing.shareNote')}
+              </p>
+            )}
             <div className="flex flex-wrap gap-3">
               {!published && (
                 <Button
@@ -243,17 +269,40 @@ export function ModulePage() {
                   save.isPending || (published && !dirty) || draft.trim() === ''
                 }
                 aria-busy={save.isPending}
-                onClick={() => persist(true)}
+                onClick={() =>
+                  published ? persist(true) : setConfirmShare(true)
+                }
               >
                 {t(published ? 'writing.saveShared' : 'writing.share')}
               </Button>
             </div>
-            <p className="text-sm text-pretty text-text-secondary">
-              {t(published ? 'writing.sharedNote' : 'writing.shareNote')}
-            </p>
           </footer>
         </div>
       </div>
+
+      <AlertDialog open={confirmShare} onOpenChange={setConfirmShare}>
+        <AlertDialogContent className="rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t('writing.confirmShare.title')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('writing.confirmShare.body')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="h-10 rounded-full px-4">
+              {t('common.cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="h-10 rounded-full px-4"
+              onClick={() => persist(true)}
+            >
+              {t('writing.confirmShare.confirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog open={blocker.state === 'blocked'}>
         <AlertDialogContent className="rounded-2xl">

@@ -180,8 +180,24 @@ describe('participant modules', () => {
     openModule(draft);
     const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
     expect(page).toHaveValue('Bir salı sabahıydı.');
+    // the note comes before the buttons
+    const note = screen.getByText(/Taslak yalnızca size görünür/);
+    const share = screen.getByRole('button', { name: 'Grupla paylaş' });
+    expect(
+      note.compareDocumentPosition(share) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    // the first share asks, and cancelling sends nothing
+    await userEvent.click(share);
+    let dialog = await screen.findByRole('alertdialog');
+    expect(dialog).toHaveTextContent(/herkes ve danışmanınız/);
     await userEvent.click(
-      screen.getByRole('button', { name: 'Grupla paylaş' }),
+      within(dialog).getByRole('button', { name: 'Vazgeç' }),
+    );
+    expect(api.put).not.toHaveBeenCalled();
+    await userEvent.click(share);
+    dialog = await screen.findByRole('alertdialog');
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Paylaş' }),
     );
     await waitFor(() =>
       expect(api.put).toHaveBeenCalledWith('/modules/m1/response', {
@@ -193,5 +209,19 @@ describe('participant modules', () => {
       await screen.findByText(/tarihinde grubunuzla paylaşıldı/),
     ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Taslağı kaydet' })).toBeNull();
+    // a note that stays, instead of a toast that fades
+    expect(screen.getByText(/danışmanınız artık okuyabilir/)).toBeVisible();
+  });
+
+  it('saves changes to shared text without asking again', async () => {
+    vi.mocked(api.put).mockResolvedValueOnce({ ...draft, published: true });
+    openModule({ ...draft, published: true });
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, ' Yağmur vardı.');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Değişiklikleri kaydet' }),
+    );
+    await waitFor(() => expect(api.put).toHaveBeenCalledTimes(1));
+    expect(screen.queryByRole('alertdialog')).toBeNull();
   });
 });

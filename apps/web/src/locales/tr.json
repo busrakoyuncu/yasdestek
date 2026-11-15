@@ -283,6 +283,12 @@
       "failed": "Taslak kaydedilemedi. Yazmaya devam edebilir veya “Taslağı kaydet” ile yeniden deneyebilirsiniz."
     },
     "shared": "Yanıtınız grubunuzla paylaşıldı",
+    "justShared": "Yanıtınız grubunuzla paylaşıldı. Grup arkadaşlarınız ve danışmanınız artık okuyabilir.",
+    "confirmShare": {
+      "title": "Yanıtınız grubunuzla paylaşılsın mı?",
+      "body": "Grubunuzdaki herkes ve danışmanınız okuyabilecek, grup arkadaşlarınız yorum yazabilecek. Paylaştıktan sonra da düzenleyebilirsiniz.",
+      "confirm": "Paylaş"
+    },
     "leave": {
       "title": "Kaydedilmemiş yazınız var",
       "body": "Bu sayfadan ayrılırsanız son değişiklikler kaybolur.",
