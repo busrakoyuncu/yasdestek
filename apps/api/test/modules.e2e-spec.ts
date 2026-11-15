@@ -6,7 +6,14 @@ import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
-type ModuleRow = { id: string; order: number; isBase: boolean };
+type ModuleRow = {
+  id: string;
+  title: string;
+  order: number;
+  isBase: boolean;
+  allowImages: boolean;
+  copiedFromId: string | null;
+};
 
 // Two psychologists with one group and one participant each. Five logins.
 // Relies on the seeded base modules being present.
@@ -40,8 +47,28 @@ describe('Modules (e2e)', () => {
     return (res.body as ModuleRow[]).map((m) => m.id);
   }
 
+  async function list(cookie: string) {
+    const res = await api().get('/modules').set('Cookie', cookie).expect(200);
+    return res.body as ModuleRow[];
+  }
+
+  const assign = (cookie: string, group: string, moduleId: string) =>
+    api()
+      .post(`/groups/${group}/modules`)
+      .set('Cookie', cookie)
+      .send({ moduleId });
+
+  const write = (cookie: string, moduleId: string, text: string) =>
+    api()
+      .put(`/modules/${moduleId}/response`)
+      .set('Cookie', cookie)
+      .send({ text });
+
   async function cleanup() {
     const owned = { createdBy: { username: { startsWith: prefix } } };
+    const byPrefix = { username: { startsWith: prefix } };
+    await prisma.response.deleteMany({ where: { user: byPrefix } });
+    await prisma.hiddenModule.deleteMany({ where: { psychologist: byPrefix } });
     await prisma.groupModule.deleteMany({
       where: {
         OR: [
@@ -111,6 +138,10 @@ describe('Modules (e2e)', () => {
       where: { isBase: true, order: 1 },
     });
     ids.base1 = base.id;
+    const base2 = await prisma.module.findFirstOrThrow({
+      where: { isBase: true, order: 2 },
+    });
+    ids.base2 = base2.id;
   });
 
   afterAll(async () => {
@@ -176,7 +207,7 @@ describe('Modules (e2e)', () => {
 
   it('editing follows the same scope', async () => {
     await api()
-      .patch(`/modules/${ids.global}`)
+      .patch(`/modules/${ids['m-p2']}`)
       .set('Cookie', cookies.p1)
       .send({ title: 'hijack' })
       .expect(404);
@@ -199,12 +230,6 @@ describe('Modules (e2e)', () => {
 
   it('participants see nothing until a module is assigned to their group', async () => {
     expect(await listIds(cookies['u-p1'])).toEqual([]);
-
-    const assign = (cookie: string, group: string, moduleId: string) =>
-      api()
-        .post(`/groups/${group}/modules`)
-        .set('Cookie', cookie)
-        .send({ moduleId });
 
     await assign(cookies.p1, ids['g-p1'], ids['m-p2']).expect(404);
     await assign(cookies.p1, ids['g-p2'], ids['m-p1']).expect(404);
@@ -237,6 +262,89 @@ describe('Modules (e2e)', () => {
     expect(await listIds(cookies['u-p1'])).toEqual([ids['m-p1']]);
   });
 
+  it("a psychologist's edit of a shared module becomes their own copy", async () => {
+    await assign(cookies.p1, ids['g-p1'], ids.base1).expect(204);
+    await assign(cookies.p2, ids['g-p2'], ids.base1).expect(204);
+    await write(cookies['u-p1'], ids.base1, 'Bir salı sabahıydı.').expect(200);
+
+    await api()
+      .patch(`/modules/${ids.base1}`)
+      .set('Cookie', cookies.p1)
+      .send({ title: 'p1 Modül 1', allowImages: true })
+      .expect(204);
+
+    // p1 now sees their copy in the original's place, not the original
+    const mine = await list(cookies.p1);
+    const copy = mine.find((m) => m.copiedFromId === ids.base1)!;
+    expect(copy).toMatchObject({
+      title: 'p1 Modül 1',
+      allowImages: true,
+      isBase: false,
+    });
+    expect(mine.map((m) => m.id)).not.toContain(ids.base1);
+    ids.copy = copy.id;
+
+    // p1's group and participant moved with it, writing included
+    expect(await listIds(cookies['u-p1'])).toContain(ids.copy);
+    expect(await listIds(cookies['u-p1'])).not.toContain(ids.base1);
+    const response = await api()
+      .get(`/modules/${ids.copy}/response`)
+      .set('Cookie', cookies['u-p1'])
+      .expect(200);
+    expect(response.body).toMatchObject({ text: 'Bir salı sabahıydı.' });
+
+    // everyone else keeps the original as it was
+    expect(await listIds(cookies.p2)).toContain(ids.base1);
+    expect(await listIds(cookies.p2)).not.toContain(ids.copy);
+    expect(await listIds(cookies['u-p2'])).toEqual([ids.base1]);
+    const original = await prisma.module.findUniqueOrThrow({
+      where: { id: ids.base1 },
+    });
+    expect(original.title).not.toBe('p1 Modül 1');
+
+    // a second edit changes the copy, it does not copy again
+    await api()
+      .patch(`/modules/${ids.copy}`)
+      .set('Cookie', cookies.p1)
+      .send({ title: 'p1 Modül 1 v2' })
+      .expect(204);
+    await api()
+      .patch(`/modules/${ids.base1}`)
+      .set('Cookie', cookies.p1)
+      .send({ title: 'again' })
+      .expect(404);
+    expect(
+      await prisma.module.count({
+        where: { copiedFromId: ids.base1, createdById: ids.p1 },
+      }),
+    ).toBe(1);
+  });
+
+  it("a psychologist's delete of a shared module only hides it for them", async () => {
+    await assign(cookies.p2, ids['g-p2'], ids.global).expect(204);
+    await api()
+      .delete(`/modules/${ids.global}`)
+      .set('Cookie', cookies.p2)
+      .expect(204);
+    expect(await listIds(cookies.p2)).not.toContain(ids.global);
+    expect(await listIds(cookies['u-p2'])).not.toContain(ids.global);
+    await assign(cookies.p2, ids['g-p2'], ids.global).expect(404);
+    expect(await listIds(cookies.p1)).toContain(ids.global);
+    expect(await listIds(cookies.admin)).toContain(ids.global);
+
+    // not while their own participants wrote on it
+    await assign(cookies.p1, ids['g-p1'], ids.base2).expect(204);
+    await write(cookies['u-p1'], ids.base2, 'Karışık.').expect(200);
+    await api()
+      .delete(`/modules/${ids.base2}`)
+      .set('Cookie', cookies.p1)
+      .expect(409)
+      .expect((res) =>
+        expect(res.body).toMatchObject({ code: 'MODULE_IN_USE' }),
+      );
+    expect(await listIds(cookies.p1)).toContain(ids.base2);
+  });
+
   it('base modules cannot be deleted; others only by who may edit them', async () => {
     await api()
       .delete(`/modules/${ids.base1}`)
@@ -244,14 +352,15 @@ describe('Modules (e2e)', () => {
       .expect(403)
       .expect((res) => expect(res.body).toMatchObject({ code: 'BASE_MODULE' }));
     await api()
-      .delete(`/modules/${ids.global}`)
+      .delete(`/modules/${ids['m-p2']}`)
       .set('Cookie', cookies.p1)
       .expect(404);
     await api()
       .delete(`/modules/${ids['m-p1']}`)
       .set('Cookie', cookies.p1)
       .expect(204);
-    expect(await listIds(cookies['u-p1'])).toEqual([]);
+    expect(await listIds(cookies['u-p1'])).not.toContain(ids['m-p1']);
+    // p2 hid it, the admin can still delete it for everyone
     await api()
       .delete(`/modules/${ids.global}`)
       .set('Cookie', cookies.admin)

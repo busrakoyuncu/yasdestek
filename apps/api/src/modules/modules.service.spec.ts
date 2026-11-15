@@ -21,8 +21,14 @@ const input = {
 
 describe('ModulesService', () => {
   const tx = {
-    module: { findFirst: jest.fn(), delete: jest.fn() },
-    groupModule: { deleteMany: jest.fn() },
+    module: {
+      findFirst: jest.fn(),
+      delete: jest.fn(),
+      create: jest.fn().mockResolvedValue({ id: 'copy' }),
+    },
+    groupModule: { deleteMany: jest.fn(), updateMany: jest.fn() },
+    response: { updateMany: jest.fn(), count: jest.fn() },
+    hiddenModule: { deleteMany: jest.fn(), createMany: jest.fn() },
   };
   const prisma = {
     module: {
@@ -54,6 +60,13 @@ describe('ModulesService', () => {
       { where: { OR: unknown[] } },
     ];
     expect(where.OR).toContainEqual({ createdById: 'p1' });
+    // shared modules, minus the ones replaced by a copy or hidden
+    expect(JSON.stringify(where.OR[0])).toContain(
+      '{"copies":{"none":{"createdById":"p1"}}}',
+    );
+    expect(JSON.stringify(where.OR[0])).toContain(
+      '{"hiddenBy":{"none":{"psychologistId":"p1"}}}',
+    );
 
     await service.list(member);
     expect(prisma.module.findMany).toHaveBeenLastCalledWith(
@@ -98,6 +111,79 @@ describe('ModulesService', () => {
     });
   });
 
+  it("turns a psychologist's edit of a shared module into their own copy", async () => {
+    prisma.module.findFirst.mockResolvedValueOnce({
+      id: 'base5',
+      title: 'Modül 5',
+      description: 'd',
+      rules: 'r',
+      questions: ['q1', 'q2'],
+      order: 5,
+      allowImages: false,
+      allowAudio: false,
+    });
+    await service.update(psychologist, 'base5', {
+      title: 'Benim Modül 5',
+      allowImages: true,
+    });
+    expect(tx.module.create).toHaveBeenCalledWith({
+      data: {
+        title: 'Benim Modül 5',
+        description: 'd',
+        rules: 'r',
+        questions: ['q1', 'q2'],
+        order: 5,
+        allowImages: true,
+        allowAudio: false,
+        createdById: 'p1',
+        copiedFromId: 'base5',
+      },
+      select: { id: true },
+    });
+    // only this psychologist's groups and participants move to the copy
+    expect(tx.groupModule.updateMany).toHaveBeenCalledWith({
+      where: { moduleId: 'base5', group: { psychologistId: 'p1' } },
+      data: { moduleId: 'copy' },
+    });
+    expect(tx.response.updateMany).toHaveBeenCalledWith({
+      where: { moduleId: 'base5', user: { psychologistId: 'p1' } },
+      data: { moduleId: 'copy' },
+    });
+    expect(prisma.module.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('lets an admin edit a shared module in place', async () => {
+    prisma.module.updateMany.mockResolvedValueOnce({ count: 1 });
+    await service.update(admin, 'base5', { title: 'x' });
+    expect(prisma.module.findFirst).not.toHaveBeenCalled();
+    expect(tx.module.create).not.toHaveBeenCalled();
+    expect(prisma.module.updateMany).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides a shared module from a psychologist's list instead of deleting it", async () => {
+    prisma.module.findFirst.mockResolvedValue({ id: 'base5' });
+    tx.response.count.mockResolvedValueOnce(2);
+    await expect(service.remove(psychologist, 'base5')).rejects.toBeInstanceOf(
+      ConflictException,
+    );
+    expect(tx.response.count).toHaveBeenCalledWith({
+      where: { moduleId: 'base5', user: { psychologistId: 'p1' } },
+    });
+    expect(tx.hiddenModule.createMany).not.toHaveBeenCalled();
+
+    tx.response.count.mockResolvedValueOnce(0);
+    await service.remove(psychologist, 'base5');
+    expect(tx.groupModule.deleteMany).toHaveBeenCalledWith({
+      where: { moduleId: 'base5', group: { psychologistId: 'p1' } },
+    });
+    expect(tx.hiddenModule.createMany).toHaveBeenCalledWith({
+      data: [{ psychologistId: 'p1', moduleId: 'base5' }],
+      skipDuplicates: true,
+    });
+    expect(tx.module.delete).not.toHaveBeenCalled();
+    prisma.module.findFirst.mockReset();
+  });
+
   it('refuses to delete base modules and modules with responses', async () => {
     tx.module.findFirst.mockResolvedValueOnce({
       isBase: true,
@@ -122,6 +208,10 @@ describe('ModulesService', () => {
     });
     await service.remove(psychologist, 'm1');
     expect(tx.groupModule.deleteMany).toHaveBeenCalledWith({
+      where: { moduleId: 'm1' },
+    });
+    // anyone's hidden marks go with it
+    expect(tx.hiddenModule.deleteMany).toHaveBeenCalledWith({
       where: { moduleId: 'm1' },
     });
     expect(tx.module.delete).toHaveBeenCalledWith({ where: { id: 'm1' } });
