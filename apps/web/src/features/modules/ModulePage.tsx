@@ -68,6 +68,14 @@ export function ModulePage() {
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
 
+  // The kind way out of the leave dialog for a private draft: keep the words,
+  // then go. A failed save stays on the page so nothing is lost.
+  const saveAndLeave = () =>
+    save.mutate(
+      { text: draft, published: false },
+      { onSuccess: () => blocker.proceed?.(), onError: toastError },
+    );
+
   const persist = (published: boolean) =>
     save.mutate(
       { text: draft, published },
@@ -269,6 +277,20 @@ export function ModulePage() {
             >
               {t('writing.leave.discard')}
             </AlertDialogAction>
+            {!published && (
+              <Button
+                className="h-10 rounded-full px-4"
+                disabled={save.isPending}
+                aria-busy={save.isPending}
+                onClick={saveAndLeave}
+              >
+                {t(
+                  save.isPending
+                    ? 'writing.autosave.saving'
+                    : 'writing.leave.saveAndLeave',
+                )}
+              </Button>
+            )}
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

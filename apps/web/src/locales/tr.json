@@ -287,7 +287,8 @@
       "title": "Kaydedilmemiş yazınız var",
       "body": "Bu sayfadan ayrılırsanız son değişiklikler kaybolur.",
       "stay": "Sayfada kal",
-      "discard": "Kaydetmeden ayrıl"
+      "discard": "Kaydetmeden ayrıl",
+      "saveAndLeave": "Taslağı kaydet ve ayrıl"
     }
   },
   "attachments": {

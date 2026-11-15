@@ -287,7 +287,8 @@
       "title": "You have unsaved writing",
       "body": "If you leave this page, the latest changes are lost.",
       "stay": "Stay on the page",
-      "discard": "Leave without saving"
+      "discard": "Leave without saving",
+      "saveAndLeave": "Save draft and leave"
     }
   },
   "attachments": {

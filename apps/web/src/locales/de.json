@@ -287,7 +287,8 @@
       "title": "Sie haben ungespeicherten Text",
       "body": "Wenn Sie diese Seite verlassen, gehen die letzten Änderungen verloren.",
       "stay": "Auf der Seite bleiben",
-      "discard": "Ohne Speichern verlassen"
+      "discard": "Ohne Speichern verlassen",
+      "saveAndLeave": "Entwurf speichern und verlassen"
     }
   },
   "attachments": {

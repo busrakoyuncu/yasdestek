@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '@/test/render';
@@ -141,6 +141,38 @@ describe('participant modules', () => {
     await userEvent.type(page, ' Yağmur vardı.');
     await new Promise((resolve) => setTimeout(resolve, 1800));
     expect(api.put).not.toHaveBeenCalled();
+  });
+
+  it('saves the draft and leaves from the leave dialog', async () => {
+    vi.mocked(api.put).mockResolvedValue(draft);
+    const { router } = openModule(draft);
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, ' Yağmur vardı.');
+    await userEvent.click(screen.getByRole('link', { name: 'Modüllere dön' }));
+    const dialog = await screen.findByRole('alertdialog');
+    expect(router.state.location.pathname).toBe('/app/modules/m1');
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Taslağı kaydet ve ayrıl' }),
+    );
+    await waitFor(() => expect(router.state.location.pathname).toBe('/app'));
+    expect(api.put).toHaveBeenCalledWith('/modules/m1/response', {
+      text: 'Bir salı sabahıydı. Yağmur vardı.',
+      published: false,
+    });
+  });
+
+  it('offers no save in the leave dialog for shared text', async () => {
+    openModule({ ...draft, published: true });
+    const page = await screen.findByRole('textbox', { name: 'Yanıtınız' });
+    await userEvent.type(page, ' Yağmur vardı.');
+    await userEvent.click(screen.getByRole('link', { name: 'Modüllere dön' }));
+    const dialog = await screen.findByRole('alertdialog');
+    expect(
+      within(dialog).queryByRole('button', { name: 'Taslağı kaydet ve ayrıl' }),
+    ).toBeNull();
+    expect(
+      within(dialog).getByRole('button', { name: 'Kaydetmeden ayrıl' }),
+    ).toBeVisible();
   });
 
   it('shares a saved draft with the group', async () => {
