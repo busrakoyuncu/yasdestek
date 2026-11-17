@@ -77,7 +77,8 @@
     "groups": "Groups",
     "inbox": "Inbox",
     "counselors": "Counselors",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "forums": "Forums"
   },
   "theme": {
     "label": "Appearance",
@@ -331,5 +332,19 @@
       "body": "A removed file cannot be recovered.",
       "confirm": "Remove"
     }
+  },
+  "forum": {
+    "open": "Read what your group shared",
+    "back": "Back to forums",
+    "empty": "None of your group mates has shared this module yet.",
+    "noGroup": "You are not in a group yet. Once your counselor adds you to one, shared responses will appear here.",
+    "comments": "Comments",
+    "removed": "This comment was removed.",
+    "listTitle": "Forums",
+    "intro": "Each module has a forum for your group. Here you can read what your group mates shared.",
+    "lead": "What your group mates shared in this module. Read at your own pace.",
+    "notShared": "You have not shared anything in this module yet.",
+    "write": "Start writing",
+    "yours": "Your response"
   }
 }

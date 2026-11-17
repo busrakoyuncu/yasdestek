@@ -77,7 +77,8 @@
     "groups": "Gruppen",
     "inbox": "Posteingang",
     "counselors": "Begleitungen",
-    "analytics": "Auswertung"
+    "analytics": "Auswertung",
+    "forums": "Foren"
   },
   "theme": {
     "label": "Darstellung",
@@ -331,5 +332,19 @@
       "body": "Eine entfernte Datei kann nicht wiederhergestellt werden.",
       "confirm": "Entfernen"
     }
+  },
+  "forum": {
+    "open": "Lesen, was Ihre Gruppe geteilt hat",
+    "back": "Zurück zu den Foren",
+    "empty": "Von Ihren Gruppenmitgliedern hat noch niemand dieses Modul geteilt.",
+    "noGroup": "Sie sind noch keiner Gruppe zugeordnet. Sobald Ihre Begleitung Sie einer Gruppe hinzufügt, erscheinen die geteilten Antworten hier.",
+    "comments": "Kommentare",
+    "removed": "Dieser Kommentar wurde entfernt.",
+    "listTitle": "Foren",
+    "intro": "Jedes Modul hat ein Forum für Ihre Gruppe. Hier können Sie lesen, was Ihre Gruppenmitglieder geteilt haben.",
+    "lead": "Was Ihre Gruppenmitglieder in diesem Modul geteilt haben. Lesen Sie in Ihrem Tempo.",
+    "notShared": "Sie haben in diesem Modul noch nichts geteilt.",
+    "write": "Mit dem Schreiben beginnen",
+    "yours": "Ihre Antwort"
   }
 }

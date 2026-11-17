@@ -77,7 +77,8 @@
     "groups": "Gruplar",
     "inbox": "Gelen Kutusu",
     "counselors": "Danışmanlar",
-    "analytics": "Analitik"
+    "analytics": "Analitik",
+    "forums": "Forumlar"
   },
   "theme": {
     "label": "Görünüm",
@@ -331,5 +332,19 @@
       "body": "Kaldırılan dosya geri getirilemez.",
       "confirm": "Kaldır"
     }
+  },
+  "forum": {
+    "open": "Grubun paylaşımlarını okuyun",
+    "back": "Forumlara dön",
+    "empty": "Grup arkadaşlarınızdan bu modülü henüz kimse paylaşmadı.",
+    "noGroup": "Henüz bir gruba eklenmediniz. Danışmanınız sizi bir gruba eklediğinde paylaşımlar burada görünecek.",
+    "comments": "Yorumlar",
+    "removed": "Bu yorum kaldırıldı.",
+    "listTitle": "Forumlar",
+    "intro": "Her modülün grubunuza ait bir forumu var. Grup arkadaşlarınızın paylaştıklarını burada okuyabilirsiniz.",
+    "lead": "Grup arkadaşlarınızın bu modülde paylaştıkları. Kendi hızınızda okuyun.",
+    "notShared": "Bu modülde henüz bir şey paylaşmadınız.",
+    "write": "Yazmaya başlayın",
+    "yours": "Sizin paylaşımınız"
   }
 }
