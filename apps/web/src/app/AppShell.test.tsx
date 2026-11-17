@@ -36,7 +36,19 @@ const mount = () => renderApp(<RequireAuth role="USER" />, '/app', area);
 
 describe('AppShell', () => {
   beforeEach(() => {
-    vi.mocked(api.get).mockReset().mockResolvedValue(participant);
+    // /auth/me answers the session, /modules the participant's modules
+    vi.mocked(api.get)
+      .mockReset()
+      .mockImplementation((path: string) =>
+        Promise.resolve(
+          path === '/modules'
+            ? [
+                { id: 'm1', title: 'Sözcüklerin Gücü' },
+                { id: 'm2', title: 'Mektup Yazma' },
+              ]
+            : participant,
+        ),
+      );
     vi.mocked(api.post).mockReset();
     localStorage.clear();
     document.documentElement.classList.remove('dark');
@@ -51,6 +63,34 @@ describe('AppShell', () => {
     expect(
       screen.getAllByRole('link', { name: 'Mesajlar' })[0],
     ).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('lists each module under Modüller and Forumlar, and folds them away', async () => {
+    mount();
+    const forums = await screen.findByRole('button', { name: 'Forumlar' });
+    // home stays one click away through the wordmark
+    expect(
+      screen.getAllByRole('link', { name: 'Yasdestek' })[0],
+    ).toHaveAttribute('href', '/app');
+    expect(forums).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: 'Modüller' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    // the same module, once to write and once to read the group
+    const links = await screen.findAllByRole('link', {
+      name: /Sözcüklerin Gücü/,
+    });
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/app/modules/m1',
+      '/app/forums/m1',
+    ]);
+
+    await userEvent.click(forums);
+    expect(forums).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.getAllByRole('link', { name: /Sözcüklerin Gücü/ }),
+    ).toHaveLength(1);
   });
 
   it('is night by default and remembers a switch to light', async () => {
