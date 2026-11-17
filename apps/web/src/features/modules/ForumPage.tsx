@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { fileKind } from '@yasdestek/shared';
-import { ChevronDown, ChevronLeft } from 'lucide-react';
-import { useId } from 'react';
+import { ChevronDown, ChevronLeft, SendHorizontal } from 'lucide-react';
+import { useId, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { useSession } from '@/features/auth/useSession';
 import { errorMessage } from '@/lib/errors';
+import { toastError } from '@/lib/toast';
 import { fileUrl } from './useFiles';
-import { forumQuery, type ForumPost } from './useForum';
+import { forumQuery, useAddComment, type ForumPost } from './useForum';
 import { moduleQuery } from './useModules';
 
 // What a participant's group shared for one module, each response with the
@@ -75,6 +77,7 @@ export function ForumPage() {
     );
   }
 
+  const forumKey = { groupId, moduleId };
   const others = forum.data.filter((post) => post.user.id !== user?.id);
   const mine = forum.data.find((post) => post.user.id === user?.id);
   // Without a shared response of their own, the way to write one.
@@ -130,20 +133,30 @@ export function ForumPage() {
         <ol className="flex flex-col gap-10">
           {others.map((post) => (
             <li key={post.id}>
-              <Post post={post} />
+              <Post post={post} forum={forumKey} />
             </li>
           ))}
         </ol>
       )}
 
-      {mine ? <Post post={mine} own /> : writeLink}
+      {mine ? <Post post={mine} forum={forumKey} own /> : writeLink}
     </article>
   );
 }
 
-// One member's response, then the comments under it. The reader's own is
-// named as theirs rather than by username.
-function Post({ post, own = false }: { post: ForumPost; own?: boolean }) {
+type ForumKey = { groupId: string; moduleId: string };
+
+// One member's response, then the comments under it and a place to add one.
+// The reader's own is named as theirs rather than by username.
+function Post({
+  post,
+  forum,
+  own = false,
+}: {
+  post: ForumPost;
+  forum: ForumKey;
+  own?: boolean;
+}) {
   const { t, i18n } = useTranslation();
   const headingId = useId();
   const when = new Intl.DateTimeFormat(i18n.language, {
@@ -205,36 +218,96 @@ function Post({ post, own = false }: { post: ForumPost; own?: boolean }) {
         </ul>
       )}
 
-      {post.comments.length > 0 && (
-        <ul
-          aria-label={t('forum.comments')}
-          className="flex flex-col gap-4 border-l border-border pl-5"
-        >
-          {post.comments.map((comment) => (
-            <li key={comment.id} className="flex flex-col gap-1">
-              {comment.author === null ? (
-                <p className="text-sm text-text-secondary italic">
-                  {t('forum.removed')}
-                </p>
-              ) : (
-                <>
-                  <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
-                    <span className="font-medium">
-                      {comment.author.username}
-                    </span>
-                    <span className="text-text-secondary">
-                      {when.format(new Date(comment.createdAt))}
-                    </span>
+      <div className="flex flex-col gap-4 border-l border-border pl-5">
+        {post.comments.length > 0 && (
+          <ul aria-label={t('forum.comments')} className="flex flex-col gap-4">
+            {post.comments.map((comment) => (
+              <li key={comment.id} className="flex flex-col gap-1">
+                {comment.author === null ? (
+                  <p className="text-sm text-text-secondary italic">
+                    {t('forum.removed')}
                   </p>
-                  <p className="font-body leading-relaxed text-pretty whitespace-pre-line">
-                    {comment.text}
-                  </p>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+                ) : (
+                  <>
+                    <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                      <span className="font-medium">
+                        {comment.author.username}
+                      </span>
+                      <span className="text-text-secondary">
+                        {when.format(new Date(comment.createdAt))}
+                      </span>
+                    </p>
+                    <p className="font-body leading-relaxed text-pretty whitespace-pre-line">
+                      {comment.text}
+                    </p>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        <CommentForm responseId={post.id} forum={forum} />
+      </div>
     </section>
+  );
+}
+
+// Writes a comment at the end of a response's thread. Enter sends, Shift and
+// Enter starts a new line, as in messages.
+function CommentForm({
+  responseId,
+  forum,
+}: {
+  responseId: string;
+  forum: ForumKey;
+}) {
+  const { t } = useTranslation();
+  const add = useAddComment(forum.groupId, forum.moduleId);
+  const [draft, setDraft] = useState('');
+
+  const submit = () => {
+    const text = draft.trim();
+    if (!text || add.isPending) return;
+    add.mutate(
+      { responseId, text },
+      { onSuccess: () => setDraft(''), onError: toastError },
+    );
+  };
+  const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      submit();
+    }
+  };
+
+  return (
+    <form
+      className="flex items-end gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        submit();
+      }}
+    >
+      <Textarea
+        value={draft}
+        onChange={(event) => setDraft(event.target.value)}
+        onKeyDown={onKeyDown}
+        rows={1}
+        maxLength={5000}
+        placeholder={t('forum.comment.placeholder')}
+        aria-label={t('forum.comment.label')}
+        className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl font-body text-base"
+      />
+      <Button
+        type="submit"
+        size="icon"
+        className="size-11 shrink-0 rounded-full"
+        disabled={!draft.trim() || add.isPending}
+        aria-busy={add.isPending}
+        aria-label={t('forum.comment.send')}
+      >
+        <SendHorizontal className="size-5" />
+      </Button>
+    </form>
   );
 }

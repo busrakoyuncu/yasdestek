@@ -345,6 +345,11 @@
     "lead": "Was Ihre Gruppenmitglieder in diesem Modul geteilt haben. Lesen Sie in Ihrem Tempo.",
     "notShared": "Sie haben in diesem Modul noch nichts geteilt.",
     "write": "Mit dem Schreiben beginnen",
-    "yours": "Ihre Antwort"
+    "yours": "Ihre Antwort",
+    "comment": {
+      "label": "Ihr Kommentar",
+      "placeholder": "Schreiben Sie einen unterstützenden Kommentar…",
+      "send": "Kommentar senden"
+    }
   }
 }

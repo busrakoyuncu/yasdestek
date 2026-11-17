@@ -1,4 +1,9 @@
-import { queryOptions } from '@tanstack/react-query';
+import {
+  queryOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import type { CommentInput } from '@yasdestek/shared';
 import { api } from '@/lib/api';
 import type { MediaFile } from './useMyResponse';
 
@@ -39,3 +44,20 @@ export const forumQuery = (groupId: string, moduleId: string) =>
     queryKey: ['forum', groupId, moduleId],
     queryFn: () => api.get<ForumPost[]>(`/groups/${groupId}/forum/${moduleId}`),
   });
+
+// A comment under a group mate's response, or the writer's own. The forum is
+// fetched again so the new comment shows in its place, with any others that
+// arrived meanwhile.
+export function useAddComment(groupId: string, moduleId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ responseId, text }: { responseId: string; text: string }) =>
+      api.post<ForumComment>(`/responses/${responseId}/comments`, {
+        text,
+      } satisfies CommentInput),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: forumQuery(groupId, moduleId).queryKey,
+      }),
+  });
+}

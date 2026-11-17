@@ -345,6 +345,11 @@
     "lead": "What your group mates shared in this module. Read at your own pace.",
     "notShared": "You have not shared anything in this module yet.",
     "write": "Start writing",
-    "yours": "Your response"
+    "yours": "Your response",
+    "comment": {
+      "label": "Your comment",
+      "placeholder": "Write a supportive comment…",
+      "send": "Send comment"
+    }
   }
 }

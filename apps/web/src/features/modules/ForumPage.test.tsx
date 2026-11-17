@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '@/test/render';
@@ -6,7 +6,10 @@ import { ForumPage } from './ForumPage';
 
 vi.mock('@/lib/api', async () => {
   const actual = await vi.importActual<typeof import('@/lib/api')>('@/lib/api');
-  return { ...actual, api: { ...actual.api, get: vi.fn() } };
+  return {
+    ...actual,
+    api: { ...actual.api, get: vi.fn(), post: vi.fn() },
+  };
 });
 
 import { api, ApiError } from '@/lib/api';
@@ -80,6 +83,7 @@ const openForum = (
 describe('group forum', () => {
   beforeEach(() => {
     vi.mocked(api.get).mockReset();
+    vi.mocked(api.post).mockReset();
   });
 
   it('shows each shared response with its files and comments', async () => {
@@ -186,5 +190,49 @@ describe('group forum', () => {
     expect(
       await screen.findByRole('link', { name: 'Forumlara dön' }),
     ).toHaveAttribute('href', '/app/forums');
+  });
+
+  it('adds a comment under a response and shows the forum again', async () => {
+    vi.mocked(api.post).mockResolvedValueOnce({});
+    openForum('g1');
+    const kerem = await screen.findByRole('region', { name: 'kerem' });
+    const send = within(kerem).getByRole('button', { name: 'Yorumu gönder' });
+    expect(send).toBeDisabled();
+
+    const box = within(kerem).getByRole('textbox', { name: 'Yorumunuz' });
+    await userEvent.type(box, ' Yanındayım. ');
+    await userEvent.click(send);
+    expect(api.post).toHaveBeenCalledWith('/responses/r2/comments', {
+      text: 'Yanındayım.',
+    });
+    await waitFor(() => expect(box).toHaveValue(''));
+    // fetched once on open, once more after the comment
+    expect(
+      vi
+        .mocked(api.get)
+        .mock.calls.filter(([path]) => path.includes('/forum/')),
+    ).toHaveLength(2);
+  });
+
+  it('sends with Enter and starts a new line with Shift and Enter', async () => {
+    vi.mocked(api.post).mockResolvedValueOnce({});
+    openForum('g1');
+    const box = await screen.findByRole('textbox', { name: 'Yorumunuz' });
+    await userEvent.type(box, 'Bir{Shift>}{Enter}{/Shift}iki');
+    expect(box).toHaveValue('Bir\niki');
+    expect(api.post).not.toHaveBeenCalled();
+    await userEvent.type(box, '{Enter}');
+    expect(api.post).toHaveBeenCalledWith('/responses/r2/comments', {
+      text: 'Bir\niki',
+    });
+  });
+
+  it('keeps the comment when it could not be sent', async () => {
+    vi.mocked(api.post).mockRejectedValueOnce(new ApiError(0, 'NETWORK', ''));
+    openForum('g1');
+    const box = await screen.findByRole('textbox', { name: 'Yorumunuz' });
+    await userEvent.type(box, 'Yanındayım.{Enter}');
+    await waitFor(() => expect(api.post).toHaveBeenCalled());
+    expect(box).toHaveValue('Yanındayım.');
   });
 });

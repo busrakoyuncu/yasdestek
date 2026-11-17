@@ -345,6 +345,11 @@
     "lead": "Grup arkadaşlarınızın bu modülde paylaştıkları. Kendi hızınızda okuyun.",
     "notShared": "Bu modülde henüz bir şey paylaşmadınız.",
     "write": "Yazmaya başlayın",
-    "yours": "Sizin paylaşımınız"
+    "yours": "Sizin paylaşımınız",
+    "comment": {
+      "label": "Yorumunuz",
+      "placeholder": "Destekleyici bir yorum yazın…",
+      "send": "Yorumu gönder"
+    }
   }
 }
