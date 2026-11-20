@@ -7,12 +7,15 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
 // Reads the seeded general-rules page and restores its text afterwards.
+// Languages are tested on a page of their own, removed again at the end.
 describe('Pages (e2e)', () => {
   let app: INestApplication<App>;
   let prisma: PrismaService;
   let original: string;
   const prefix = 'e2e-pages-';
   const cookies: Record<string, string> = {};
+  const slug = prefix + 'page';
+  const rules = { slug_locale: { slug: 'general-rules', locale: 'tr' } };
 
   const api = () => request(app.getHttpServer());
 
@@ -51,17 +54,23 @@ describe('Pages (e2e)', () => {
       });
       cookies[name] = await login(name);
     }
-    const page = await prisma.contentPage.findUniqueOrThrow({
-      where: { slug: 'general-rules' },
-    });
+    const page = await prisma.contentPage.findUniqueOrThrow({ where: rules });
     original = page.content;
+    await prisma.contentPage.deleteMany({ where: { slug } });
+    await prisma.contentPage.createMany({
+      data: [
+        { slug, locale: 'tr', content: 'Kurallar' },
+        { slug, locale: 'en', content: 'Rules' },
+      ],
+    });
   });
 
   afterAll(async () => {
     await prisma.contentPage.update({
-      where: { slug: 'general-rules' },
+      where: rules,
       data: { content: original },
     });
+    await prisma.contentPage.deleteMany({ where: { slug } });
     await prisma.user.deleteMany({
       where: { username: { startsWith: prefix } },
     });
@@ -111,5 +120,45 @@ describe('Pages (e2e)', () => {
       .expect((res) =>
         expect(res.body).toMatchObject({ content: 'Yeni kurallar' }),
       );
+  });
+
+  it('serves the asked language and falls back to Turkish', async () => {
+    const read = (query: string) =>
+      api().get(`/pages/${slug}${query}`).set('Cookie', cookies.user);
+    await read('?locale=en')
+      .expect(200)
+      .expect((res) =>
+        expect(res.body).toMatchObject({ locale: 'en', content: 'Rules' }),
+      );
+    // no German yet: the Turkish page, saying so
+    await read('?locale=de')
+      .expect(200)
+      .expect((res) =>
+        expect(res.body).toMatchObject({ locale: 'tr', content: 'Kurallar' }),
+      );
+    await read('')
+      .expect(200)
+      .expect((res) => expect(res.body).toMatchObject({ locale: 'tr' }));
+    await read('?locale=fr').expect(400);
+  });
+
+  it('edits one language at a time', async () => {
+    const edit = (locale: string, content: string) =>
+      api()
+        .put(`/pages/${slug}?locale=${locale}`)
+        .set('Cookie', cookies.admin)
+        .send({ content });
+    await edit('en', 'New rules').expect(204);
+    // a language that is not there yet is not created
+    await edit('de', 'Regeln').expect(404);
+
+    const pages = await prisma.contentPage.findMany({
+      where: { slug },
+      orderBy: { locale: 'asc' },
+    });
+    expect(pages.map((p) => [p.locale, p.content])).toEqual([
+      ['en', 'New rules'],
+      ['tr', 'Kurallar'],
+    ]);
   });
 });

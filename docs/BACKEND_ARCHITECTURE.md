@@ -52,7 +52,7 @@ One `User` table for all roles.
 - **User** - `role` (`admin` | `psychologist` | `user`), `username` (unique), `passwordHash`, `active` (default false), `mustChangePassword`, `psychologistId?` (owner, for participants), `groupId?` (for participants).
 - **Group** - name, `psychologistId`.
 - **Module** - title, `description` (welcome/purpose text), `rules` (module-specific expectations - required at creation), `questions` (ordered list of guided questions), order, `isBase`, `allowImages` and `allowAudio` (whether responses may carry images or voice recordings; both off by default, set by whoever may edit the module), `createdById`, `copiedFromId?` (set on a psychologist's edited copy of a shared module); scope derives from creator: base/admin → global, psychologist → visible only to their own users.
-- **ContentPage** - slug + content for editable platform pages; seeded with `general-rules` ("Genel Kurallar"), admin-editable, readable by all roles.
+- **ContentPage** - slug + locale + content for editable platform pages, one row per language (`tr`, `en`, `de`, unique on slug and locale); seeded with `general-rules` ("Genel Kurallar") in all three, admin-editable per language, readable by all roles. A missing translation falls back to Turkish.
 - **GroupModule** - assignment of a module to a group (modules are assigned group-level, not per user).
 - **HiddenModule** - `psychologistId` + `moduleId`: a shared module a psychologist removed from their own list. Everyone else keeps it.
 - **Response** - one per user per module: text, published state, timestamps, `deletedAt?`.
@@ -118,8 +118,8 @@ POST   /modules  PATCH /modules/:id  DELETE /modules/:id     A (global), P (own)
 POST   /groups/:groupId/modules             P: assign a visible module to an own group (idempotent)
 DELETE /groups/:groupId/modules/:moduleId   P
 
-GET    /pages/:slug                         any role
-PUT    /pages/:slug                         A, existing slugs only
+GET    /pages/:slug?locale=tr|en|de         any role, falls back to tr
+PUT    /pages/:slug?locale=tr|en|de         A, existing slug and locale only
 
 GET    /modules/:moduleId/response          U: my response with its files
 PUT    /modules/:moduleId/response          U: create or update, { text, published }
@@ -158,7 +158,7 @@ GET    /analytics/users/:id                 A: assigned modules with status not_
 
 1. The first admin account (`SEED_ADMIN_USERNAME` / `SEED_ADMIN_PASSWORD` from env, active, `mustChangePassword` set). An existing admin is left untouched; use the reset-password command to recover it.
 2. The 6 base modules, marked `isBase`, from `prisma/base-modules.ts`. The texts there are placeholders until the Turkish prompt texts from the thesis (Appendix M) are pasted in.
-3. The `general-rules` content page with initial interaction rules.
+3. The `general-rules` content page with initial interaction rules, in tr, en, and de. A language already present is left as edited.
 
 Existing rows are never overwritten, so admin edits survive a re-seed.
 

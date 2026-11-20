@@ -43,12 +43,17 @@ async function seedBaseModules() {
   }
 }
 
+// One row per language; a language already there is left as the admin wrote it.
 async function seedGeneralRules() {
   const slug = 'general-rules';
-  const existing = await prisma.contentPage.findUnique({ where: { slug } });
-  if (existing) return;
-  await prisma.contentPage.create({ data: { slug, content: generalRules } });
-  console.log('general-rules page created');
+  for (const [locale, content] of Object.entries(generalRules)) {
+    const existing = await prisma.contentPage.findUnique({
+      where: { slug_locale: { slug, locale } },
+    });
+    if (existing) continue;
+    await prisma.contentPage.create({ data: { slug, locale, content } });
+    console.log(`general-rules page created (${locale})`);
+  }
 }
 
 async function main() {

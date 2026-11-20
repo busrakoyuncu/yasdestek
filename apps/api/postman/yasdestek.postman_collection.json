@@ -379,21 +379,21 @@
     },
     {
       "name": "Pages",
-      "description": "Editable platform pages. Seeded: general-rules.",
+      "description": "Editable platform pages, one text per language (tr, en, de). Seeded: general-rules in all three. `?locale=` picks the language on both routes; without it, Turkish.",
       "item": [
         {
           "name": "Get general rules",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/pages/general-rules",
-            "description": "Any role."
+            "url": "{{baseUrl}}/pages/general-rules?locale=en",
+            "description": "Any role. Answers the page in the asked language, or the Turkish one while that translation is missing; the answer's `locale` says which came back. 400 for a locale other than tr, en, de."
           }
         },
         {
           "name": "Update general rules (admin)",
           "request": {
             "method": "PUT",
-            "url": "{{baseUrl}}/pages/general-rules",
+            "url": "{{baseUrl}}/pages/general-rules?locale=en",
             "header": [
               {
                 "key": "Content-Type",
@@ -404,7 +404,7 @@
               "mode": "raw",
               "raw": "{\n  \"content\": \"Genel Kurallar\\n\\n- ...\"\n}"
             },
-            "description": "204. 404 for a slug that was not seeded."
+            "description": "204. Changes only the named language. 404 for a slug or language that was not seeded."
           }
         }
       ]
