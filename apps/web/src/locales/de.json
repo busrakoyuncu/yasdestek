@@ -241,7 +241,9 @@
       "noneLeft": "Keine weiteren Module zum Zuweisen.",
       "unassign": "{{title}} entfernen",
       "assigned": "Modul zugewiesen",
-      "unassigned": "Modul entfernt"
+      "unassigned": "Modul entfernt",
+      "forum": "Forum für {{title}} öffnen",
+      "forumShort": "Forum"
     },
     "remove": {
       "title": "Gruppe {{name}} löschen?",
@@ -350,6 +352,18 @@
       "label": "Ihr Kommentar",
       "placeholder": "Schreiben Sie einen unterstützenden Kommentar…",
       "send": "Kommentar senden"
+    },
+    "counselor": {
+      "back": "Zurück zu den Gruppen",
+      "lead": "Was diese Gruppe in diesem Modul geteilt hat. Sie können einen unpassenden Kommentar entfernen.",
+      "empty": "In dieser Gruppe hat dieses Modul noch niemand geteilt.",
+      "remove": {
+        "label": "Kommentar von {{name}} entfernen",
+        "title": "Diesen Kommentar entfernen?",
+        "body": "Der Kommentar wird für alle in der Gruppe ausgeblendet, an seiner Stelle steht „Dieser Kommentar wurde entfernt.“ Das lässt sich nicht rückgängig machen.",
+        "confirm": "Entfernen",
+        "done": "Kommentar entfernt"
+      }
     }
   }
 }

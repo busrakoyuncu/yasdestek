@@ -36,6 +36,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { THEMES, useTheme, type Theme } from '@/lib/theme';
 import { toastError } from '@/lib/toast';
 import { homeFor, useSession } from '@/features/auth/useSession';
+import { groupsQuery } from '@/features/groups/useGroups';
 import { modulesQuery } from '@/features/modules/useModules';
 import type { CurrentUser, Role } from '@/types/user';
 import { navigation, type NavItem } from './navigation';
@@ -67,6 +68,7 @@ export function AppShell({ role }: { role: Role }) {
   const { theme, resolved, setTheme } = useTheme(user!.id);
   const items = navigation[role];
   const participant = role === 'USER';
+  const counselor = role === 'PSYCHOLOGIST';
   // A participant's sidebar lists their assigned modules twice: under
   // "Modüller" to write, under "Forumlar" to read the group.
   const modules = useQuery({ ...modulesQuery, enabled: participant });
@@ -75,9 +77,23 @@ export function AppShell({ role }: { role: Role }) {
       to: `${base}/${module.id}`,
       label: module.title,
     }));
+  // A counselor's "Forumlar" lists each group by name, then the forums of
+  // the modules assigned to it.
+  const groups = useQuery({ ...groupsQuery, enabled: counselor });
+  const groupForums = (groups.data ?? [])
+    .filter((group) => group.modules.length > 0)
+    .flatMap((group) => [
+      { heading: group.name },
+      ...group.modules.map(({ module }) => ({
+        to: `/psychologist/forums/${group.id}/${module.id}`,
+        label: module.title,
+      })),
+    ]);
   const subItems: SubItems = participant
     ? { '/app': linksTo('/app/modules'), '/app/forums': linksTo('/app/forums') }
-    : {};
+    : counselor
+      ? { '/psychologist/forums': groupForums }
+      : {};
 
   return (
     <div className="min-h-svh bg-background text-foreground md:grid md:grid-cols-[15rem_1fr]">
@@ -88,7 +104,9 @@ export function AppShell({ role }: { role: Role }) {
 
       <div className="flex min-h-svh flex-col">
         <header className="flex h-14 items-center gap-1 border-b border-border px-3 md:px-6">
-          {!participant && <PhoneMenu role={role} items={items} />}
+          {!participant && (
+            <PhoneMenu role={role} items={items} subItems={subItems} />
+          )}
           <span className="md:hidden">
             <Wordmark role={role} />
           </span>
@@ -127,9 +145,13 @@ function Wordmark({ role }: { role: Role }) {
   );
 }
 
-// Links listed under an item, keyed by the item's path. Their labels are
-// data (module titles), shown as written.
-type SubItems = Record<string, { to: string; label: string }[]>;
+// Links listed under an item, keyed by the item's path, with optional
+// headings between them. Labels are data (module titles, group names),
+// shown as written.
+type SubItems = Record<
+  string,
+  ({ to: string; label: string } | { heading: string })[]
+>;
 
 function SideNav({
   items,
@@ -188,7 +210,9 @@ function NavGroup({
   // The header shows where you are, even with the list folded away.
   const { pathname } = useLocation();
   const inside = links.some(
-    (link) => pathname === link.to || pathname.startsWith(`${link.to}/`),
+    (link) =>
+      'to' in link &&
+      (pathname === link.to || pathname.startsWith(`${link.to}/`)),
   );
   return (
     <div className="flex flex-col gap-1">
@@ -213,27 +237,44 @@ function NavGroup({
         />
       </button>
       {open &&
-        links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              cn(
-                'flex min-h-9 items-center rounded-2xl border border-transparent py-2 pr-3 pl-11 text-sm leading-snug text-pretty transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-                isActive ? navActive : navIdle,
-              )
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        links.map((link) =>
+          'heading' in link ? (
+            <p
+              key={`heading-${link.heading}`}
+              className="pt-2 pr-3 pl-11 text-xs font-medium text-foreground/75 dark:text-glow/75"
+            >
+              {link.heading}
+            </p>
+          ) : (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                cn(
+                  'flex min-h-9 items-center rounded-2xl border border-transparent py-2 pr-3 pl-11 text-sm leading-snug text-pretty transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  isActive ? navActive : navIdle,
+                )
+              }
+            >
+              {link.label}
+            </NavLink>
+          ),
+        )}
     </div>
   );
 }
 
 // Phone navigation for the denser roles: the same list, in a side sheet.
-function PhoneMenu({ role, items }: { role: Role; items: NavItem[] }) {
+function PhoneMenu({
+  role,
+  items,
+  subItems,
+}: {
+  role: Role;
+  items: NavItem[];
+  subItems: SubItems;
+}) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   return (
@@ -258,7 +299,11 @@ function PhoneMenu({ role, items }: { role: Role; items: NavItem[] }) {
           </SheetDescription>
         </SheetHeader>
         <div className="px-4">
-          <SideNav items={items} onNavigate={() => setOpen(false)} />
+          <SideNav
+            items={items}
+            subItems={subItems}
+            onNavigate={() => setOpen(false)}
+          />
         </div>
       </SheetContent>
     </Sheet>

@@ -93,6 +93,37 @@ describe('AppShell', () => {
     ).toHaveLength(1);
   });
 
+  it("lists a counselor's group forums under Forumlar", async () => {
+    vi.mocked(api.get).mockImplementation((path: string) =>
+      Promise.resolve(
+        path === '/groups'
+          ? [
+              {
+                id: 'g1',
+                name: 'Salı grubu',
+                modules: [{ module: { id: 'm1', title: 'Sözcüklerin Gücü' } }],
+              },
+              { id: 'g2', name: 'Boş grup', modules: [] },
+            ]
+          : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
+      ),
+    );
+    renderApp(<RequireAuth role="PSYCHOLOGIST" />, '/psychologist', [
+      {
+        element: <AppShell role="PSYCHOLOGIST" />,
+        children: [{ index: true, element: <p>Katılımcı listesi</p> }],
+      },
+    ]);
+    const forums = await screen.findByRole('button', { name: 'Forumlar' });
+    expect(forums).toHaveAttribute('aria-expanded', 'true');
+    // the group's name, then its modules; a group with none is left out
+    expect(await screen.findByText('Salı grubu')).toBeInTheDocument();
+    expect(screen.queryByText('Boş grup')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Sözcüklerin Gücü' }),
+    ).toHaveAttribute('href', '/psychologist/forums/g1/m1');
+  });
+
   it('is night by default and remembers a switch to light', async () => {
     mount();
     await userEvent.click(

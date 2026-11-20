@@ -31,6 +31,7 @@ export const navigation: Record<Role, NavItem[]> = {
   PSYCHOLOGIST: [
     { to: '/psychologist', label: 'nav.participants', icon: Users, end: true },
     { to: '/psychologist/groups', label: 'nav.groups', icon: UsersRound },
+    { to: '/psychologist/forums', label: 'nav.forums', icon: MessagesSquare },
     { to: '/psychologist/modules', label: 'nav.modules', icon: BookOpen },
     { to: '/psychologist/inbox', label: 'nav.inbox', icon: Inbox },
     { to: '/psychologist/rules', label: 'nav.rules', icon: ScrollText },

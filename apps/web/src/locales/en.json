@@ -241,7 +241,9 @@
       "noneLeft": "No other modules to assign.",
       "unassign": "Unassign {{title}}",
       "assigned": "Module assigned",
-      "unassigned": "Module unassigned"
+      "unassigned": "Module unassigned",
+      "forum": "Open the forum for {{title}}",
+      "forumShort": "Forum"
     },
     "remove": {
       "title": "Delete the group {{name}}?",
@@ -350,6 +352,18 @@
       "label": "Your comment",
       "placeholder": "Write a supportive comment…",
       "send": "Send comment"
+    },
+    "counselor": {
+      "back": "Back to groups",
+      "lead": "What this group shared in this module. You can remove a comment that is not appropriate.",
+      "empty": "No one in this group has shared this module yet.",
+      "remove": {
+        "label": "Remove the comment by {{name}}",
+        "title": "Remove this comment?",
+        "body": "The comment is hidden from everyone in the group and “This comment was removed.” shows in its place. This cannot be undone.",
+        "confirm": "Remove",
+        "done": "Comment removed"
+      }
     }
   }
 }

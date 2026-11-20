@@ -61,3 +61,17 @@ export function useAddComment(groupId: string, moduleId: string) {
       }),
   });
 }
+
+// A counselor removes a comment in one of their groups. The api keeps the row
+// and the forum shows a placeholder in its place.
+export function useRemoveComment(groupId: string, moduleId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (commentId: string) =>
+      api.delete<void>(`/comments/${commentId}`),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: forumQuery(groupId, moduleId).queryKey,
+      }),
+  });
+}

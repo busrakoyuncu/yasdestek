@@ -8,7 +8,7 @@ vi.mock('@/lib/api', async () => {
   const actual = await vi.importActual<typeof import('@/lib/api')>('@/lib/api');
   return {
     ...actual,
-    api: { ...actual.api, get: vi.fn(), post: vi.fn() },
+    api: { ...actual.api, get: vi.fn(), post: vi.fn(), delete: vi.fn() },
   };
 });
 
@@ -84,6 +84,7 @@ describe('group forum', () => {
   beforeEach(() => {
     vi.mocked(api.get).mockReset();
     vi.mocked(api.post).mockReset();
+    vi.mocked(api.delete).mockReset();
   });
 
   it('shows each shared response with its files and comments', async () => {
@@ -234,5 +235,74 @@ describe('group forum', () => {
     await userEvent.type(box, 'Yanındayım.{Enter}');
     await waitFor(() => expect(api.post).toHaveBeenCalled());
     expect(box).toHaveValue('Yanındayım.');
+  });
+
+  describe('for the counselor', () => {
+    const openAsCounselor = () => {
+      vi.mocked(api.get).mockImplementation((path: string) => {
+        if (path === '/auth/me')
+          return Promise.resolve({
+            ...participant(null),
+            id: 'p1',
+            role: 'PSYCHOLOGIST',
+            username: 'danisman',
+            psychologistId: null,
+          });
+        if (path === '/modules/m1')
+          return Promise.resolve({
+            id: 'm1',
+            title: 'Sözcüklerin Gücü',
+            questions: [],
+          });
+        if (path === '/groups/g1/forum/m1') return Promise.resolve([post]);
+        return Promise.reject(new Error(`unexpected ${path}`));
+      });
+      return renderApp(
+        <ForumPage />,
+        '/psychologist/forums/:groupId/:moduleId',
+        undefined,
+        '/psychologist/forums/g1/m1',
+      );
+    };
+
+    it('reads the group without a comment box, back to the groups', async () => {
+      openAsCounselor();
+      const kerem = await screen.findByRole('region', { name: 'kerem' });
+      expect(
+        within(kerem).queryByRole('textbox', { name: 'Yorumunuz' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Gruplara dön' }),
+      ).toHaveAttribute('href', '/psychologist/groups');
+      expect(
+        screen.queryByRole('link', { name: 'Yazmaya başlayın' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('asks before removing a comment, then removes it', async () => {
+      vi.mocked(api.delete).mockResolvedValueOnce(undefined);
+      openAsCounselor();
+      const remove = await screen.findByRole('button', {
+        name: 'elif adlı kişinin yorumunu kaldır',
+      });
+      // the comment already removed has nothing left to remove
+      expect(
+        screen.getAllByRole('button', { name: /yorumunu kaldır/ }),
+      ).toHaveLength(1);
+
+      await userEvent.click(remove);
+      await userEvent.click(
+        await screen.findByRole('button', { name: 'Vazgeç' }),
+      );
+      expect(api.delete).not.toHaveBeenCalled();
+
+      await userEvent.click(remove);
+      await userEvent.click(
+        await screen.findByRole('button', { name: 'Kaldır' }),
+      );
+      await waitFor(() =>
+        expect(api.delete).toHaveBeenCalledWith('/comments/c1'),
+      );
+    });
   });
 });

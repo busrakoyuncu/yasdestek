@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { groupSchema, type GroupInput } from '@yasdestek/shared';
-import { Pencil, Plus, Trash2, X } from 'lucide-react';
+import { MessagesSquare, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -268,6 +269,21 @@ function GroupSection({
                   {index + 1}
                 </span>
                 <span className="min-w-0 flex-1">{module.title}</span>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="h-8 rounded-full px-3 text-sm"
+                >
+                  <Link
+                    to={`/psychologist/forums/${group.id}/${module.id}`}
+                    aria-label={t('groups.modules.forum', {
+                      title: module.title,
+                    })}
+                  >
+                    <MessagesSquare className="size-4" aria-hidden="true" />
+                    {t('groups.modules.forumShort')}
+                  </Link>
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"
