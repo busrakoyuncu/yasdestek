@@ -66,9 +66,6 @@
     "passwordCase": "Needs upper and lower case letters.",
     "username": "Only lowercase letters, digits, dot, underscore and dash."
   },
-  "area": {
-    "comingSoon": "This area is coming soon."
-  },
   "nav": {
     "modules": "Modules",
     "messages": "Messages",
@@ -379,6 +376,19 @@
       "body": "If you leave now, the text you have not saved is lost.",
       "stay": "Keep editing",
       "discard": "Leave without saving"
+    }
+  },
+  "analytics": {
+    "intro": "Each counselor's participants and how far they are in their modules. Open a participant to see their modules.",
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "noGroup": "No group",
+    "notInGroup": "Not in a group yet.",
+    "noModules": "No modules assigned to their group yet.",
+    "status": {
+      "not_started": "Not started",
+      "in_progress": "Draft",
+      "completed": "Shared"
     }
   }
 }
