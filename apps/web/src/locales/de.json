@@ -365,5 +365,20 @@
         "done": "Kommentar entfernt"
       }
     }
+  },
+  "pages": {
+    "edit": "Bearbeiten",
+    "done": "Bearbeitung beenden",
+    "save": "Text auf {{language}} speichern",
+    "saved": "Text auf {{language}} gespeichert",
+    "unsaved": "ungespeicherte Änderungen",
+    "hint": "Jede Sprache wird einzeln gespeichert. Schreiben Sie einfachen Text und trennen Sie Absätze durch eine Leerzeile.",
+    "label": "Text auf {{language}}",
+    "leave": {
+      "title": "Es gibt ungespeicherte Änderungen",
+      "body": "Wenn Sie jetzt gehen, geht der nicht gespeicherte Text verloren.",
+      "stay": "Weiter bearbeiten",
+      "discard": "Ohne Speichern verlassen"
+    }
   }
 }
