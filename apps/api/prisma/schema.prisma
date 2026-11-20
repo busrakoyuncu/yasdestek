@@ -96,12 +96,16 @@ model HiddenModule {
   @@id([psychologistId, moduleId])
 }
 
-// Editable platform pages, e.g. slug "general-rules".
+// Editable platform pages, e.g. slug "general-rules", one row per language
+// (tr, en, de). Turkish is the default and the fallback.
 model ContentPage {
   id        String   @id @default(uuid(7))
-  slug      String   @unique
+  slug      String
+  locale    String   @default("tr")
   content   String
   updatedAt DateTime @updatedAt
+
+  @@unique([slug, locale])
 }
 
 // A module assigned to a group. All members receive it together.

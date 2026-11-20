@@ -82,11 +82,30 @@ export const baseModules = [
   },
 ];
 
-export const generalRules = `Genel Kurallar
+// The general rules page in each interface language. Turkish is the source.
+export const generalRules: Record<'tr' | 'en' | 'de', string> = {
+  tr: `Genel Kurallar
 
 Bu platform, kaybını yaşayan kişilerin birbirine eşlik ettiği bir alandır. Birlikte güvenli bir ortam oluşturabilmek için:
 
 - Yorumlarınızda destekleyici ve yapıcı bir dil kullanın.
 - Arkadaşlarınızın duygularını yargılamayın, öğüt vermek yerine dinleyin.
 - Burada paylaşılanlar bu grupta kalır. Başkalarının yazdıklarını dışarıda anlatmayın.
-- Zorlandığınızı hissettiğinizde danışmanınıza mesaj yazabilirsiniz.`;
+- Zorlandığınızı hissettiğinizde danışmanınıza mesaj yazabilirsiniz.`,
+  en: `General Rules
+
+This platform is a place where people living with a loss keep each other company. To make it a safe place together:
+
+- Use supportive and constructive language in your comments.
+- Do not judge your group mates' feelings. Listen instead of giving advice.
+- What is shared here stays in this group. Do not repeat what others wrote outside of it.
+- When things feel hard, you can write a message to your counselor.`,
+  de: `Allgemeine Regeln
+
+Diese Plattform ist ein Ort, an dem Menschen nach einem Verlust einander begleiten. Damit wir gemeinsam einen sicheren Raum schaffen:
+
+- Schreiben Sie Ihre Kommentare unterstützend und konstruktiv.
+- Bewerten Sie die Gefühle der anderen nicht. Hören Sie zu, statt Ratschläge zu geben.
+- Was hier geteilt wird, bleibt in dieser Gruppe. Erzählen Sie nicht außerhalb weiter, was andere geschrieben haben.
+- Wenn es Ihnen schwerfällt, können Sie Ihrer Begleitung eine Nachricht schreiben.`,
+};
