@@ -76,7 +76,7 @@ Rules:
 
 ## 6.1 Terminology
 
-- The psychologist role is called **"danışman"** everywhere in the user-facing UI (e.g. "Danışmanım", "Bu yorum danışman tarafından silinmiştir"); code, database, and docs keep `psychologist`. The English UI uses "counselor".
+- The psychologist role is called **"danışman"** everywhere in the user-facing UI (e.g. "Danışmanım"); code, database, and docs keep `psychologist`. The English UI uses "counselor".
 
 ## 7. Implementation Notes
 

@@ -93,7 +93,7 @@ Each module has two switches, images and audio, both off by default. Whoever edi
     - Ali's comment on Kerem's
 - Group members can write **comments** under each other's posts.
 - Moderation: the group's psychologist and admins can delete comments.
-- Deleted comments are **soft-deleted**: the content is hidden and a placeholder is shown in its place ("Bu yorum danışman tarafından silinmiştir"). True erasure exists only as an explicit admin action for privacy requests.
+- Deleted comments are **soft-deleted**: the content is hidden and a placeholder is shown in its place ("Bu yorum kaldırıldı"). It does not name who removed it, so the counselor is not singled out in a small group. True erasure exists only as an explicit admin action for privacy requests.
 
 ## 6. Messaging
 

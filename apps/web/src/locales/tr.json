@@ -77,7 +77,8 @@
     "groups": "Gruplar",
     "inbox": "Gelen Kutusu",
     "counselors": "Danışmanlar",
-    "analytics": "Analitik"
+    "analytics": "Analitik",
+    "forums": "Forumlar"
   },
   "theme": {
     "label": "Görünüm",
@@ -240,7 +241,9 @@
       "noneLeft": "Atanacak başka modül yok.",
       "unassign": "{{title}} modülünü kaldır",
       "assigned": "Modül atandı",
-      "unassigned": "Modül kaldırıldı"
+      "unassigned": "Modül kaldırıldı",
+      "forum": "{{title}} forumunu aç",
+      "forumShort": "Forum"
     },
     "remove": {
       "title": "{{name}} grubu silinsin mi?",
@@ -330,6 +333,37 @@
       "title": "Bu dosya kaldırılsın mı?",
       "body": "Kaldırılan dosya geri getirilemez.",
       "confirm": "Kaldır"
+    }
+  },
+  "forum": {
+    "open": "Grubun paylaşımlarını okuyun",
+    "back": "Forumlara dön",
+    "empty": "Grup arkadaşlarınızdan bu modülü henüz kimse paylaşmadı.",
+    "noGroup": "Henüz bir gruba eklenmediniz. Danışmanınız sizi bir gruba eklediğinde paylaşımlar burada görünecek.",
+    "comments": "Yorumlar",
+    "removed": "Bu yorum kaldırıldı.",
+    "listTitle": "Forumlar",
+    "intro": "Her modülün grubunuza ait bir forumu var. Grup arkadaşlarınızın paylaştıklarını burada okuyabilirsiniz.",
+    "lead": "Grup arkadaşlarınızın bu modülde paylaştıkları. Kendi hızınızda okuyun.",
+    "notShared": "Bu modülde henüz bir şey paylaşmadınız.",
+    "write": "Yazmaya başlayın",
+    "yours": "Sizin paylaşımınız",
+    "comment": {
+      "label": "Yorumunuz",
+      "placeholder": "Destekleyici bir yorum yazın…",
+      "send": "Yorumu gönder"
+    },
+    "counselor": {
+      "back": "Gruplara dön",
+      "lead": "Bu grubun bu modülde paylaştıkları. Uygun olmayan bir yorumu kaldırabilirsiniz.",
+      "empty": "Bu grupta bu modülü henüz kimse paylaşmadı.",
+      "remove": {
+        "label": "{{name}} adlı kişinin yorumunu kaldır",
+        "title": "Bu yorum kaldırılsın mı?",
+        "body": "Yorum grubun tüm üyelerinden gizlenir, yerinde “Bu yorum kaldırıldı.” yazar. Bu işlem geri alınamaz.",
+        "confirm": "Kaldır",
+        "done": "Yorum kaldırıldı"
+      }
     }
   }
 }

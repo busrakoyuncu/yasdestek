@@ -103,6 +103,15 @@ describe('participant modules', () => {
     expect(await screen.findByText(/Taslak .* kaydedildi/)).toBeInTheDocument();
   });
 
+  it('links to what the group shared', async () => {
+    openModule(draft);
+    expect(
+      await screen.findByRole('link', {
+        name: 'Grubun paylaşımlarını okuyun',
+      }),
+    ).toHaveAttribute('href', '/app/forums/m1');
+  });
+
   it('leaves out the attachments when the module takes none and none are saved', async () => {
     openModule(draft);
     await screen.findByRole('textbox', { name: 'Yanıtınız' });

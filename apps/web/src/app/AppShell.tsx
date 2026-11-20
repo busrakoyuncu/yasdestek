@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import {
   ChevronDown,
   CircleUserRound,
@@ -9,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet, useNavigate } from 'react-router';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { cn } from 'cn';
 import { LanguageSwitch } from '@/components/LanguageSwitch';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,9 @@ import {
 import { Toaster } from '@/components/ui/sonner';
 import { THEMES, useTheme, type Theme } from '@/lib/theme';
 import { toastError } from '@/lib/toast';
-import { useSession } from '@/features/auth/useSession';
+import { homeFor, useSession } from '@/features/auth/useSession';
+import { groupsQuery } from '@/features/groups/useGroups';
+import { modulesQuery } from '@/features/modules/useModules';
 import type { CurrentUser, Role } from '@/types/user';
 import { navigation, type NavItem } from './navigation';
 
@@ -65,19 +68,47 @@ export function AppShell({ role }: { role: Role }) {
   const { theme, resolved, setTheme } = useTheme(user!.id);
   const items = navigation[role];
   const participant = role === 'USER';
+  const counselor = role === 'PSYCHOLOGIST';
+  // A participant's sidebar lists their assigned modules twice: under
+  // "Modüller" to write, under "Forumlar" to read the group.
+  const modules = useQuery({ ...modulesQuery, enabled: participant });
+  const linksTo = (base: string) =>
+    (modules.data ?? []).map((module) => ({
+      to: `${base}/${module.id}`,
+      label: module.title,
+    }));
+  // A counselor's "Forumlar" lists each group by name, then the forums of
+  // the modules assigned to it.
+  const groups = useQuery({ ...groupsQuery, enabled: counselor });
+  const groupForums = (groups.data ?? [])
+    .filter((group) => group.modules.length > 0)
+    .flatMap((group) => [
+      { heading: group.name },
+      ...group.modules.map(({ module }) => ({
+        to: `/psychologist/forums/${group.id}/${module.id}`,
+        label: module.title,
+      })),
+    ]);
+  const subItems: SubItems = participant
+    ? { '/app': linksTo('/app/modules'), '/app/forums': linksTo('/app/forums') }
+    : counselor
+      ? { '/psychologist/forums': groupForums }
+      : {};
 
   return (
     <div className="min-h-svh bg-background text-foreground md:grid md:grid-cols-[15rem_1fr]">
       <aside className="hidden flex-col gap-8 border-r border-border bg-surface px-4 py-6 md:flex">
-        <Wordmark />
-        <SideNav items={items} />
+        <Wordmark role={role} />
+        <SideNav items={items} subItems={subItems} />
       </aside>
 
       <div className="flex min-h-svh flex-col">
         <header className="flex h-14 items-center gap-1 border-b border-border px-3 md:px-6">
-          {!participant && <PhoneMenu items={items} />}
+          {!participant && (
+            <PhoneMenu role={role} items={items} subItems={subItems} />
+          )}
           <span className="md:hidden">
-            <Wordmark />
+            <Wordmark role={role} />
           </span>
           <div className="ml-auto flex items-center gap-1">
             <LanguageSwitch className={control} />
@@ -102,45 +133,148 @@ export function AppShell({ role }: { role: Role }) {
   );
 }
 
-function Wordmark() {
+// Also the way home, which for participants is the module overview.
+function Wordmark({ role }: { role: Role }) {
   return (
-    <span className="text-lg font-semibold tracking-tight">Yasdestek</span>
+    <Link
+      to={homeFor[role]}
+      className="self-start rounded-md text-lg font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+    >
+      Yasdestek
+    </Link>
   );
 }
 
+// Links listed under an item, keyed by the item's path, with optional
+// headings between them. Labels are data (module titles, group names),
+// shown as written.
+type SubItems = Record<
+  string,
+  ({ to: string; label: string } | { heading: string })[]
+>;
+
 function SideNav({
   items,
+  subItems = {},
   onNavigate,
 }: {
   items: NavItem[];
+  subItems?: SubItems;
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
   return (
     <nav aria-label={t('common.menu')} className="flex flex-col gap-1">
-      {items.map(({ to, label, icon: Icon, end }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={end}
-          onClick={onNavigate}
-          className={({ isActive }) =>
-            cn(
-              'flex h-11 items-center gap-3 rounded-full border border-transparent px-4 text-base transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-              isActive ? navActive : navIdle,
-            )
-          }
-        >
-          <Icon className="size-5" aria-hidden="true" />
-          {t(label)}
-        </NavLink>
-      ))}
+      {items.map((item) =>
+        subItems[item.to] ? (
+          <NavGroup
+            key={item.to}
+            item={item}
+            links={subItems[item.to]}
+            onNavigate={onNavigate}
+          />
+        ) : (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            onClick={onNavigate}
+            className={({ isActive }) =>
+              cn(navRow, isActive ? navActive : navIdle)
+            }
+          >
+            <item.icon className="size-5" aria-hidden="true" />
+            {t(item.label)}
+          </NavLink>
+        ),
+      )}
     </nav>
   );
 }
 
+const navRow =
+  'flex h-11 items-center gap-3 rounded-full border border-transparent px-4 text-base transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50';
+
+// An item that opens and closes its list of links instead of leading to a page.
+function NavGroup({
+  item: { label, icon: Icon },
+  links,
+  onNavigate,
+}: {
+  item: NavItem;
+  links: SubItems[string];
+  onNavigate?: () => void;
+}) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(true);
+  // The header shows where you are, even with the list folded away.
+  const { pathname } = useLocation();
+  const inside = links.some(
+    (link) =>
+      'to' in link &&
+      (pathname === link.to || pathname.startsWith(`${link.to}/`)),
+  );
+  return (
+    <div className="flex flex-col gap-1">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className={cn(
+          navRow,
+          navIdle,
+          inside && 'font-medium text-foreground dark:text-glow',
+        )}
+      >
+        <Icon className="size-5" aria-hidden="true" />
+        {t(label)}
+        <ChevronDown
+          className={cn(
+            'ml-auto size-4 transition-transform',
+            open && 'rotate-180',
+          )}
+          aria-hidden="true"
+        />
+      </button>
+      {open &&
+        links.map((link) =>
+          'heading' in link ? (
+            <p
+              key={`heading-${link.heading}`}
+              className="pt-2 pr-3 pl-11 text-xs font-medium text-foreground/75 dark:text-glow/75"
+            >
+              {link.heading}
+            </p>
+          ) : (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                cn(
+                  'flex min-h-9 items-center rounded-2xl border border-transparent py-2 pr-3 pl-11 text-sm leading-snug text-pretty transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  isActive ? navActive : navIdle,
+                )
+              }
+            >
+              {link.label}
+            </NavLink>
+          ),
+        )}
+    </div>
+  );
+}
+
 // Phone navigation for the denser roles: the same list, in a side sheet.
-function PhoneMenu({ items }: { items: NavItem[] }) {
+function PhoneMenu({
+  role,
+  items,
+  subItems,
+}: {
+  role: Role;
+  items: NavItem[];
+  subItems: SubItems;
+}) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   return (
@@ -158,27 +292,31 @@ function PhoneMenu({ items }: { items: NavItem[] }) {
       <SheetContent side="left" className="w-72 bg-surface">
         <SheetHeader>
           <SheetTitle>
-            <Wordmark />
+            <Wordmark role={role} />
           </SheetTitle>
           <SheetDescription className="sr-only">
             {t('common.menu')}
           </SheetDescription>
         </SheetHeader>
         <div className="px-4">
-          <SideNav items={items} onNavigate={() => setOpen(false)} />
+          <SideNav
+            items={items}
+            subItems={subItems}
+            onNavigate={() => setOpen(false)}
+          />
         </div>
       </SheetContent>
     </Sheet>
   );
 }
 
-// Phone navigation for participants: three big targets along the bottom.
+// Phone navigation for participants: four big targets along the bottom.
 function TabBar({ items }: { items: NavItem[] }) {
   const { t } = useTranslation();
   return (
     <nav
       aria-label={t('common.menu')}
-      className="fixed inset-x-0 bottom-0 grid grid-cols-3 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="fixed inset-x-0 bottom-0 grid grid-cols-4 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       {items.map(({ to, label, icon: Icon, end }) => (
         <NavLink

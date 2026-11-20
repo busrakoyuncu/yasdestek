@@ -4,6 +4,7 @@ import {
   HeartHandshake,
   Inbox,
   MessageCircle,
+  MessagesSquare,
   ScrollText,
   Users,
   UsersRound,
@@ -23,12 +24,14 @@ export type NavItem = {
 export const navigation: Record<Role, NavItem[]> = {
   USER: [
     { to: '/app', label: 'nav.modules', icon: BookOpen, end: true },
+    { to: '/app/forums', label: 'nav.forums', icon: MessagesSquare },
     { to: '/app/messages', label: 'nav.messages', icon: MessageCircle },
     { to: '/app/rules', label: 'nav.rules', icon: ScrollText },
   ],
   PSYCHOLOGIST: [
     { to: '/psychologist', label: 'nav.participants', icon: Users, end: true },
     { to: '/psychologist/groups', label: 'nav.groups', icon: UsersRound },
+    { to: '/psychologist/forums', label: 'nav.forums', icon: MessagesSquare },
     { to: '/psychologist/modules', label: 'nav.modules', icon: BookOpen },
     { to: '/psychologist/inbox', label: 'nav.inbox', icon: Inbox },
     { to: '/psychologist/rules', label: 'nav.rules', icon: ScrollText },

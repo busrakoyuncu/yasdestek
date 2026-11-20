@@ -84,6 +84,11 @@ describe('GroupsPage', () => {
       within(group).getByText('etkin değil', { exact: false }),
     ).toBeInTheDocument();
     expect(within(group).getByText('Sözcüklerin Gücü')).toBeInTheDocument();
+    expect(
+      within(group).getByRole('link', {
+        name: 'Sözcüklerin Gücü forumunu aç',
+      }),
+    ).toHaveAttribute('href', '/psychologist/forums/g1/m1');
   });
 
   it('offers only free participants and adds the chosen one', async () => {

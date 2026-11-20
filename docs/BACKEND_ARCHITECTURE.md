@@ -63,7 +63,7 @@ One `User` table for all roles.
 
 ### Soft delete
 
-Moderated comments keep their rows (`deletedAt`, `deletedById`). The forum sends them with `text` and `author` set to null, and the frontend renders the placeholder ("Bu yorum danışman tarafından silinmiştir"). `Response.deletedAt` exists in the schema but no route sets it in v1.
+Moderated comments keep their rows (`deletedAt`, `deletedById`). The forum sends them with `text` and `author` set to null, and the frontend renders the placeholder ("Bu yorum kaldırıldı"). `Response.deletedAt` exists in the schema but no route sets it in v1.
 
 Hard delete exists only as an explicit admin action for privacy requests: `DELETE /users/:id` erases a participant with their comments, the comments on their posts, files, responses, messages, and sessions in one transaction, then removes their Garage objects. Psychologists are deactivated, never erased.
 

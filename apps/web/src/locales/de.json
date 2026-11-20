@@ -77,7 +77,8 @@
     "groups": "Gruppen",
     "inbox": "Posteingang",
     "counselors": "Begleitungen",
-    "analytics": "Auswertung"
+    "analytics": "Auswertung",
+    "forums": "Foren"
   },
   "theme": {
     "label": "Darstellung",
@@ -240,7 +241,9 @@
       "noneLeft": "Keine weiteren Module zum Zuweisen.",
       "unassign": "{{title}} entfernen",
       "assigned": "Modul zugewiesen",
-      "unassigned": "Modul entfernt"
+      "unassigned": "Modul entfernt",
+      "forum": "Forum für {{title}} öffnen",
+      "forumShort": "Forum"
     },
     "remove": {
       "title": "Gruppe {{name}} löschen?",
@@ -330,6 +333,37 @@
       "title": "Diese Datei entfernen?",
       "body": "Eine entfernte Datei kann nicht wiederhergestellt werden.",
       "confirm": "Entfernen"
+    }
+  },
+  "forum": {
+    "open": "Lesen, was Ihre Gruppe geteilt hat",
+    "back": "Zurück zu den Foren",
+    "empty": "Von Ihren Gruppenmitgliedern hat noch niemand dieses Modul geteilt.",
+    "noGroup": "Sie sind noch keiner Gruppe zugeordnet. Sobald Ihre Begleitung Sie einer Gruppe hinzufügt, erscheinen die geteilten Antworten hier.",
+    "comments": "Kommentare",
+    "removed": "Dieser Kommentar wurde entfernt.",
+    "listTitle": "Foren",
+    "intro": "Jedes Modul hat ein Forum für Ihre Gruppe. Hier können Sie lesen, was Ihre Gruppenmitglieder geteilt haben.",
+    "lead": "Was Ihre Gruppenmitglieder in diesem Modul geteilt haben. Lesen Sie in Ihrem Tempo.",
+    "notShared": "Sie haben in diesem Modul noch nichts geteilt.",
+    "write": "Mit dem Schreiben beginnen",
+    "yours": "Ihre Antwort",
+    "comment": {
+      "label": "Ihr Kommentar",
+      "placeholder": "Schreiben Sie einen unterstützenden Kommentar…",
+      "send": "Kommentar senden"
+    },
+    "counselor": {
+      "back": "Zurück zu den Gruppen",
+      "lead": "Was diese Gruppe in diesem Modul geteilt hat. Sie können einen unpassenden Kommentar entfernen.",
+      "empty": "In dieser Gruppe hat dieses Modul noch niemand geteilt.",
+      "remove": {
+        "label": "Kommentar von {{name}} entfernen",
+        "title": "Diesen Kommentar entfernen?",
+        "body": "Der Kommentar wird für alle in der Gruppe ausgeblendet, an seiner Stelle steht „Dieser Kommentar wurde entfernt.“ Das lässt sich nicht rückgängig machen.",
+        "confirm": "Entfernen",
+        "done": "Kommentar entfernt"
+      }
     }
   }
 }

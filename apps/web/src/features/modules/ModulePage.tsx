@@ -291,6 +291,12 @@ export function ModulePage() {
                 {t(published ? 'writing.saveShared' : 'writing.share')}
               </Button>
             </div>
+            <Link
+              to={`/app/forums/${moduleId}`}
+              className="self-start font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t('forum.open')}
+            </Link>
           </footer>
         </div>
       </div>
