@@ -1,12 +1,20 @@
 import { queryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 
-export type ContentPage = { slug: string; content: string; updatedAt: string };
+// `locale` is the language that came back: the one asked for, or Turkish
+// while that translation is missing.
+export type ContentPage = {
+  slug: string;
+  locale: string;
+  content: string;
+  updatedAt: string;
+};
 
-// One editable platform page by slug. Read by every role; edited by admins.
-export const pageQuery = (slug: string) =>
+// One editable platform page by slug, in the interface language. Read by
+// every role; edited by admins. A language switch asks again.
+export const pageQuery = (slug: string, locale: string) =>
   queryOptions({
-    queryKey: ['pages', slug],
-    queryFn: () => api.get<ContentPage>(`/pages/${slug}`),
+    queryKey: ['pages', slug, locale],
+    queryFn: () => api.get<ContentPage>(`/pages/${slug}?locale=${locale}`),
     staleTime: 5 * 60 * 1000,
   });

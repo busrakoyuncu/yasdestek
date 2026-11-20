@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { errorMessage } from '@/lib/errors';
 import { pageQuery } from './usePage';
 
-// The platform-wide "Genel Kurallar" text, the same for every role. Plain
-// text from the api; blank lines separate paragraphs.
+// The platform-wide "Genel Kurallar" text, the same for every role, in the
+// interface language. Plain text from the api; blank lines separate paragraphs.
 export function RulesPage() {
-  const { t } = useTranslation();
-  const page = useQuery(pageQuery('general-rules'));
+  const { t, i18n } = useTranslation();
+  const page = useQuery(pageQuery('general-rules', i18n.language));
 
   return (
     <article className="flex flex-col gap-6">

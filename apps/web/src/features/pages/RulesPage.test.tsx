@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { setLocale } from '@/lib/i18n';
 import { renderApp } from '@/test/render';
 import { RulesPage } from './RulesPage';
 
@@ -27,7 +28,23 @@ describe('RulesPage', () => {
       await screen.findByText('Birbirinize nazik olun.'),
     ).toBeInTheDocument();
     expect(screen.getByText('Yargılamadan dinleyin.')).toBeInTheDocument();
-    expect(api.get).toHaveBeenCalledWith('/pages/general-rules');
+    expect(api.get).toHaveBeenCalledWith('/pages/general-rules?locale=tr');
+  });
+
+  it('asks again in the new language after a switch', async () => {
+    vi.mocked(api.get).mockImplementation((path: string) =>
+      Promise.resolve({
+        slug: 'general-rules',
+        locale: path.endsWith('=en') ? 'en' : 'tr',
+        content: path.endsWith('=en') ? 'Be kind.' : 'Nazik olun.',
+        updatedAt: '',
+      }),
+    );
+    renderApp(<RulesPage />, '/app/rules');
+    expect(await screen.findByText('Nazik olun.')).toBeInTheDocument();
+    await act(() => setLocale('en'));
+    expect(await screen.findByText('Be kind.')).toBeInTheDocument();
+    expect(api.get).toHaveBeenLastCalledWith('/pages/general-rules?locale=en');
   });
 
   it('offers a retry when the page cannot be loaded', async () => {
