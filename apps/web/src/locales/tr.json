@@ -365,5 +365,20 @@
         "done": "Yorum kaldırıldı"
       }
     }
+  },
+  "pages": {
+    "edit": "Düzenle",
+    "done": "Düzenlemeyi bitir",
+    "save": "{{language}} metnini kaydet",
+    "saved": "{{language}} metni kaydedildi",
+    "unsaved": "kaydedilmemiş değişiklik var",
+    "hint": "Her dilin metni ayrı kaydedilir. Düz metin yazın, paragrafları boş bir satırla ayırın.",
+    "label": "{{language}} metni",
+    "leave": {
+      "title": "Kaydedilmemiş değişiklikler var",
+      "body": "Şimdi çıkarsanız kaydetmediğiniz metinler kaybolur.",
+      "stay": "Düzenlemeye devam et",
+      "discard": "Kaydetmeden çık"
+    }
   }
 }

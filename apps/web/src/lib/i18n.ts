@@ -8,6 +8,13 @@ import messagesTr from '@/locales/tr.json';
 
 export const LOCALES = ['tr', 'en', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
+
+// Each language names itself, so a list of them reads the same in every locale.
+export const LOCALE_NAMES: Record<Locale, string> = {
+  tr: 'Türkçe',
+  en: 'English',
+  de: 'Deutsch',
+};
 const STORAGE_KEY = 'locale';
 
 function isLocale(value: unknown): value is Locale {

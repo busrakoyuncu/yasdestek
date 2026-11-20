@@ -8,14 +8,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LOCALES, setLocale, type Locale } from '@/lib/i18n';
-
-// Each language names itself, so the list reads the same in every locale.
-const names: Record<Locale, string> = {
-  tr: 'Türkçe',
-  en: 'English',
-  de: 'Deutsch',
-};
+import {
+  LOCALE_NAMES as names,
+  LOCALES,
+  setLocale,
+  type Locale,
+} from '@/lib/i18n';
 
 // `className` styles the trigger. The menu renders in a portal at the end of
 // <body>, outside any themed wrapper, so a page that is themed locally passes

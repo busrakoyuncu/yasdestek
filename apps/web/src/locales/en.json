@@ -365,5 +365,20 @@
         "done": "Comment removed"
       }
     }
+  },
+  "pages": {
+    "edit": "Edit",
+    "done": "Finish editing",
+    "save": "Save the {{language}} text",
+    "saved": "{{language}} text saved",
+    "unsaved": "unsaved changes",
+    "hint": "Each language is saved on its own. Write plain text and separate paragraphs with a blank line.",
+    "label": "{{language}} text",
+    "leave": {
+      "title": "You have unsaved changes",
+      "body": "If you leave now, the text you have not saved is lost.",
+      "stay": "Keep editing",
+      "discard": "Leave without saving"
+    }
   }
 }
