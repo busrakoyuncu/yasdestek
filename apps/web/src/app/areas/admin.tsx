@@ -1,22 +1,17 @@
-import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router';
-import { ComingSoon } from '@/components/ComingSoon';
+import { AnalyticsPage } from '@/features/analytics/AnalyticsPage';
 import { RulesPage } from '@/features/pages/RulesPage';
 import { ModulesPage } from '@/features/modules/ModulesPage';
 import { PeoplePage } from '@/features/people/PeoplePage';
 
-// The admin area, one lazily loaded chunk. Screens arrive in step 13.
+// The admin area, one lazily loaded chunk.
 export function Component() {
-  const { t } = useTranslation();
   return (
     <Routes>
       <Route index element={<PeoplePage role="PSYCHOLOGIST" admin />} />
       <Route path="participants" element={<PeoplePage role="USER" admin />} />
       <Route path="modules" element={<ModulesPage />} />
-      <Route
-        path="analytics"
-        element={<ComingSoon title={t('nav.analytics')} />}
-      />
+      <Route path="analytics" element={<AnalyticsPage />} />
       <Route path="rules" element={<RulesPage />} />
     </Routes>
   );

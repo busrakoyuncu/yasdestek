@@ -66,9 +66,6 @@
     "passwordCase": "Büyük ve küçük harf içermeli.",
     "username": "Yalnızca küçük harf, rakam, nokta, alt çizgi ve tire."
   },
-  "area": {
-    "comingSoon": "Bu alan yakında hazır olacak."
-  },
   "nav": {
     "modules": "Modüller",
     "messages": "Mesajlar",
@@ -379,6 +376,19 @@
       "body": "Şimdi çıkarsanız kaydetmediğiniz metinler kaybolur.",
       "stay": "Düzenlemeye devam et",
       "discard": "Kaydetmeden çık"
+    }
+  },
+  "analytics": {
+    "intro": "Her danışmanın katılımcıları ve modüllerdeki ilerlemeleri. Bir katılımcıyı açın, modüllerini görün.",
+    "participants_one": "{{count}} katılımcı",
+    "participants_other": "{{count}} katılımcı",
+    "noGroup": "Grupsuz",
+    "notInGroup": "Henüz bir gruba eklenmedi.",
+    "noModules": "Grubuna henüz modül atanmadı.",
+    "status": {
+      "not_started": "Başlamadı",
+      "in_progress": "Taslak",
+      "completed": "Paylaştı"
     }
   }
 }

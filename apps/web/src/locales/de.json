@@ -66,9 +66,6 @@
     "passwordCase": "Braucht Groß- und Kleinbuchstaben.",
     "username": "Nur Kleinbuchstaben, Ziffern, Punkt, Unterstrich und Bindestrich."
   },
-  "area": {
-    "comingSoon": "Dieser Bereich kommt bald."
-  },
   "nav": {
     "modules": "Module",
     "messages": "Nachrichten",
@@ -379,6 +376,19 @@
       "body": "Wenn Sie jetzt gehen, geht der nicht gespeicherte Text verloren.",
       "stay": "Weiter bearbeiten",
       "discard": "Ohne Speichern verlassen"
+    }
+  },
+  "analytics": {
+    "intro": "Die Teilnehmenden jeder Begleitung und ihr Stand in den Modulen. Öffnen Sie eine Person, um ihre Module zu sehen.",
+    "participants_one": "{{count}} Teilnehmer:in",
+    "participants_other": "{{count}} Teilnehmende",
+    "noGroup": "Keine Gruppe",
+    "notInGroup": "Noch in keiner Gruppe.",
+    "noModules": "Der Gruppe sind noch keine Module zugewiesen.",
+    "status": {
+      "not_started": "Nicht begonnen",
+      "in_progress": "Entwurf",
+      "completed": "Geteilt"
     }
   }
 }
