@@ -390,5 +390,17 @@
       "in_progress": "Entwurf",
       "completed": "Geteilt"
     }
+  },
+  "install": {
+    "action": "App installieren",
+    "steps": {
+      "title": "Zum Home-Bildschirm hinzufügen",
+      "intro": "So öffnen Sie Yasdestek wie die anderen Apps auf Ihrem Telefon:",
+      "share": "Tippen Sie in Safari auf das Teilen-Symbol",
+      "shareHint": "Wenn Sie es nicht sehen, öffnen Sie zuerst das •••-Menü.",
+      "add": "Wählen Sie „Zum Home-Bildschirm“.",
+      "confirm": "Tippen Sie oben rechts auf „Hinzufügen“.",
+      "done": "Fertig"
+    }
   }
 }

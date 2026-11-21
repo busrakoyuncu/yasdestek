@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ChevronDown,
   CircleUserRound,
+  Download,
   LogOut,
   Menu,
   Monitor,
@@ -33,12 +34,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Toaster } from '@/components/ui/sonner';
+import { useInstall } from '@/lib/install';
 import { THEMES, useTheme, type Theme } from '@/lib/theme';
 import { toastError } from '@/lib/toast';
 import { homeFor, useSession } from '@/features/auth/useSession';
 import { groupsQuery } from '@/features/groups/useGroups';
 import { modulesQuery } from '@/features/modules/useModules';
 import type { CurrentUser, Role } from '@/types/user';
+import { InstallSteps } from './InstallSteps';
 import { navigation, type NavItem } from './navigation';
 
 // Header controls mirror the forest pages: gold hairline and firelight text at
@@ -353,6 +356,8 @@ function UserMenu({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { logout } = useSession();
+  const { option: installOption, install } = useInstall();
+  const [installSteps, setInstallSteps] = useState(false);
 
   const signOut = () =>
     logout.mutate(undefined, {
@@ -361,49 +366,64 @@ function UserMenu({
     });
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className={cn(control, 'gap-2 px-2 md:px-3')}
-          aria-label={t('common.account')}
-        >
-          <CircleUserRound className="size-5" aria-hidden="true" />
-          <span className="hidden text-sm md:inline">{user.username}</span>
-          <ChevronDown className="size-4 opacity-70" aria-hidden="true" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-56">
-        <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span className="font-medium text-foreground">{user.username}</span>
-          <span className="text-xs font-normal text-muted-foreground">
-            {t(`roles.${user.role}`)}
-          </span>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          {t('theme.label')}
-        </DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={theme}
-          onValueChange={(value) => onTheme(value as Theme)}
-        >
-          {THEMES.map((option) => {
-            const Icon = themeIcons[option];
-            return (
-              <DropdownMenuRadioItem key={option} value={option}>
-                <Icon className="size-4" aria-hidden="true" />
-                {t(`theme.${option}`)}
-              </DropdownMenuRadioItem>
-            );
-          })}
-        </DropdownMenuRadioGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={signOut} disabled={logout.isPending}>
-          <LogOut className="size-4" aria-hidden="true" />
-          {t('common.signOut')}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className={cn(control, 'gap-2 px-2 md:px-3')}
+            aria-label={t('common.account')}
+          >
+            <CircleUserRound className="size-5" aria-hidden="true" />
+            <span className="hidden text-sm md:inline">{user.username}</span>
+            <ChevronDown className="size-4 opacity-70" aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-56">
+          <DropdownMenuLabel className="flex flex-col gap-0.5">
+            <span className="font-medium text-foreground">{user.username}</span>
+            <span className="text-xs font-normal text-muted-foreground">
+              {t(`roles.${user.role}`)}
+            </span>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-xs text-muted-foreground">
+            {t('theme.label')}
+          </DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={theme}
+            onValueChange={(value) => onTheme(value as Theme)}
+          >
+            {THEMES.map((option) => {
+              const Icon = themeIcons[option];
+              return (
+                <DropdownMenuRadioItem key={option} value={option}>
+                  <Icon className="size-4" aria-hidden="true" />
+                  {t(`theme.${option}`)}
+                </DropdownMenuRadioItem>
+              );
+            })}
+          </DropdownMenuRadioGroup>
+          <DropdownMenuSeparator />
+          {installOption && (
+            <DropdownMenuItem
+              onSelect={() =>
+                installOption === 'prompt'
+                  ? void install()
+                  : setInstallSteps(true)
+              }
+            >
+              <Download className="size-4" aria-hidden="true" />
+              {t('install.action')}
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem onSelect={signOut} disabled={logout.isPending}>
+            <LogOut className="size-4" aria-hidden="true" />
+            {t('common.signOut')}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <InstallSteps open={installSteps} onOpenChange={setInstallSteps} />
+    </>
   );
 }

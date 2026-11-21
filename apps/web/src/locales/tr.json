@@ -390,5 +390,17 @@
       "in_progress": "Taslak",
       "completed": "Paylaştı"
     }
+  },
+  "install": {
+    "action": "Uygulamayı yükle",
+    "steps": {
+      "title": "Ana ekrana ekleyin",
+      "intro": "Yasdestek’i telefonunuzdaki diğer uygulamalar gibi açmak için:",
+      "share": "Safari’de Paylaş simgesine dokunun",
+      "shareHint": "Görmüyorsanız önce ••• menüsünü açın.",
+      "add": "“Ana Ekrana Ekle”yi seçin.",
+      "confirm": "Sağ üstteki “Ekle”ye dokunun.",
+      "done": "Tamam"
+    }
   }
 }
