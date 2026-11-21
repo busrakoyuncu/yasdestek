@@ -34,6 +34,7 @@ Rules:
 - App areas (`/app`, `/psychologist`, `/admin`): night by default, so the forest's mood carries into the app; the user menu offers light and "follow device" (`prefers-color-scheme`) as well, and the choice is kept per user in the browser.
 - Controls in the app shell (language, account, menu) mirror the forest pages: in dark mode a firefly-gold hairline with firelight text; in light mode the reverse, a dark navy (`foreground`) hairline and text. Content text uses `foreground` as usual.
 - The public forest pages (welcome at `/`, login) are **always night**: the page root carries the `dark` class, so they use the dark token set whatever the device prefers. Anything rendered in a portal (menus, dialogs, toasts) opened from these pages gets the `dark` class passed to it, because portals mount outside the page root.
+- The browser and installed-app top bar (`<meta name="theme-color">`) matches the page background: night navy `#0B1530` by default and on the forest pages, cream `#F3F2EC` while an app area is in light mode. `lib/theme.ts` switches it with the theme.
 - Both themes are first-class: every screen is checked in both before shipping.
 
 ## 3. Typography
@@ -84,4 +85,4 @@ Rules:
 - Alias tokens (`popover`, `card`, `muted`, `accent`, `secondary` point at `surface` or `surface-raised`) are restated inside `.dark`. A CSS variable alias resolves where it is declared, so without this a page themed dark on its own would still get the light values.
 - A new token is a new row in the table above, in the same change. Components never hardcode hex values; a one-off colour that cannot be expressed with a token is a sign the table is missing a row.
 - Fonts self-hosted as woff2 in `apps/web` (subsets: latin + latin-ext), declared via `@font-face` with `font-display: swap`.
-- The app icon / manifest theme color derive from this palette (`background` cream, `primary` fog blue) - designed alongside the first screens.
+- The app icon is a watercolor firefly rising toward the upper right on night navy `#0B1530`, its lantern glowing in firefly gold: the forest's one warm light. It is a raster PNG on purpose (watercolor texture cannot be drawn as vector shapes). The manifest's background and theme color are the same night navy, so the splash screen flows into the forest login page.
