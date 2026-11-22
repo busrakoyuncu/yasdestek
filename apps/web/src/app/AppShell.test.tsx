@@ -1,6 +1,6 @@
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '@/test/render';
 import { AppShell } from './AppShell';
 import { RequireAuth } from './RequireAuth';
@@ -125,16 +125,103 @@ describe('AppShell', () => {
   });
 
   it('is night by default and remembers a switch to light', async () => {
+    const bar = document.createElement('meta');
+    bar.name = 'theme-color';
+    document.head.append(bar);
     mount();
     await userEvent.click(
       await screen.findByRole('button', { name: 'Hesap menüsü' }),
     );
     expect(document.documentElement).toHaveClass('dark');
+    expect(bar).toHaveAttribute('content', '#0B1530');
     await userEvent.click(
       await screen.findByRole('menuitemradio', { name: 'Açık' }),
     );
     expect(document.documentElement).not.toHaveClass('dark');
+    expect(bar).toHaveAttribute('content', '#F3F2EC');
     expect(localStorage.getItem('theme:u1')).toBe('light');
+    bar.remove();
+  });
+
+  describe('install', () => {
+    const openMenu = async () =>
+      userEvent.click(
+        await screen.findByRole('button', { name: 'Hesap menüsü' }),
+      );
+    const installItem = () =>
+      screen.queryByRole('menuitem', { name: 'Uygulamayı yükle' });
+
+    beforeEach(() => {
+      // forget an install offer left over from another test
+      window.dispatchEvent(new Event('appinstalled'));
+    });
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('offers nothing when the browser cannot install', async () => {
+      mount();
+      await openMenu();
+      expect(
+        await screen.findByRole('menuitem', { name: 'Çıkış yap' }),
+      ).toBeInTheDocument();
+      expect(installItem()).not.toBeInTheDocument();
+    });
+
+    it("opens the browser's install dialog once it is offered", async () => {
+      const prompt = vi.fn().mockResolvedValue(undefined);
+      const offer = Object.assign(
+        new Event('beforeinstallprompt', { cancelable: true }),
+        {
+          prompt,
+        },
+      );
+      mount();
+      act(() => {
+        window.dispatchEvent(offer);
+      });
+      expect(offer.defaultPrevented).toBe(true);
+      await openMenu();
+      await userEvent.click(installItem()!);
+      expect(prompt).toHaveBeenCalledTimes(1);
+      // the offer is used up
+      await openMenu();
+      expect(installItem()).not.toBeInTheDocument();
+    });
+
+    it('shows the Safari steps on an iPhone', async () => {
+      vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)',
+      );
+      mount();
+      await openMenu();
+      await userEvent.click(installItem()!);
+      const steps = await screen.findByRole('dialog', {
+        name: 'Ana ekrana ekleyin',
+      });
+      expect(steps).toHaveTextContent('“Ana Ekrana Ekle”yi seçin.');
+    });
+
+    it('offers nothing once it runs from the home screen', async () => {
+      vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)',
+      );
+      vi.spyOn(window, 'matchMedia').mockImplementation(
+        (query: string) =>
+          ({
+            matches: query === '(display-mode: standalone)',
+            media: query,
+            addEventListener() {},
+            removeEventListener() {},
+          }) as unknown as MediaQueryList,
+      );
+      mount();
+      await openMenu();
+      expect(
+        await screen.findByRole('menuitem', { name: 'Çıkış yap' }),
+      ).toBeInTheDocument();
+      expect(installItem()).not.toBeInTheDocument();
+    });
   });
 
   it('signs out through the api and returns to login', async () => {

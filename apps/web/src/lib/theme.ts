@@ -26,11 +26,17 @@ const resolveTheme = (theme: Theme): 'light' | 'dark' =>
     ? 'dark'
     : 'light';
 
+// The browser and installed-app top bar, in the page background colour.
+const barColor = { dark: '#0B1530', light: '#F3F2EC' };
+const setBar = (mode: 'light' | 'dark') =>
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', barColor[mode]);
+
 function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle(
-    'dark',
-    resolveTheme(theme) === 'dark',
-  );
+  const mode = resolveTheme(theme);
+  document.documentElement.classList.toggle('dark', mode === 'dark');
+  setBar(mode);
 }
 
 // Applies the user's theme to <html> while the area is mounted and keeps it in
@@ -47,6 +53,7 @@ export function useTheme(userId: string) {
     return () => {
       query.removeEventListener('change', onChange);
       document.documentElement.classList.remove('dark');
+      setBar('dark');
     };
   }, [theme]);
 

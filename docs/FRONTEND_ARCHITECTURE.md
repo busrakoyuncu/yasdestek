@@ -42,8 +42,8 @@ apps/web/src/
 │   ├── groups/           # the counselor's groups and their members
 │   ├── messages/         # participant thread and counselor inbox
 │   └── analytics/        # admin overview of counselors, participants and progress
-├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, ComingSoon, shadcn primitives under ui/
-├── lib/                  # api client, i18n setup, query client, error messages, cn
+├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, shadcn primitives under ui/
+├── lib/                  # api client, i18n setup, query client, error messages, theme, install offer, cn
 ├── locales/              # tr.json (source of truth), en.json, de.json
 ├── test/                 # vitest setup and the renderApp helper
 └── types/                # local types; shared contracts come from packages/shared
@@ -103,10 +103,13 @@ Two kinds of state, handled differently:
 
 ## 8. Home-Screen App (Manifest)
 
-- A web manifest gives the site an app identity: name, icons, theme color, `display: "standalone"` (opens full-screen without browser chrome).
-- iOS/Safari: no programmatic install prompt exists - show a one-time hint explaining Share → "Add to Home Screen".
-- Android/Chrome: show an install button using the `beforeinstallprompt` event.
-- No service worker / offline support in v1. Module writing requires connectivity. This is deliberate scope control; a full PWA can be layered on later.
+- `public/manifest.webmanifest` gives the site an app identity: name, icons, night-navy background and theme color, `display: "standalone"` (opens full-screen without browser chrome). `start_url` is `/login`, which sends a signed-in person straight to their home screen.
+- Icons live in `public/` and are linked from `index.html`: `favicon.ico` (16, 32, 48) and `favicon-32.png` for the tab, `apple-touch-icon.png` (180) for iPhone and iPad, `icon-192.png` and `icon-512.png` for Android and desktop, and `icon-maskable-512.png`, which Android may crop to its own shape.
+- The install offer lives in the account menu as "Uygulamayı yükle" and is shown only when it can work (`lib/install.ts`, `useInstall()`):
+  - Chrome and Edge: the `beforeinstallprompt` event is caught as soon as the page loads (`main.tsx` imports the module first) and kept; the menu item replays it with `prompt()`. Chrome's own install banner is suppressed so the offer appears only when asked for. Each event can be used once.
+  - iPhone and iPad: Safari has no such event, so the item opens a dialog with the Share → "Ana Ekrana Ekle" → "Ekle" steps (`app/InstallSteps.tsx`). iPadOS reports itself as a Mac; a touchscreen tells them apart.
+  - Running from the home screen (`display-mode: standalone`, or `navigator.standalone` on iOS): no item.
+- No service worker / offline support in v1. Module writing requires connectivity. This is deliberate scope control; a full PWA can be layered on later. Chrome no longer requires a service worker to install.
 - Because standalone mode has no browser refresh, error screens must offer a retry action.
 
 ## 9. Audio Recording

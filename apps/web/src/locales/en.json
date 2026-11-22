@@ -390,5 +390,17 @@
       "in_progress": "Draft",
       "completed": "Shared"
     }
+  },
+  "install": {
+    "action": "Install the app",
+    "steps": {
+      "title": "Add to your home screen",
+      "intro": "To open Yasdestek like the other apps on your phone:",
+      "share": "In Safari, tap the Share icon",
+      "shareHint": "If you don’t see it, open the ••• menu first.",
+      "add": "Choose “Add to Home Screen”.",
+      "confirm": "Tap “Add” in the top right.",
+      "done": "Done"
+    }
   }
 }

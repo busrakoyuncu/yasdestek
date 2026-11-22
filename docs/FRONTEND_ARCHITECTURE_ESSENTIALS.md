@@ -66,6 +66,10 @@ Companion to `FRONTEND_ARCHITECTURE.md`. For each decision: what we picked, why,
 
 **Known iOS limit:** Safari has no programmatic install prompt; the guided Share → Add to Home Screen hint is the platform ceiling, not a design choice.
 
+**Why the offer sits in the account menu, not a banner:** people arrive here grieving; a bar sliding up to sell an install is noise at the wrong moment. Chrome's own banner is suppressed for the same reason, and the menu item appears only on browsers where it can work.
+
+**Why `start_url` is `/login`, not `/`:** someone who installed the app has already passed the welcome page. The login page sends a signed-in person straight to their home screen, so the icon opens their modules in one tap.
+
 ## MediaRecorder API, no recording library
 
 **Chosen:** browser-native MediaRecorder wrapped in one `useAudioRecorder` hook.
