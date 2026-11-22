@@ -32,7 +32,12 @@ Rules:
 ## 2. Theme Behavior
 
 - App areas (`/app`, `/psychologist`, `/admin`): night by default, so the forest's mood carries into the app; the user menu offers light and "follow device" (`prefers-color-scheme`) as well, and the choice is kept per user in the browser.
-- Controls in the app shell (language, account, menu) mirror the forest pages: in dark mode a firefly-gold hairline with firelight text; in light mode the reverse, a dark navy (`foreground`) hairline and text. Content text uses `foreground` as usual.
+- Controls in the app shell (language, account, menu) are quiet text buttons: no outline, no gold, a soft `foreground/5` fill on hover. The active menu item is a soft `foreground/7` fill, not an outlined pill. The forest's firelight stays on the app wordmark at night.
+- **Gold means attention.** In the app, `secondary-accent` marks only what needs someone: unread message counts, the dot on the phone menu button, a draft waiting to be finished. Not outlines, menu text or decoration.
+- **Rows, not boxes.** Lists (modules, people) are rows split by 1px `border` lines; a filled box is kept for something that stands apart, such as an item waiting for the counselor's action. Pills are for buttons and count badges only.
+- **Page titles** share the `title-page` utility in `style.css`: large (34 to 48px), regular weight, tracking -0.03em.
+- **Paper grain:** a faint generated noise (`--grain`, an inline SVG) lies on the page ground and the app shell, dark specks by day and light ones at night, so the cream and navy read as paper, not flat screen colour.
+- **The forest inside the app:** the participant home opens with a band of the welcome page's forest, fading into the page (full at night, 70% by day).
 - The public forest pages (welcome at `/`, login) are **always night**: the page root carries the `dark` class, so they use the dark token set whatever the device prefers. Anything rendered in a portal (menus, dialogs, toasts) opened from these pages gets the `dark` class passed to it, because portals mount outside the page root.
 - The browser and installed-app top bar (`<meta name="theme-color">`) matches the page background: night navy `#0B1530` by default and on the forest pages, cream `#F3F2EC` while an app area is in light mode. `lib/theme.ts` switches it with the theme.
 - Both themes are first-class: every screen is checked in both before shipping.
