@@ -377,7 +377,7 @@ function CommentForm({
         maxLength={5000}
         placeholder={t('forum.comment.placeholder')}
         aria-label={t('forum.comment.label')}
-        className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl font-body text-base"
+        className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl font-body text-base md:text-base"
       />
       <Button
         type="submit"

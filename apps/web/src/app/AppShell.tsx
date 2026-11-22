@@ -157,7 +157,8 @@ function Wordmark({ role }: { role: Role }) {
   return (
     <Link
       to={homeFor[role]}
-      className="self-start rounded-md text-lg font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      // the welcome page's voice: firelight at night, navy by day
+      className="self-start rounded-md text-lg font-medium tracking-tight text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 dark:text-glow"
     >
       Yasdestek
     </Link>

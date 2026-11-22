@@ -153,7 +153,7 @@ export function Thread({ userId, meId, emptyText }: Props) {
           maxLength={5000}
           placeholder={t('messages.placeholder')}
           aria-label={t('messages.compose')}
-          className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl text-base"
+          className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl text-base md:text-base"
         />
         <Button
           type="submit"

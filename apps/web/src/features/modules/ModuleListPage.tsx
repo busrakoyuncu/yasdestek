@@ -54,17 +54,15 @@ export function ModuleListPage() {
       )}
       {modules.data && modules.data.length > 0 && (
         <ol className="flex flex-col gap-3">
-          {modules.data.map((module, index) => {
+          {modules.data.map((module) => {
             const progress = progressOf(module);
             return (
               <li key={module.id}>
+                {/* no separate number: module titles carry their own */}
                 <Link
                   to={`modules/${module.id}`}
                   className="flex items-center gap-4 rounded-2xl border border-border px-4 py-4 outline-none transition-colors hover:bg-surface focus-visible:ring-3 focus-visible:ring-ring/50 md:px-5"
                 >
-                  <span className="w-6 shrink-0 text-right text-lg text-text-secondary tabular-nums">
-                    {index + 1}
-                  </span>
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="text-lg font-medium text-balance">
                       {module.title}

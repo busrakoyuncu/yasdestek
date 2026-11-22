@@ -43,7 +43,7 @@ Three faces, assigned by **content role** - all self-hosted (no runtime Google C
 
 | Face | Role | Weights |
 |---|---|---|
-| **Google Sans** | UI: headings, buttons, labels, module content & rules | 400 / 500 / 700 |
+| **Hanken Grotesk** | UI: headings, buttons, labels, module content & rules | variable 400-700 |
 | **Nunito Sans** | Everything users write: responses, comments | 400 / 600 / 700 |
 | **Playwrite DE LA** | Letters only (Module 3 display *and* input) | 400 |
 

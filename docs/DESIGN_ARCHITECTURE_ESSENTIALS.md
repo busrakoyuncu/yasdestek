@@ -36,13 +36,15 @@ Companion to `DESIGN_ARCHITECTURE.md`. For each decision: what we picked, why, a
 
 ## Three fonts by content role
 
-**Chosen:** Google Sans (UI + module content), Nunito Sans (what users write), Playwrite DE LA (letters only).
+**Chosen:** Hanken Grotesk (UI + module content), Nunito Sans (what users write), Playwrite DE LA (letters only).
 
 **Why:** the roles are semantically different voices - the *platform* speaks (instructions, rules), *people* speak (responses, comments), and the *letter* is intimate address to the deceased. Giving each a face makes the distinction felt without labels. Handwriting for the Module 3 letter turns a form field into something closer to paper.
 
 **Risks accepted, with guardrails:** three families is above the usual two-font guidance - accepted because each has a strict role. Playwrite is decorative and low-legibility at small sizes → 18px minimum, tall line-height, never for UI or long text. The **"Guides" variant is explicitly banned** (it renders school-notebook guide lines through the letters - meant for handwriting practice sheets, and was the originally linked variant).
 
-**Licensing (verified):** all three are SIL OFL on Google Fonts - Google Sans included, which was historically proprietary but is now openly licensed. Commercial use and self-hosting are permitted; the only OFL restriction (not selling the fonts themselves) is irrelevant here.
+**Why Hanken Grotesk for the UI (2026-11-22, replacing Google Sans):** Google Sans read cool and a little corporate. The owner compared friendly faces (Nunito, Figtree, Lexend, Fraunces) and Helvetica-style ones (Inter, Hanken Grotesk, Instrument Sans, Geist) on the same Yasdestek screen in both themes, and chose Hanken Grotesk: Helvetica's clean, calm structure with slightly softer, rounder shapes. Helvetica itself was ruled out: it is paid and missing on Android and Windows.
+
+**Licensing (verified):** all three are SIL OFL on Google Fonts. Commercial use and self-hosting are permitted; the only OFL restriction (not selling the fonts themselves) is irrelevant here.
 
 **Why self-hosted, not Google CDN `<link>`:** no user data leaks to a third party on every page load (relevant for a health-adjacent product), no dependency on an external host, and fonts load offline-ish with the installed home-screen app.
 
