@@ -19,7 +19,9 @@ export function InboxPage() {
   const open = inbox.data?.find((p) => p.id === userId);
 
   return (
-    <div className="flex min-h-[calc(100svh-7rem)] flex-col gap-4">
+    // One screen tall (minus the top bar and the page padding): the list and
+    // the thread scroll on their own and the text box stays at the bottom.
+    <div className="flex h-[calc(100dvh-7rem)] flex-col gap-4">
       <div className="flex items-center gap-2">
         {userId && (
           <Button
@@ -42,10 +44,13 @@ export function InboxPage() {
         </h1>
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-6 md:grid-cols-[16rem_1fr]">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-6 md:grid-cols-[16rem_1fr]">
         <nav
           aria-label={t('nav.inbox')}
-          className={cn('flex flex-col gap-1', userId && 'hidden md:flex')}
+          className={cn(
+            'flex min-h-0 flex-col gap-1 overflow-y-auto',
+            userId && 'hidden md:flex',
+          )}
         >
           {inbox.isPending && (
             <p className="text-text-secondary" role="status">
