@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
 import { SESSION_COOKIE } from './auth.constants';
+import { findSessionUser } from './session-user';
 import {
   ALLOW_PASSWORD_CHANGE_PENDING_KEY,
   IS_PUBLIC_KEY,
@@ -28,21 +29,13 @@ export class SessionGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
     const cookies = request.cookies as Record<string, string | undefined>;
-    const sessionId = cookies[SESSION_COOKIE];
-    if (!sessionId) throw new UnauthorizedException();
+    const user = await findSessionUser(this.prisma, cookies[SESSION_COOKIE]);
+    if (!user) throw new UnauthorizedException();
 
-    const session = await this.prisma.session.findUnique({
-      where: { id: sessionId },
-      include: { user: { omit: { passwordHash: true } } },
-    });
-    if (!session || session.expiresAt <= new Date() || !session.user.active) {
-      throw new UnauthorizedException();
-    }
-
-    request.user = session.user;
+    request.user = user;
 
     if (
-      session.user.mustChangePassword &&
+      user.mustChangePassword &&
       !this.hasFlag(context, ALLOW_PASSWORD_CHANGE_PENDING_KEY)
     ) {
       throw new ForbiddenException({
