@@ -11,7 +11,7 @@ import { PageLoading } from '@/components/PageLoading';
 import { Button } from '@/components/ui/button';
 import { errorMessage } from '@/lib/errors';
 import { PasswordField } from './PasswordField';
-import { homeFor, useSession } from './useSession';
+import { landingFor, useSession } from './useSession';
 
 // The forced stop after a first sign-in or a reset: the api refuses everything
 // else until the handed-out password is replaced.
@@ -31,9 +31,9 @@ export function ChangePasswordPage() {
   if (isLoading) return <PageLoading />;
   if (!user) return <Navigate to="/login" replace />;
   // Nothing to change, or just changed: the session flag flips on success and
-  // this line carries the person home.
+  // this line carries the person to their first page.
   if (!user.mustChangePassword) {
-    return <Navigate to={homeFor[user.role]} replace />;
+    return <Navigate to={landingFor[user.role]} replace />;
   }
 
   const onSubmit = handleSubmit((values) =>

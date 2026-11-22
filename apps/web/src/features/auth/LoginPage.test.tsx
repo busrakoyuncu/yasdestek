@@ -35,13 +35,15 @@ describe('LoginPage', () => {
     expect(api.post).not.toHaveBeenCalled();
   });
 
-  it('signs in and sends the participant to their area', async () => {
+  it('signs in and opens the general rules first', async () => {
     vi.mocked(api.post).mockResolvedValueOnce(user);
     const { router } = renderApp(<LoginPage />, '/login');
     await userEvent.type(screen.getByLabelText('Kullanıcı adı'), 'elif');
     await userEvent.type(screen.getByLabelText('Şifre'), 'secret-1');
     await userEvent.click(screen.getByRole('button', { name: 'Giriş yap' }));
-    await waitFor(() => expect(router.state.location.pathname).toBe('/app'));
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/app/rules'),
+    );
     expect(api.post).toHaveBeenCalledWith('/auth/login', {
       username: 'elif',
       password: 'secret-1',

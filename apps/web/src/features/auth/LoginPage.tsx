@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { errorMessage } from '@/lib/errors';
 import { forestField, PasswordField } from './PasswordField';
-import { homeFor, useSession } from './useSession';
+import { landingFor, useSession } from './useSession';
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -26,8 +26,8 @@ export function LoginPage() {
     defaultValues: { username: '', password: '' },
   });
 
-  // Already signed in: straight to the user's own area.
-  if (user) return <Navigate to={homeFor[user.role]} replace />;
+  // Already signed in: straight to the user's first page.
+  if (user) return <Navigate to={landingFor[user.role]} replace />;
 
   const onSubmit = handleSubmit(async (values) => {
     const signedIn = await login.mutateAsync(values).catch(() => null);
@@ -40,7 +40,7 @@ export function LoginPage() {
     await navigate(
       signedIn.mustChangePassword
         ? '/change-password'
-        : (redirect ?? homeFor[signedIn.role]),
+        : (redirect ?? landingFor[signedIn.role]),
       { replace: true },
     );
   });

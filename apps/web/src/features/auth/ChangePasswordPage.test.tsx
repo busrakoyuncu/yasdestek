@@ -53,11 +53,13 @@ describe('ChangePasswordPage', () => {
     expect(api.post).not.toHaveBeenCalled();
   });
 
-  it('changes the password and sends the participant home', async () => {
+  it('changes the password and opens the general rules', async () => {
     vi.mocked(api.post).mockResolvedValueOnce(undefined);
     const { router } = renderApp(<ChangePasswordPage />, '/change-password');
     await fill('handed-out', 'Only-mine-now');
-    await waitFor(() => expect(router.state.location.pathname).toBe('/app'));
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/app/rules'),
+    );
     expect(api.post).toHaveBeenCalledWith('/auth/change-password', {
       currentPassword: 'handed-out',
       newPassword: 'Only-mine-now',
@@ -75,12 +77,14 @@ describe('ChangePasswordPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('sends someone who already changed it straight home', async () => {
+  it('sends someone who already changed it to the general rules', async () => {
     vi.mocked(api.get).mockResolvedValue({
       ...user,
       mustChangePassword: false,
     });
     const { router } = renderApp(<ChangePasswordPage />, '/change-password');
-    await waitFor(() => expect(router.state.location.pathname).toBe('/app'));
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/app/rules'),
+    );
   });
 });
