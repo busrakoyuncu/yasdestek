@@ -46,17 +46,17 @@ import type { CurrentUser, Role } from '@/types/user';
 import { InstallSteps } from './InstallSteps';
 import { navigation, type NavItem } from './navigation';
 
-// Header controls mirror the forest pages: gold hairline and firelight text at
-// night, the reverse by day (dark navy hairline and text). shadcn's ghost
-// variant sets hover and expanded colours per modifier, so each is restated.
+// Header controls are quiet text buttons: no outline, no gold. Gold is kept
+// for what needs attention (unread messages); the wordmark carries the
+// forest's firelight. shadcn's ghost variant sets hover and expanded colours
+// per modifier, so each is restated.
 const control =
-  'h-10 rounded-full border border-foreground/60 bg-transparent px-3 text-sm text-foreground hover:border-foreground hover:bg-foreground/5 hover:text-foreground aria-expanded:border-foreground aria-expanded:bg-foreground/5 aria-expanded:text-foreground dark:border-secondary-accent/70 dark:text-glow dark:hover:border-secondary-accent dark:hover:bg-secondary-accent/10 dark:hover:text-glow dark:aria-expanded:border-secondary-accent dark:aria-expanded:bg-secondary-accent/10 dark:aria-expanded:text-glow';
+  'h-10 rounded-lg bg-transparent px-3 text-sm text-foreground/80 hover:bg-foreground/5 hover:text-foreground aria-expanded:bg-foreground/5 aria-expanded:text-foreground dark:hover:bg-foreground/5 dark:aria-expanded:bg-foreground/5';
 
-// Navigation items use the same two voices: the active one wears the hairline.
+// Navigation: muted ink at rest, a soft fill for where you are.
 const navIdle =
-  'text-foreground/75 hover:bg-foreground/5 hover:text-foreground dark:text-glow/75 dark:hover:bg-secondary-accent/10 dark:hover:text-glow';
-const navActive =
-  'border-foreground/60 font-medium text-foreground dark:border-secondary-accent/70 dark:text-glow';
+  'text-foreground/70 hover:bg-foreground/5 hover:text-foreground';
+const navActive = 'bg-foreground/[0.07] font-medium text-foreground';
 
 const themeIcons: Record<Theme, typeof Sun> = {
   system: Monitor,
@@ -110,7 +110,7 @@ export function AppShell({ role }: { role: Role }) {
       : {};
 
   return (
-    <div className="min-h-svh bg-background text-foreground md:grid md:grid-cols-[15rem_1fr]">
+    <div className="min-h-svh bg-background [background-image:var(--grain)] text-foreground md:grid md:grid-cols-[15rem_1fr]">
       <aside className="hidden flex-col gap-8 border-r border-border bg-surface px-4 py-6 md:flex">
         <Wordmark role={role} />
         <SideNav items={items} subItems={subItems} unread={unread} />
@@ -216,7 +216,7 @@ function SideNav({
 }
 
 const navRow =
-  'flex h-11 items-center gap-3 rounded-full border border-transparent px-4 text-base transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50';
+  'flex h-11 items-center gap-3 rounded-lg px-4 text-base transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50';
 
 // An item that opens and closes its list of links instead of leading to a page.
 function NavGroup({
@@ -243,11 +243,7 @@ function NavGroup({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className={cn(
-          navRow,
-          navIdle,
-          inside && 'font-medium text-foreground dark:text-glow',
-        )}
+        className={cn(navRow, navIdle, inside && 'font-medium text-foreground')}
       >
         <Icon className="size-5" aria-hidden="true" />
         {t(label)}
@@ -264,7 +260,7 @@ function NavGroup({
           'heading' in link ? (
             <p
               key={`heading-${link.heading}`}
-              className="pt-2 pr-3 pl-11 text-xs font-medium text-foreground/75 dark:text-glow/75"
+              className="pt-2 pr-3 pl-11 text-xs font-medium text-muted-foreground"
             >
               {link.heading}
             </p>
@@ -275,7 +271,7 @@ function NavGroup({
               onClick={onNavigate}
               className={({ isActive }) =>
                 cn(
-                  'flex min-h-9 items-center rounded-2xl border border-transparent py-2 pr-3 pl-11 text-sm leading-snug text-pretty transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  'flex min-h-9 items-center rounded-lg py-2 pr-3 pl-11 text-sm leading-snug text-pretty transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                   isActive ? navActive : navIdle,
                 )
               }
@@ -369,9 +365,7 @@ function TabBar({ items, unread }: { items: NavItem[]; unread: number }) {
           className={({ isActive }) =>
             cn(
               'flex h-16 flex-col items-center justify-center gap-1 text-xs outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset',
-              isActive
-                ? 'font-medium text-foreground dark:text-glow'
-                : 'text-foreground/70 dark:text-glow/70',
+              isActive ? 'font-medium text-foreground' : 'text-foreground/70',
             )
           }
         >
