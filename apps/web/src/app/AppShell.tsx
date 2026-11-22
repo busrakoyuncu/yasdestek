@@ -9,7 +9,7 @@ import {
   Moon,
   Sun,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { cn } from 'cn';
@@ -40,6 +40,7 @@ import { THEMES, useTheme, type Theme } from '@/lib/theme';
 import { toastError } from '@/lib/toast';
 import { homeFor, useSession } from '@/features/auth/useSession';
 import { groupsQuery } from '@/features/groups/useGroups';
+import { useUnreadCount } from '@/features/messages/useMessages';
 import { modulesQuery } from '@/features/modules/useModules';
 import type { CurrentUser, Role } from '@/types/user';
 import { InstallSteps } from './InstallSteps';
@@ -71,6 +72,14 @@ export function AppShell({ role }: { role: Role }) {
   const { user } = useSession();
   const { theme, resolved, setTheme } = useTheme(user!.id);
   useRealtime(user!.id);
+  const unread = useUnreadCount(user!);
+  // The browser tab says it too: "(3) Yasdestek".
+  useEffect(() => {
+    document.title = unread > 0 ? `(${unread}) Yasdestek` : 'Yasdestek';
+    return () => {
+      document.title = 'Yasdestek';
+    };
+  }, [unread]);
   const items = navigation[role];
   const participant = role === 'USER';
   const counselor = role === 'PSYCHOLOGIST';
@@ -104,13 +113,18 @@ export function AppShell({ role }: { role: Role }) {
     <div className="min-h-svh bg-background text-foreground md:grid md:grid-cols-[15rem_1fr]">
       <aside className="hidden flex-col gap-8 border-r border-border bg-surface px-4 py-6 md:flex">
         <Wordmark role={role} />
-        <SideNav items={items} subItems={subItems} />
+        <SideNav items={items} subItems={subItems} unread={unread} />
       </aside>
 
       <div className="flex min-h-svh flex-col">
         <header className="flex h-14 items-center gap-1 border-b border-border px-3 md:px-6">
           {!participant && (
-            <PhoneMenu role={role} items={items} subItems={subItems} />
+            <PhoneMenu
+              role={role}
+              items={items}
+              subItems={subItems}
+              unread={unread}
+            />
           )}
           <span className="md:hidden">
             <Wordmark role={role} />
@@ -131,7 +145,7 @@ export function AppShell({ role }: { role: Role }) {
           <Outlet />
         </main>
 
-        {participant && <TabBar items={items} />}
+        {participant && <TabBar items={items} unread={unread} />}
       </div>
       <Toaster theme={resolved} position="top-center" />
     </div>
@@ -161,10 +175,12 @@ type SubItems = Record<
 function SideNav({
   items,
   subItems = {},
+  unread,
   onNavigate,
 }: {
   items: NavItem[];
   subItems?: SubItems;
+  unread: number;
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
@@ -190,6 +206,7 @@ function SideNav({
           >
             <item.icon className="size-5" aria-hidden="true" />
             {t(item.label)}
+            {item.unread && <UnreadBadge count={unread} className="ml-auto" />}
           </NavLink>
         ),
       )}
@@ -275,10 +292,12 @@ function PhoneMenu({
   role,
   items,
   subItems,
+  unread,
 }: {
   role: Role;
   items: NavItem[];
   subItems: SubItems;
+  unread: number;
 }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -288,10 +307,21 @@ function PhoneMenu({
         <Button
           variant="ghost"
           size="icon"
-          className={cn(control, 'size-10 px-0 md:hidden')}
-          aria-label={t('common.menu')}
+          className={cn(control, 'relative size-10 px-0 md:hidden')}
+          aria-label={
+            unread > 0
+              ? `${t('common.menu')}, ${t('nav.unread', { count: unread })}`
+              : t('common.menu')
+          }
         >
           <Menu className="size-5" />
+          {/* unread messages wait inside the menu */}
+          {unread > 0 && (
+            <span
+              className="absolute top-1.5 right-1.5 size-2.5 rounded-full bg-secondary-accent ring-2 ring-background"
+              aria-hidden="true"
+            />
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-72 bg-surface">
@@ -307,6 +337,7 @@ function PhoneMenu({
           <SideNav
             items={items}
             subItems={subItems}
+            unread={unread}
             onNavigate={() => setOpen(false)}
           />
         </div>
@@ -316,18 +347,24 @@ function PhoneMenu({
 }
 
 // Phone navigation for participants: four big targets along the bottom.
-function TabBar({ items }: { items: NavItem[] }) {
+function TabBar({ items, unread }: { items: NavItem[]; unread: number }) {
   const { t } = useTranslation();
   return (
     <nav
       aria-label={t('common.menu')}
       className="fixed inset-x-0 bottom-0 grid grid-cols-4 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      {items.map(({ to, label, icon: Icon, end }) => (
+      {items.map(({ to, label, icon: Icon, end, unread: counts }) => (
         <NavLink
           key={to}
           to={to}
           end={end}
+          // the count sits on the icon, before the label; say it after
+          aria-label={
+            counts && unread > 0
+              ? `${t(label)}, ${t('nav.unread', { count: unread })}`
+              : undefined
+          }
           className={({ isActive }) =>
             cn(
               'flex h-16 flex-col items-center justify-center gap-1 text-xs outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset',
@@ -337,11 +374,44 @@ function TabBar({ items }: { items: NavItem[] }) {
             )
           }
         >
-          <Icon className="size-6" aria-hidden="true" />
+          <span className="relative">
+            <Icon className="size-6" aria-hidden="true" />
+            {counts && (
+              <UnreadBadge
+                count={unread}
+                className="absolute -top-1.5 left-4 ring-2 ring-surface"
+              />
+            )}
+          </span>
           {t(label)}
         </NavLink>
       ))}
     </nav>
+  );
+}
+
+// Unread messages on the Messages or Inbox item. Above 9 it reads "9+"
+// to stay small; screen readers hear the full number.
+function UnreadBadge({
+  count,
+  className,
+}: {
+  count: number;
+  className?: string;
+}) {
+  const { t } = useTranslation();
+  if (count === 0) return null;
+  return (
+    <span
+      className={cn(
+        'inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary-accent px-1.5 text-xs font-semibold text-background tabular-nums',
+        className,
+      )}
+    >
+      <span aria-hidden="true">{count > 9 ? '9+' : count}</span>
+      {/* the comma keeps "Mesajlar" and the count apart when read aloud */}
+      <span className="sr-only">, {t('nav.unread', { count })}</span>
+    </span>
   );
 }
 

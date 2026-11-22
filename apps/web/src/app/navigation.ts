@@ -17,6 +17,7 @@ export type NavItem = {
   label: string; // translation key
   icon: LucideIcon;
   end?: boolean; // the area's home: active only on an exact match
+  unread?: boolean; // shows the unread message count
 };
 
 // What each role sees in the sidebar (or the tab bar, for participants).
@@ -26,7 +27,12 @@ export const navigation: Record<Role, NavItem[]> = {
     { to: '/app/rules', label: 'nav.rules', icon: ScrollText },
     { to: '/app', label: 'nav.modules', icon: BookOpen, end: true },
     { to: '/app/forums', label: 'nav.forums', icon: MessagesSquare },
-    { to: '/app/messages', label: 'nav.messages', icon: MessageCircle },
+    {
+      to: '/app/messages',
+      label: 'nav.messages',
+      icon: MessageCircle,
+      unread: true,
+    },
   ],
   PSYCHOLOGIST: [
     { to: '/psychologist/rules', label: 'nav.rules', icon: ScrollText },
@@ -34,7 +40,12 @@ export const navigation: Record<Role, NavItem[]> = {
     { to: '/psychologist/groups', label: 'nav.groups', icon: UsersRound },
     { to: '/psychologist/forums', label: 'nav.forums', icon: MessagesSquare },
     { to: '/psychologist/modules', label: 'nav.modules', icon: BookOpen },
-    { to: '/psychologist/inbox', label: 'nav.inbox', icon: Inbox },
+    {
+      to: '/psychologist/inbox',
+      label: 'nav.inbox',
+      icon: Inbox,
+      unread: true,
+    },
   ],
   ADMIN: [
     { to: '/admin/rules', label: 'nav.rules', icon: ScrollText },

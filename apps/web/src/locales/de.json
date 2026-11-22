@@ -75,7 +75,9 @@
     "inbox": "Posteingang",
     "counselors": "Begleitungen",
     "analytics": "Auswertung",
-    "forums": "Foren"
+    "forums": "Foren",
+    "unread_one": "{{count}} ungelesene Nachricht",
+    "unread_other": "{{count}} ungelesene Nachrichten"
   },
   "theme": {
     "label": "Darstellung",

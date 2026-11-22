@@ -1,10 +1,12 @@
 import {
   queryOptions,
   useMutation,
+  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import type { SendMessageInput } from '@yasdestek/shared';
 import { api } from '@/lib/api';
+import type { CurrentUser } from '@/types/user';
 
 export type Message = {
   id: string;
@@ -39,6 +41,25 @@ export const inboxQuery = queryOptions({
   queryKey: ['messages', 'inbox'],
   queryFn: () => api.get<InboxEntry[]>('/messages'),
 });
+
+// How many messages wait to be read: for a counselor across the inbox, for
+// a participant in their thread. Shares the queries the message screens
+// use, so the socket keeps it current. Admins have no messages.
+export function useUnreadCount(user: CurrentUser) {
+  const counselor = user.role === 'PSYCHOLOGIST';
+  const participant = user.role === 'USER';
+  const inbox = useQuery({ ...inboxQuery, enabled: counselor });
+  const thread = useQuery({ ...threadQuery(), enabled: participant });
+  if (counselor) {
+    return (inbox.data ?? []).reduce((sum, entry) => sum + entry.unread, 0);
+  }
+  if (participant) {
+    return (thread.data ?? []).filter(
+      (m) => m.recipientId === user.id && m.readAt === null,
+    ).length;
+  }
+  return 0;
+}
 
 export function useMessageActions(userId?: string) {
   const queryClient = useQueryClient();

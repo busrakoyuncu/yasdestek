@@ -34,9 +34,22 @@ const area = [
 ];
 const mount = () => renderApp(<RequireAuth role="USER" />, '/app', area);
 
+// The participant's thread, as GET /messages answers it.
+let thread: object[] = [];
+const fromCounselor = (id: string, readAt: string | null = null) => ({
+  id,
+  senderId: 'p1',
+  recipientId: 'u1',
+  body: 'Merhaba',
+  readAt,
+  createdAt: '2026-11-22T10:00:00Z',
+});
+
 describe('AppShell', () => {
   beforeEach(() => {
-    // /auth/me answers the session, /modules the participant's modules
+    // /auth/me answers the session, /modules the participant's modules,
+    // /messages their thread
+    thread = [];
     vi.mocked(api.get)
       .mockReset()
       .mockImplementation((path: string) =>
@@ -46,7 +59,9 @@ describe('AppShell', () => {
                 { id: 'm1', title: 'Sözcüklerin Gücü' },
                 { id: 'm2', title: 'Mektup Yazma' },
               ]
-            : participant,
+            : path === '/messages'
+              ? thread
+              : participant,
         ),
       );
     vi.mocked(api.post).mockReset();
@@ -119,7 +134,9 @@ describe('AppShell', () => {
               },
               { id: 'g2', name: 'Boş grup', modules: [] },
             ]
-          : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
+          : path === '/messages'
+            ? []
+            : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
       ),
     );
     renderApp(<RequireAuth role="PSYCHOLOGIST" />, '/psychologist', [
@@ -136,6 +153,70 @@ describe('AppShell', () => {
     expect(
       screen.getByRole('link', { name: 'Sözcüklerin Gücü' }),
     ).toHaveAttribute('href', '/psychologist/forums/g1/m1');
+  });
+
+  describe('unread messages', () => {
+    afterEach(() => {
+      document.title = 'Yasdestek';
+    });
+
+    it("counts the counselor's messages a participant has not read", async () => {
+      thread = [
+        fromCounselor('m1', '2026-11-22T10:05:00Z'),
+        fromCounselor('m2'),
+        fromCounselor('m3'),
+        // their own message is never "unread" for them
+        { ...fromCounselor('m4'), senderId: 'u1', recipientId: 'p1' },
+      ];
+      mount();
+      // in the sidebar and on the phone tab bar
+      expect(
+        await screen.findAllByRole('link', {
+          name: 'Mesajlar, 2 okunmamış mesaj',
+        }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('(2) Yasdestek');
+    });
+
+    it('adds up the inbox for a counselor, shown as 9+ above nine', async () => {
+      vi.mocked(api.get).mockImplementation((path: string) =>
+        Promise.resolve(
+          path === '/messages'
+            ? [
+                { id: 'u1', username: 'elif', active: true, unread: 7 },
+                { id: 'u2', username: 'can', active: true, unread: 5 },
+                { id: 'u3', username: 'ada', active: true, unread: 0 },
+              ]
+            : path === '/groups'
+              ? []
+              : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
+        ),
+      );
+      renderApp(<RequireAuth role="PSYCHOLOGIST" />, '/psychologist', [
+        {
+          element: <AppShell role="PSYCHOLOGIST" />,
+          children: [{ index: true, element: <p>Katılımcı listesi</p> }],
+        },
+      ]);
+      const inbox = await screen.findByRole('link', {
+        name: 'Gelen Kutusu, 12 okunmamış mesaj',
+      });
+      expect(inbox).toHaveTextContent('9+');
+      expect(document.title).toBe('(12) Yasdestek');
+      // on a phone the menu button carries a dot and says why
+      expect(
+        screen.getByRole('button', { name: 'Menü, 12 okunmamış mesaj' }),
+      ).toBeInTheDocument();
+    });
+
+    it('shows nothing when everything is read', async () => {
+      thread = [fromCounselor('m1', '2026-11-22T10:05:00Z')];
+      mount();
+      expect(
+        await screen.findAllByRole('link', { name: 'Mesajlar' }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('Yasdestek');
+    });
   });
 
   it('is night by default and remembers a switch to light', async () => {
