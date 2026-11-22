@@ -98,13 +98,10 @@
   },
   "people": {
     "columns": {
-      "username": "Kullanıcı adı",
-      "status": "Durum",
-      "counselor": "Danışmanı",
-      "created": "Oluşturulma"
+      "username": "Kullanıcı adı"
     },
     "status": {
-      "active": "Aktif",
+      "active": "Etkin",
       "inactive": "Etkin değil",
       "pending": "İlk girişini bekliyor"
     },
@@ -177,6 +174,21 @@
       "message": "Mesaj",
       "unread_one": "{{name}}: {{count}} okunmamış mesaj",
       "unread_other": "{{name}}: {{count}} okunmamış mesaj"
+    },
+    "list": {
+      "show": "Göster",
+      "all": "Tümü",
+      "search": "Ada göre ara",
+      "counselor": "Danışmana göre",
+      "allCounselors": "Tüm danışmanlar",
+      "noMatch": "Bu seçime uyan kimse yok.",
+      "created": "{{date}} tarihinde açıldı",
+      "participantOf": "{{counselor}}, {{group}}",
+      "counselorOf": "{{people}}, {{groups}}",
+      "participants_one": "{{count}} katılımcı",
+      "participants_other": "{{count}} katılımcı",
+      "groups_one": "{{count}} grup",
+      "groups_other": "{{count}} grup"
     }
   },
   "modules": {

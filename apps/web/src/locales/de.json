@@ -98,10 +98,7 @@
   },
   "people": {
     "columns": {
-      "username": "Benutzername",
-      "status": "Status",
-      "counselor": "Begleitung",
-      "created": "Erstellt"
+      "username": "Benutzername"
     },
     "status": {
       "active": "Aktiv",
@@ -177,6 +174,21 @@
       "message": "Nachricht",
       "unread_one": "{{name}}: {{count}} ungelesene Nachricht",
       "unread_other": "{{name}}: {{count}} ungelesene Nachrichten"
+    },
+    "list": {
+      "show": "Anzeigen",
+      "all": "Alle",
+      "search": "Nach Namen suchen",
+      "counselor": "Nach Begleitung",
+      "allCounselors": "Alle Begleitungen",
+      "noMatch": "Niemand passt zu dieser Auswahl.",
+      "created": "Eröffnet am {{date}}",
+      "participantOf": "{{counselor}}, {{group}}",
+      "counselorOf": "{{people}}, {{groups}}",
+      "participants_one": "{{count}} Teilnehmer:in",
+      "participants_other": "{{count}} Teilnehmende",
+      "groups_one": "{{count}} Gruppe",
+      "groups_other": "{{count}} Gruppen"
     }
   },
   "modules": {

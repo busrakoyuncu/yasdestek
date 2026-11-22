@@ -38,26 +38,135 @@ const people = [
   }),
   person({ id: 'u1', username: 'elif', active: false }),
   person({ id: 'u2', username: 'can', mustChangePassword: true }),
-  person({ id: 'u3', username: 'deniz' }),
+  person({ id: 'u3', username: 'deniz', groupId: 'g1' }),
+  person({
+    id: 'p2',
+    role: 'PSYCHOLOGIST',
+    username: 'mert',
+    psychologistId: null,
+    active: false,
+  }),
+  person({ id: 'u4', username: 'selin', psychologistId: 'p2' }),
+];
+const groups = [
+  {
+    id: 'g1',
+    name: 'Salı grubu',
+    psychologistId: P1,
+    members: [],
+    modules: [],
+  },
 ];
 
 describe('PeoplePage', () => {
   beforeEach(() => {
-    vi.mocked(api.get).mockReset().mockResolvedValue(people);
+    vi.mocked(api.get)
+      .mockReset()
+      .mockImplementation((path: string) =>
+        Promise.resolve(path === '/groups' ? groups : people),
+      );
     vi.mocked(api.post).mockReset();
     vi.mocked(api.delete).mockReset();
   });
 
-  it('lists the participants with their status and counselor', async () => {
+  // the rows of the list: each person's name, then the rest of the row
+  const rows = async () =>
+    within(
+      await screen.findByRole('list', { name: 'Katılımcılar' }),
+    ).getAllByRole('listitem');
+
+  it('lists the participants with their counselor, group and status', async () => {
     renderApp(<PeoplePage role="USER" admin />, '/admin/participants');
-    const rows = await screen.findAllByRole('row');
-    expect(rows).toHaveLength(4); // header + 3 participants, no counselor row
-    expect(within(rows[1]).getByText('Etkin değil')).toBeInTheDocument();
+    // the group names arrive with the second request
+    await screen.findByText('ayse, Salı grubu');
+    const items = await rows();
+    // by name; no counselor rows
+    expect(items.map((li) => li.querySelector('p')?.textContent)).toEqual([
+      'can',
+      'deniz',
+      'elif',
+      'selin',
+    ]);
+    expect(items[1]).toHaveTextContent('ayse, Salı grubu');
+    expect(items[1]).toHaveTextContent('Etkin');
+    expect(items[0]).toHaveTextContent('ayse, Grupsuz');
+    expect(items[0]).toHaveTextContent('İlk girişini bekliyor');
+    expect(items[2]).toHaveTextContent('Etkin değil');
+    expect(items[3]).toHaveTextContent('mert, Grupsuz');
+    // the likely next action sits on the row
     expect(
-      within(rows[2]).getByText('İlk girişini bekliyor'),
+      within(items[2]).getByRole('button', { name: 'Etkinleştir' }),
     ).toBeInTheDocument();
-    expect(within(rows[3]).getByText('Aktif')).toBeInTheDocument();
-    expect(within(rows[3]).getByText('ayse')).toBeInTheDocument();
+    expect(
+      within(items[0]).getByRole('button', { name: 'Yeni geçici şifre' }),
+    ).toBeInTheDocument();
+    expect(
+      within(items[1]).queryByRole('button', { name: /Etkinleştir|şifre/ }),
+    ).toBeNull();
+  });
+
+  it('filters by state, name and counselor, with counts', async () => {
+    renderApp(<PeoplePage role="USER" admin />, '/admin/participants');
+    await rows();
+    const waiting = screen.getByRole('button', {
+      name: 'İlk girişini bekliyor 1',
+    });
+    expect(screen.getByRole('button', { name: 'Tümü 4' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await userEvent.click(waiting);
+    expect(
+      (await rows()).map((li) => li.querySelector('p')?.textContent),
+    ).toEqual(['can']);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Tümü 4' }));
+    await userEvent.type(
+      screen.getByRole('searchbox', { name: 'Ada göre ara' }),
+      'elif',
+    );
+    expect(
+      (await rows()).map((li) => li.querySelector('p')?.textContent),
+    ).toEqual(['elif']);
+    // the counts follow the search
+    expect(screen.getByRole('button', { name: 'Tümü 1' })).toBeInTheDocument();
+
+    await userEvent.clear(
+      screen.getByRole('searchbox', { name: 'Ada göre ara' }),
+    );
+    await userEvent.click(
+      screen.getByRole('combobox', { name: 'Danışmana göre' }),
+    );
+    await userEvent.click(await screen.findByRole('option', { name: 'mert' }));
+    expect(
+      (await rows()).map((li) => li.querySelector('p')?.textContent),
+    ).toEqual(['selin']);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Etkin değil 0' }),
+    );
+    expect(screen.getByText('Bu seçime uyan kimse yok.')).toBeInTheDocument();
+  });
+
+  it('shows each counselor with their participants and groups', async () => {
+    renderApp(<PeoplePage role="PSYCHOLOGIST" admin />, '/admin');
+    await screen.findByText('3 katılımcı, 1 grup');
+    const list = screen.getByRole('list', { name: 'Danışmanlar' });
+    const items = within(list).getAllByRole('listitem');
+    expect(items[0]).toHaveTextContent('ayse');
+    expect(items[0]).toHaveTextContent('3 katılımcı, 1 grup');
+    expect(items[1]).toHaveTextContent('mert');
+    expect(items[1]).toHaveTextContent('1 katılımcı, 0 grup');
+    // counselors cannot be deleted
+    await userEvent.click(
+      within(items[0]).getByRole('button', { name: 'İşlemler: ayse' }),
+    );
+    expect(
+      await screen.findByRole('menuitem', { name: 'Şifreyi sıfırla' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('menuitem', { name: 'Kalıcı olarak sil' }),
+    ).toBeNull();
   });
 
   it('asks before deactivating and then calls the api', async () => {
