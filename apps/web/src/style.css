@@ -14,7 +14,7 @@
  */
 @theme inline {
   /* UI: headings, buttons, labels, module content */
-  --font-sans: 'Google Sans', system-ui, sans-serif;
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
   /* everything participants write: responses, comments */
   --font-body: 'Nunito Sans', system-ui, sans-serif;
   /* module 3 letters only, never below 18px */
