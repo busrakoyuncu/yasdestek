@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/sheet';
 import { Toaster } from '@/components/ui/sonner';
 import { useInstall } from '@/lib/install';
+import { useRealtime } from '@/lib/realtime';
 import { THEMES, useTheme, type Theme } from '@/lib/theme';
 import { toastError } from '@/lib/toast';
 import { homeFor, useSession } from '@/features/auth/useSession';
@@ -69,6 +70,7 @@ const themeIcons: Record<Theme, typeof Sun> = {
 export function AppShell({ role }: { role: Role }) {
   const { user } = useSession();
   const { theme, resolved, setTheme } = useTheme(user!.id);
+  useRealtime(user!.id);
   const items = navigation[role];
   const participant = role === 'USER';
   const counselor = role === 'PSYCHOLOGIST';

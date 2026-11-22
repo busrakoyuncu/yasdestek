@@ -22,8 +22,8 @@ export type InboxEntry = {
   unread: number;
 };
 
-// No push channel: open screens ask again every half minute.
-const POLL = 30_000;
+// No polling: the socket (lib/realtime.ts) marks these queries stale when a
+// message is sent or read, and the open screens ask again.
 
 // One conversation, oldest first. A participant has exactly one (with their
 // counselor) and passes no id; a counselor names the participant.
@@ -32,14 +32,12 @@ export const threadQuery = (userId?: string) =>
     queryKey: ['messages', userId ?? 'me'],
     queryFn: () =>
       api.get<Message[]>(userId ? `/messages/${userId}` : '/messages'),
-    refetchInterval: POLL,
   });
 
 // The counselor's participants with unread counts, unread first.
 export const inboxQuery = queryOptions({
   queryKey: ['messages', 'inbox'],
   queryFn: () => api.get<InboxEntry[]>('/messages'),
-  refetchInterval: POLL,
 });
 
 export function useMessageActions(userId?: string) {
