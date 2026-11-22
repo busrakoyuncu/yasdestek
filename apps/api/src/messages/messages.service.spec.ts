@@ -1,6 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CurrentUser } from '../common/current-user';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { MessagesService } from './messages.service';
 
 const psychologist = { id: 'p1', role: 'PSYCHOLOGIST' } as CurrentUser;
@@ -17,7 +18,11 @@ describe('MessagesService', () => {
       updateMany: jest.fn(),
     },
   };
-  const service = new MessagesService(prisma as unknown as PrismaService);
+  const realtime = { notify: jest.fn() };
+  const service = new MessagesService(
+    prisma as unknown as PrismaService,
+    realtime as unknown as RealtimeGateway,
+  );
 
   beforeEach(() => jest.clearAllMocks());
 
@@ -27,6 +32,9 @@ describe('MessagesService', () => {
       data: { senderId: 'u1', recipientId: 'p1', body: 'Merhaba' },
     });
     expect(prisma.user.findFirst).not.toHaveBeenCalled();
+    // both sides' open screens hear about it
+    expect(realtime.notify).toHaveBeenCalledWith(['u1', 'p1'], 'messages');
+    realtime.notify.mockClear();
 
     await expect(
       service.send(member, { recipientId: 'p2', body: 'x' }),
@@ -34,6 +42,7 @@ describe('MessagesService', () => {
     await expect(service.send(orphan, { body: 'x' })).rejects.toBeInstanceOf(
       NotFoundException,
     );
+    expect(realtime.notify).not.toHaveBeenCalled();
   });
 
   it('a psychologist names one of their own participants', async () => {
@@ -49,12 +58,14 @@ describe('MessagesService', () => {
       where: { id: 'u9', role: 'USER', psychologistId: 'p1' },
       select: { id: true },
     });
+    expect(realtime.notify).not.toHaveBeenCalled();
 
     prisma.user.findFirst.mockResolvedValueOnce({ id: 'u1' });
     await service.send(psychologist, { recipientId: 'u1', body: 'Nasılsın?' });
     expect(prisma.message.create).toHaveBeenCalledWith({
       data: { senderId: 'p1', recipientId: 'u1', body: 'Nasılsın?' },
     });
+    expect(realtime.notify).toHaveBeenCalledWith(['p1', 'u1'], 'messages');
   });
 
   it('a thread holds both directions, oldest first', async () => {
@@ -99,5 +110,11 @@ describe('MessagesService', () => {
       where: { id: 'm1', recipientId: 'u1', readAt: null },
       data: { readAt: expect.any(Date) as Date },
     });
+    expect(realtime.notify).not.toHaveBeenCalled();
+
+    // the reader's other tabs update their unread counts
+    prisma.message.updateMany.mockResolvedValueOnce({ count: 1 });
+    await service.markRead(member, 'm1');
+    expect(realtime.notify).toHaveBeenCalledWith(['u1'], 'messages');
   });
 });

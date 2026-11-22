@@ -6,19 +6,27 @@ import {
 import type { SendMessageInput } from '@yasdestek/shared';
 import { CurrentUser } from '../common/current-user';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 
 // One continuous thread per participant and psychologist pair. A participant
 // talks only to their own psychologist, a psychologist only to their own
 // participants; everything else is a 404.
 @Injectable()
 export class MessagesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly realtime: RealtimeGateway,
+  ) {}
 
+  // Both sides hear about it: the recipient's screens, and the sender's
+  // other tabs and devices.
   async send(me: CurrentUser, { recipientId, body }: SendMessageInput) {
     const to = await this.counterpart(me, recipientId);
-    return this.prisma.message.create({
+    const message = await this.prisma.message.create({
       data: { senderId: me.id, recipientId: to, body },
     });
+    this.realtime.notify([me.id, to], 'messages');
+    return message;
   }
 
   // The whole conversation with one counterpart, oldest first.
@@ -58,12 +66,15 @@ export class MessagesService {
   }
 
   // Only the recipient marks a message read; doing it twice is a 404.
+  // The reader's other tabs update their unread counts; the sender is not
+  // told, since nothing shows them that a message was read.
   async markRead(me: CurrentUser, id: string) {
     const { count } = await this.prisma.message.updateMany({
       where: { id, recipientId: me.id, readAt: null },
       data: { readAt: new Date() },
     });
     if (count === 0) throw new NotFoundException();
+    this.realtime.notify([me.id], 'messages');
   }
 
   // Who I am talking to. Participants: always their psychologist.
