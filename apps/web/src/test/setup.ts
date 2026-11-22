@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeEach } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 import { setLocale } from '@/lib/i18n';
 import { queryClient } from '@/lib/query';
 
@@ -15,6 +15,13 @@ beforeEach(async () => {
 });
 // Without vitest globals, Testing Library does not unmount between tests on its own.
 afterEach(cleanup);
+
+// No real socket in tests: each io() call returns a fresh fake that tests
+// can drive (test/fakeSocket.ts).
+vi.mock('socket.io-client', async () => {
+  const { createFakeSocket } = await import('./fakeSocket');
+  return { io: vi.fn(() => createFakeSocket()) };
+});
 
 // jsdom lacks what Radix Select touches on open: pointer capture and scrollIntoView.
 Element.prototype.hasPointerCapture ??= () => false;

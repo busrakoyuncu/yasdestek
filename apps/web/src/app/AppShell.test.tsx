@@ -1,6 +1,8 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { io } from 'socket.io-client';
+import type { FakeSocket } from '@/test/fakeSocket';
 import { renderApp } from '@/test/render';
 import { AppShell } from './AppShell';
 import { RequireAuth } from './RequireAuth';
@@ -207,6 +209,25 @@ describe('AppShell', () => {
       expect(
         screen.getByRole('button', { name: 'Menü, 12 okunmamış mesaj' }),
       ).toBeInTheDocument();
+    });
+
+    it('updates live when the server says messages changed', async () => {
+      mount();
+      expect(
+        await screen.findAllByRole('link', { name: 'Mesajlar' }),
+      ).toHaveLength(2);
+
+      // the counselor writes; the server rings this participant's socket
+      thread = [fromCounselor('m1')];
+      const live = vi.mocked(io).mock.results.at(-1)!.value as FakeSocket;
+      act(() => live.serverSends('messages'));
+
+      expect(
+        await screen.findAllByRole('link', {
+          name: 'Mesajlar, 1 okunmamış mesaj',
+        }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('(1) Yasdestek');
     });
 
     it('shows nothing when everything is read', async () => {
