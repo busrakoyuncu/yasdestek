@@ -12,6 +12,7 @@ import { CurrentUser } from '../common/current-user';
 import { generatePassword } from '../common/password';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { StorageService } from '../storage/storage.service';
 
 // Who a caller may manage. Admins manage every non-admin account;
@@ -30,6 +31,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly storage: StorageService,
+    private readonly realtime: RealtimeGateway,
   ) {}
 
   // Creates an inactive account with a temporary password, returned once.
@@ -78,7 +80,7 @@ export class UsersService {
   }
 
   // Deactivation and ending the sessions happen together, so the next
-  // request from that user is rejected.
+  // request from that user is rejected; their open sockets close after.
   async deactivate(me: CurrentUser, id: string): Promise<void> {
     await this.prisma.$transaction(async (tx) => {
       const { count } = await tx.user.updateMany({
@@ -88,6 +90,7 @@ export class UsersService {
       if (count === 0) throw new NotFoundException();
       await tx.session.deleteMany({ where: { userId: id } });
     });
+    this.realtime.disconnectUser(id);
   }
 
   // New temporary password, returned once. The owner must change it at next login.
@@ -102,6 +105,7 @@ export class UsersService {
       if (count === 0) throw new NotFoundException();
       await tx.session.deleteMany({ where: { userId: id } });
     });
+    this.realtime.disconnectUser(id);
     return password;
   }
 
@@ -130,6 +134,7 @@ export class UsersService {
       await tx.user.delete({ where: { id } });
       return files.map((file) => file.storageKey);
     });
+    this.realtime.disconnectUser(id);
     for (const key of keys) {
       await this.storage
         .remove(key)

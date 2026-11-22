@@ -9,6 +9,7 @@ import * as argon2 from 'argon2';
 import { CurrentUser } from '../common/current-user';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { StorageService } from '../storage/storage.service';
 import { UsersService } from './users.service';
 
@@ -25,6 +26,7 @@ describe('UsersService', () => {
     message: { deleteMany: jest.fn() },
   };
   const storage = { remove: jest.fn() };
+  const realtime = { disconnectUser: jest.fn() };
   const prisma = {
     user: {
       create: jest.fn(),
@@ -37,6 +39,7 @@ describe('UsersService', () => {
   const service = new UsersService(
     prisma as unknown as PrismaService,
     storage as unknown as StorageService,
+    realtime as unknown as RealtimeGateway,
   );
 
   beforeEach(() => {
@@ -142,11 +145,14 @@ describe('UsersService', () => {
     expect(tx.session.deleteMany).toHaveBeenCalledWith({
       where: { userId: 'u1' },
     });
+    expect(realtime.disconnectUser).toHaveBeenCalledWith('u1');
+    realtime.disconnectUser.mockClear();
 
     tx.user.updateMany.mockResolvedValueOnce({ count: 0 });
     await expect(service.deactivate(psychologist, 'u2')).rejects.toBeInstanceOf(
       NotFoundException,
     );
+    expect(realtime.disconnectUser).not.toHaveBeenCalled();
   });
 
   it('activates within the scope, 404 outside it', async () => {
@@ -169,6 +175,7 @@ describe('UsersService', () => {
     expect(tx.session.deleteMany).toHaveBeenCalledWith({
       where: { userId: 'p1' },
     });
+    expect(realtime.disconnectUser).toHaveBeenCalledWith('p1');
   });
 
   it('rejects bad input before touching the database', async () => {
@@ -184,6 +191,7 @@ describe('UsersService', () => {
       NotFoundException,
     );
     expect(tx.user.delete).not.toHaveBeenCalled();
+    expect(realtime.disconnectUser).not.toHaveBeenCalled();
 
     tx.user.findFirst.mockResolvedValueOnce({ id: 'u1' });
     tx.mediaFile.findMany.mockResolvedValueOnce([
@@ -207,6 +215,7 @@ describe('UsersService', () => {
       where: { OR: [{ senderId: 'u1' }, { recipientId: 'u1' }] },
     });
     expect(tx.user.delete).toHaveBeenCalledWith({ where: { id: 'u1' } });
+    expect(realtime.disconnectUser).toHaveBeenCalledWith('u1');
     expect(storage.remove.mock.calls).toEqual([['k1'], ['k2']]);
   });
 });

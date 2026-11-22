@@ -75,7 +75,9 @@
     "inbox": "Gelen Kutusu",
     "counselors": "Danışmanlar",
     "analytics": "Analitik",
-    "forums": "Forumlar"
+    "forums": "Forumlar",
+    "unread_one": "{{count}} okunmamış mesaj",
+    "unread_other": "{{count}} okunmamış mesaj"
   },
   "theme": {
     "label": "Görünüm",

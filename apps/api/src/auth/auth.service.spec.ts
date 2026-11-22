@@ -1,6 +1,7 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
@@ -13,7 +14,11 @@ describe('AuthService', () => {
     session: { create: jest.fn(), deleteMany: jest.fn() },
     $transaction: jest.fn(),
   };
-  const service = new AuthService(prisma as unknown as PrismaService);
+  const realtime = { disconnectSession: jest.fn(), disconnectUser: jest.fn() };
+  const service = new AuthService(
+    prisma as unknown as PrismaService,
+    realtime as unknown as RealtimeGateway,
+  );
 
   let passwordHash: string;
   const user = { id: 'u1', username: 'elif', active: true };
@@ -85,6 +90,7 @@ describe('AuthService', () => {
         }),
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(prisma.$transaction).not.toHaveBeenCalled();
+      expect(realtime.disconnectUser).not.toHaveBeenCalled();
     });
 
     it('stores a new hash, clears the flag, and ends other sessions', async () => {
@@ -108,6 +114,17 @@ describe('AuthService', () => {
         where: { userId: 'u1', id: { not: 's1' } },
       });
       expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      // the other logins' sockets close too; this one stays connected
+      expect(realtime.disconnectUser).toHaveBeenCalledWith('u1', 's1');
     });
+  });
+
+  it('logout ends this session and closes only its sockets', async () => {
+    await service.logout('s1');
+    expect(prisma.session.deleteMany).toHaveBeenCalledWith({
+      where: { id: 's1' },
+    });
+    expect(realtime.disconnectSession).toHaveBeenCalledWith('s1');
+    expect(realtime.disconnectUser).not.toHaveBeenCalled();
   });
 });

@@ -542,7 +542,7 @@
     },
     {
       "name": "Messages",
-      "description": "Private thread between a participant and their psychologist. Admins are not part of it.",
+      "description": "Private thread between a participant and their psychologist. Admins are not part of it.\n\nLive updates: new messages are announced over Socket.IO (Postman collections cannot store Socket.IO requests, so make one by hand). New → Socket.IO, URL `{{baseUrl}}`, Settings → Client version v4, Headers → `Cookie: sid=<value from a login>`. Under Events, listen to `messages`, then Connect. Send a message from another login to this user: a `messages` event arrives with no data, the cue to call GET /messages again. Without a valid cookie the connection is refused with UNAUTHORIZED.",
       "item": [
         {
           "name": "My thread (participant) / Inbox (psychologist)",

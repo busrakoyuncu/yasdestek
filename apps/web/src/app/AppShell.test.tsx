@@ -1,6 +1,8 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { io } from 'socket.io-client';
+import type { FakeSocket } from '@/test/fakeSocket';
 import { renderApp } from '@/test/render';
 import { AppShell } from './AppShell';
 import { RequireAuth } from './RequireAuth';
@@ -34,9 +36,22 @@ const area = [
 ];
 const mount = () => renderApp(<RequireAuth role="USER" />, '/app', area);
 
+// The participant's thread, as GET /messages answers it.
+let thread: object[] = [];
+const fromCounselor = (id: string, readAt: string | null = null) => ({
+  id,
+  senderId: 'p1',
+  recipientId: 'u1',
+  body: 'Merhaba',
+  readAt,
+  createdAt: '2026-11-22T10:00:00Z',
+});
+
 describe('AppShell', () => {
   beforeEach(() => {
-    // /auth/me answers the session, /modules the participant's modules
+    // /auth/me answers the session, /modules the participant's modules,
+    // /messages their thread
+    thread = [];
     vi.mocked(api.get)
       .mockReset()
       .mockImplementation((path: string) =>
@@ -46,7 +61,9 @@ describe('AppShell', () => {
                 { id: 'm1', title: 'Sözcüklerin Gücü' },
                 { id: 'm2', title: 'Mektup Yazma' },
               ]
-            : participant,
+            : path === '/messages'
+              ? thread
+              : participant,
         ),
       );
     vi.mocked(api.post).mockReset();
@@ -65,18 +82,32 @@ describe('AppShell', () => {
     ).toHaveAttribute('aria-current', 'page');
   });
 
-  it('lists each module under Modüller and Forumlar, and folds them away', async () => {
+  it('puts the general rules first', async () => {
+    mount();
+    const [sidebar] = await screen.findAllByRole('navigation', {
+      name: 'Menü',
+    });
+    expect(within(sidebar).getAllByRole('link')[0]).toHaveAccessibleName(
+      'Genel Kurallar',
+    );
+  });
+
+  it('lists each module under Modüller and Forumlar, folded at first', async () => {
     mount();
     const forums = await screen.findByRole('button', { name: 'Forumlar' });
+    const modules = screen.getByRole('button', { name: 'Modüller' });
     // home stays one click away through the wordmark
     expect(
       screen.getAllByRole('link', { name: 'Yasdestek' })[0],
     ).toHaveAttribute('href', '/app');
-    expect(forums).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('button', { name: 'Modüller' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
+    expect(forums).toHaveAttribute('aria-expanded', 'false');
+    expect(modules).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.queryByRole('link', { name: /Sözcüklerin Gücü/ }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(modules);
+    await userEvent.click(forums);
     // the same module, once to write and once to read the group
     const links = await screen.findAllByRole('link', {
       name: /Sözcüklerin Gücü/,
@@ -105,7 +136,9 @@ describe('AppShell', () => {
               },
               { id: 'g2', name: 'Boş grup', modules: [] },
             ]
-          : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
+          : path === '/messages'
+            ? []
+            : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
       ),
     );
     renderApp(<RequireAuth role="PSYCHOLOGIST" />, '/psychologist', [
@@ -115,13 +148,96 @@ describe('AppShell', () => {
       },
     ]);
     const forums = await screen.findByRole('button', { name: 'Forumlar' });
-    expect(forums).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(forums);
     // the group's name, then its modules; a group with none is left out
     expect(await screen.findByText('Salı grubu')).toBeInTheDocument();
     expect(screen.queryByText('Boş grup')).not.toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'Sözcüklerin Gücü' }),
     ).toHaveAttribute('href', '/psychologist/forums/g1/m1');
+  });
+
+  describe('unread messages', () => {
+    afterEach(() => {
+      document.title = 'Yasdestek';
+    });
+
+    it("counts the counselor's messages a participant has not read", async () => {
+      thread = [
+        fromCounselor('m1', '2026-11-22T10:05:00Z'),
+        fromCounselor('m2'),
+        fromCounselor('m3'),
+        // their own message is never "unread" for them
+        { ...fromCounselor('m4'), senderId: 'u1', recipientId: 'p1' },
+      ];
+      mount();
+      // in the sidebar and on the phone tab bar
+      expect(
+        await screen.findAllByRole('link', {
+          name: 'Mesajlar, 2 okunmamış mesaj',
+        }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('(2) Yasdestek');
+    });
+
+    it('adds up the inbox for a counselor, shown as 9+ above nine', async () => {
+      vi.mocked(api.get).mockImplementation((path: string) =>
+        Promise.resolve(
+          path === '/messages'
+            ? [
+                { id: 'u1', username: 'elif', active: true, unread: 7 },
+                { id: 'u2', username: 'can', active: true, unread: 5 },
+                { id: 'u3', username: 'ada', active: true, unread: 0 },
+              ]
+            : path === '/groups'
+              ? []
+              : { ...participant, role: 'PSYCHOLOGIST', groupId: null },
+        ),
+      );
+      renderApp(<RequireAuth role="PSYCHOLOGIST" />, '/psychologist', [
+        {
+          element: <AppShell role="PSYCHOLOGIST" />,
+          children: [{ index: true, element: <p>Katılımcı listesi</p> }],
+        },
+      ]);
+      const inbox = await screen.findByRole('link', {
+        name: 'Gelen Kutusu, 12 okunmamış mesaj',
+      });
+      expect(inbox).toHaveTextContent('9+');
+      expect(document.title).toBe('(12) Yasdestek');
+      // on a phone the menu button carries a dot and says why
+      expect(
+        screen.getByRole('button', { name: 'Menü, 12 okunmamış mesaj' }),
+      ).toBeInTheDocument();
+    });
+
+    it('updates live when the server says messages changed', async () => {
+      mount();
+      expect(
+        await screen.findAllByRole('link', { name: 'Mesajlar' }),
+      ).toHaveLength(2);
+
+      // the counselor writes; the server rings this participant's socket
+      thread = [fromCounselor('m1')];
+      const live = vi.mocked(io).mock.results.at(-1)!.value as FakeSocket;
+      act(() => live.serverSends('messages'));
+
+      expect(
+        await screen.findAllByRole('link', {
+          name: 'Mesajlar, 1 okunmamış mesaj',
+        }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('(1) Yasdestek');
+    });
+
+    it('shows nothing when everything is read', async () => {
+      thread = [fromCounselor('m1', '2026-11-22T10:05:00Z')];
+      mount();
+      expect(
+        await screen.findAllByRole('link', { name: 'Mesajlar' }),
+      ).toHaveLength(2);
+      expect(document.title).toBe('Yasdestek');
+    });
   });
 
   it('is night by default and remembers a switch to light', async () => {

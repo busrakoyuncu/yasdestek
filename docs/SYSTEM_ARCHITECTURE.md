@@ -27,7 +27,7 @@ How the monorepo's parts run in production on the existing DigitalOcean droplet,
 ## 2. Caddy (reverse proxy)
 
 - Serves the built frontend (`apps/web/dist`) as static files at `/`.
-- Proxies `/api/*` to the NestJS container.
+- Proxies `/api/*` to the NestJS container, including the WebSocket upgrade of the live channel at `/api/socket.io` (Caddy passes upgrades through by default).
 - **Automatic HTTPS**: obtains and renews Let's Encrypt certificates itself - no certbot, no renewal cron.
 - Config is a ~10-line `Caddyfile`, versioned in the repo.
 

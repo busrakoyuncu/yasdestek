@@ -7,11 +7,15 @@ import type { ChangePasswordInput, LoginInput } from '@yasdestek/shared';
 import * as argon2 from 'argon2';
 import { CurrentUser } from '../common/current-user';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { SESSION_TTL_MS } from './auth.constants';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly realtime: RealtimeGateway,
+  ) {}
 
   // Verifies the credentials and opens a session.
   async login({
@@ -41,12 +45,15 @@ export class AuthService {
     return { sessionId: session.id, user: session.user };
   }
 
+  // Ends this login only, with its open sockets; other devices stay signed in.
   async logout(sessionId: string): Promise<void> {
     await this.prisma.session.deleteMany({ where: { id: sessionId } });
+    this.realtime.disconnectSession(sessionId);
   }
 
   // Sets a new password, clears the must-change flag, and ends every other
-  // session of this user so a stolen temporary password stops working.
+  // session of this user (and its sockets) so a stolen temporary password
+  // stops working.
   async changePassword(
     userId: string,
     sessionId: string,
@@ -71,5 +78,6 @@ export class AuthService {
         where: { userId, id: { not: sessionId } },
       }),
     ]);
+    this.realtime.disconnectUser(userId, sessionId);
   }
 }
