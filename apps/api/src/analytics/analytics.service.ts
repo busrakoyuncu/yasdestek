@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CurrentUser } from '../common/current-user';
 import { PrismaService } from '../prisma/prisma.service';
 
 export type ModuleStatus = 'not_started' | 'in_progress' | 'completed';
@@ -12,8 +13,9 @@ function statusOf(
   return response.published ? 'completed' : 'in_progress';
 }
 
-// Admin views only. Reads across every psychologist, so no scoping here;
-// the controller limits the role.
+// Mostly admin views, reading across every psychologist; the controller
+// limits the role. latestSteps is also open to psychologists and scopes
+// itself to their own participants.
 @Injectable()
 export class AnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -38,6 +40,34 @@ export class AnalyticsService {
         },
       },
     });
+  }
+
+  // Where each participant is now: the module they last saved or shared in,
+  // with its status. Participants with no response yet are left out. A
+  // psychologist sees only their own participants.
+  async latestSteps(me: CurrentUser) {
+    const responses = await this.prisma.response.findMany({
+      where: {
+        deletedAt: null,
+        user:
+          me.role === 'ADMIN'
+            ? { role: 'USER' }
+            : { role: 'USER', psychologistId: me.id },
+      },
+      orderBy: { updatedAt: 'desc' },
+      distinct: ['userId'],
+      select: {
+        userId: true,
+        published: true,
+        deletedAt: true,
+        module: { select: { id: true, title: true } },
+      },
+    });
+    return responses.map(({ userId, module, ...response }) => ({
+      userId,
+      module,
+      status: statusOf(response),
+    }));
   }
 
   // One participant: their group's modules in order, each with a status.

@@ -77,6 +77,9 @@ describe('Analytics (e2e)', () => {
     });
     await account('u1', 'USER', { psychologistId: ids.p1, groupId: g1.id });
     await account('u2', 'USER', { psychologistId: ids.p1 });
+    // another psychologist's participant, with a response of their own
+    await account('p2', 'PSYCHOLOGIST');
+    await account('u3', 'USER', { psychologistId: ids.p2 });
     const base = await prisma.module.findFirstOrThrow({
       where: { isBase: true, order: 1 },
     });
@@ -101,7 +104,15 @@ describe('Analytics (e2e)', () => {
     await prisma.response.create({
       data: { userId: ids.u1, moduleId: own.id, text: 'taslak' },
     });
-    for (const name of ['admin', 'p1']) cookies[name] = await login(name);
+    await prisma.response.create({
+      data: {
+        userId: ids.u3,
+        moduleId: base.id,
+        text: 'paylaşıldı',
+        published: true,
+      },
+    });
+    for (const name of ['admin', 'p1', 'u1']) cookies[name] = await login(name);
   });
 
   afterAll(async () => {
@@ -117,6 +128,39 @@ describe('Analytics (e2e)', () => {
     await api()
       .get(`/analytics/users/${ids.u1}`)
       .set('Cookie', cookies.p1)
+      .expect(403);
+  });
+
+  it("gives a psychologist their own participants' latest step only", async () => {
+    type Step = { userId: string; module: { id: string }; status: string };
+    const steps = async (cookie: string) =>
+      (
+        (
+          await api()
+            .get('/analytics/participants')
+            .set('Cookie', cookie)
+            .expect(200)
+        ).body as Step[]
+      ).filter((s) => [ids.u1, ids.u2, ids.u3].includes(s.userId));
+
+    // u1 has a draft; u2 wrote nothing; u3 belongs to p2
+    expect(await steps(cookies.p1)).toEqual([
+      {
+        userId: ids.u1,
+        module: expect.objectContaining({ id: ids.own }) as object,
+        status: 'in_progress',
+      },
+    ]);
+    const all = await steps(cookies.admin);
+    expect(all.map((s) => [s.userId, s.status]).sort()).toEqual(
+      [
+        [ids.u1, 'in_progress'],
+        [ids.u3, 'completed'],
+      ].sort(),
+    );
+    await api()
+      .get('/analytics/participants')
+      .set('Cookie', cookies.u1)
       .expect(403);
   });
 
