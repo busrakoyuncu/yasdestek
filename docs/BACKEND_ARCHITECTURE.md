@@ -15,6 +15,7 @@ The backend is a single REST API in `apps/api`, serving all three roles. It owns
 | Password hashing | argon2 |
 | Validation | zod schemas shared with the frontend via `packages/shared` |
 | Rate limiting | NestJS throttler (login endpoint) |
+| Live updates | Socket.IO through `@nestjs/websockets`, on the api's own port at `/socket.io` |
 | Tests | Jest (unit) + supertest (endpoint/permission tests) |
 | Logging | NestJS logger, structured request/error logs |
 
@@ -36,6 +37,7 @@ apps/api/src/
 ├── forum/         # group×module forum reads, comments, moderation
 ├── messages/      # participant↔psychologist threads, inbox, read marks
 ├── analytics/     # admin views: psychologists → users → progress
+├── realtime/      # Socket.IO gateway: session handshake, per-user rooms, notify, disconnect (global module)
 ├── storage/       # the only S3 client (global module)
 ├── prisma/        # PrismaService (global module)
 ├── common/        # exception filter, zod validation pipe, roles guard, current user, password generator
@@ -75,6 +77,8 @@ Hard delete exists only as an explicit admin action for privacy requests: `DELET
   - Accounts are provisioned top-down; the creation flow **generates** a 12-character password from an unambiguous alphabet, shown once to the creator.
   - `mustChangePassword` is set on creation and on every reset. The session guard then allows only `/auth/change-password`, `/auth/logout`, and `/auth/me` (routes marked `@AllowPasswordChangePending()`); everything else answers 403 `PASSWORD_CHANGE_REQUIRED`. Only argon2 hashes are ever stored.
   - **No email in the system.** Forgotten passwords flow up the hierarchy: psychologist resets their users, admin resets psychologists, admin recovery via `pnpm --filter api reset-password <username>` on the server (`node dist/scripts/reset-password.js` in production).
+- **Sockets use the same session.** The Socket.IO handshake carries the `sid` cookie; the gateway resolves it with `findSessionUser` (`auth/session-user.ts`), the same lookup the session guard uses, so unknown, expired, and inactive sessions are refused the same way. A pending password change is refused too. A refused handshake gets `connect_error` with `UNAUTHORIZED` and never connects.
+- **Ending a session closes its sockets,** right after the database change: logout closes that login's sockets only, a password change closes every other login's, and deactivation, a password reset, and hard delete close all of the user's. The CLI `reset-password` script runs outside the server and cannot reach sockets; admins receive no events, so nothing leaks.
 - **Login errors:** unknown username and wrong password both answer 401 `INVALID_CREDENTIALS`; an inactive account answers 401 `ACCOUNT_INACTIVE` only after the password checks out.
 - **Login rate limiting:** 10 attempts per IP per minute via the NestJS throttler, 429 `TOO_MANY_REQUESTS`. Express trusts one proxy hop so the IP behind Caddy is the client's.
 
@@ -143,7 +147,22 @@ GET    /analytics/users/:id                 A: assigned modules with status not_
 
 - **Validation:** every body is validated by the shared zod schema through one reusable validation pipe (`@Body(new ZodValidationPipe(schema))`). Unknown keys are dropped. Frontend forms validate with identical rules.
 - **Error shape:** one exception filter emits `{ code, message }` consistently; the frontend maps `code` to translated messages. Codes derive from the HTTP status (`NOT_FOUND`, `FORBIDDEN`, ...) unless a route sets a specific one (`VALIDATION_ERROR`, `INVALID_CREDENTIALS`, `ACCOUNT_INACTIVE`, `PASSWORD_CHANGE_REQUIRED`, `USERNAME_TAKEN`, `PSYCHOLOGIST_REQUIRED`, `BASE_MODULE`, `MODULE_IN_USE`, `UNSUPPORTED_FILE_TYPE`, `FILE_TOO_LARGE`, `FILE_REQUIRED`, `RANGE_NOT_SATISFIABLE`, `RECIPIENT_REQUIRED`, `TOO_MANY_REQUESTS`). Unexpected errors are logged and answered with a generic 500.
-- **Postman:** `apps/api/postman/yasdestek.postman_collection.json` holds every request above with example bodies.
+- **Postman:** `apps/api/postman/yasdestek.postman_collection.json` holds every request above with example bodies. The Messages folder describes how to watch the socket with a Postman Socket.IO request.
+
+### Live updates (Socket.IO)
+
+A doorbell, not a data channel. Every event only says "this changed"; the browser then asks the REST api again, where the ownership checks live. Clients send nothing over the socket.
+
+- **Rooms:** each socket joins `user:<id>` (all of a person's tabs and devices) and `session:<id>` (one login). `RealtimeGateway.notify(userIds, event)` emits to the users' rooms; an empty list emits nothing (Socket.IO would read it as everyone).
+- **Events:**
+
+```
+messages    MessagesService.send → sender and recipient (the sender's other tabs update too)
+            MessagesService.markRead → the reader only (their other tabs' unread counts)
+```
+
+- **One server instance** is assumed: rooms live in memory. Several api instances would need the Socket.IO Redis adapter.
+- **Proxy:** Caddy passes the WebSocket upgrade through on `/api/*` without extra config; in development Vite's `/api` proxy has `ws: true`.
 
 ## 7. File Handling
 
@@ -171,6 +190,7 @@ Existing rows are never overwritten, so admin edits survive a re-seed.
 ## 10. Testing Strategy
 
 - **Unit (Jest):** every service has a spec with Prisma mocked - activation chain, password flows, scoping filters per role, soft-delete placeholder, file rules, status derivation.
+- **Sockets (socket.io-client):** `test/realtime.e2e-spec.ts` starts the app on a free port and connects like a browser: refused handshakes, a message reaches both sides and nobody else, and logout, deactivation, and password change close the right sockets.
 - **Endpoint (supertest):** one e2e file per feature, built around adversarial permission tests: wrong role on every endpoint, cross-psychologist and cross-group attempts (expected 404), deactivated-session rejection, inactive-user login, the forced password change, the rate limit. Files run against the real Garage container.
 - **Test database:** the e2e global setup (`test/global-setup.ts`) derives `<db>_test` from `DATABASE_URL`, drops and recreates it, runs `prisma migrate deploy` and the seed, and points every worker at it. Dev data is never touched. Each e2e file prefixes the accounts it creates and deletes them afterwards.
 - **Running:** `pnpm test` and `pnpm test:e2e` from the repo root; e2e needs `docker compose up -d`. ts-jest compiles tests through `tsconfig.spec.json` (CommonJS) so Jest can load the generated Prisma client.

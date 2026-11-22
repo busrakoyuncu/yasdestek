@@ -64,7 +64,7 @@ The full Turkish prompt texts exist in the thesis (Appendix M) and are used as t
 
 ### 4.2.0 General rules page
 - A platform-wide **"Genel Kurallar"** page (as on the original thesis site) holds the interaction rules: constructive commenting, supportive language, etc.
-- Admin-editable; always reachable from the app's sidebar for all roles.
+- Admin-editable; always reachable from the app's sidebar for all roles, as its first item.
 
 ### 4.2.1 Module assignment
 - Modules are assigned at the **group level**: the psychologist assigns a module to a group and all members receive it together (matching how the thesis ran groups through modules in sync).
@@ -100,6 +100,7 @@ Each module has two switches, images and audio, both off by default. Whoever edi
 - A user can write a **private message to their psychologist** for any issue (questions, distress, technical problems) - separate from the group forum.
 - The psychologist has a **message inbox** showing conversations with their users, with unread indicators.
 - Modeled as one continuous conversation thread per user↔psychologist pair; the psychologist can reply in the same thread.
+- New messages appear live, without reloading. The number of unread messages shows on "Gelen Kutusu" (psychologist) and "Mesajlar" (user), and in the browser tab title.
 - Scope rules: a user can only message their own psychologist; a psychologist only their own users. (Psychologist↔admin messaging: not in v1 unless decided otherwise.)
 
 ## 7. Analytics (Admin)

@@ -43,7 +43,7 @@ apps/web/src/
 │   ├── messages/         # participant thread and counselor inbox
 │   └── analytics/        # admin overview of counselors, participants and progress
 ├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, shadcn primitives under ui/
-├── lib/                  # api client, i18n setup, query client, error messages, theme, install offer, cn
+├── lib/                  # api client, i18n setup, query client, error messages, theme, install offer, live socket, cn
 ├── locales/              # tr.json (source of truth), en.json, de.json
 ├── test/                 # vitest setup and the renderApp helper
 └── types/                # local types; shared contracts come from packages/shared
@@ -69,6 +69,8 @@ Rules:
 - The welcome page is a door, not marketing (public pages are a non-goal in the PRD). It has no copy beyond the greeting.
 - `RequireAuth` is a layout route in front of each area: it shows the loading screen while the session is unknown, sends visitors to login with a `redirect` back, sends a pending password change to that screen, and sends the wrong role to its own home.
 - Under the guard, `AppShell` frames every signed-in screen: sidebar and top bar on desktop; for participants a bottom tab bar on phones, for the other roles the sidebar behind a menu button. The user menu holds the theme choice and sign out; the language switch sits beside it.
+- Every menu starts with "Genel Kurallar". Items with a list of links under them (a participant's "Modüller" and "Forumlar", a counselor's "Forumlar") start folded and open with their arrow.
+- Unread messages: `useUnreadCount` (in `features/messages`) adds up the counselor's inbox or counts a participant's unread messages from their counselor. The count shows as a gold badge on "Gelen Kutusu" / "Mesajlar" ("9+" above nine, the full number for screen readers), as a dot on a counselor's phone menu button, and in the tab title: "(3) Yasdestek".
 - Each area is one file in `app/areas/`, a lazily loaded chunk that renders its own `<Routes>` composed from feature screens, so participants do not download admin code and features never import each other. The nav lists per role are in `app/navigation.ts`.
 - Unknown paths go to the welcome page.
 - The guard is UX only - every permission is enforced again by the API.
@@ -78,6 +80,7 @@ Rules:
 Two kinds of state, handled differently:
 
 - **Server state** (modules, posts, comments, users - anything from the database): TanStack Query. Caching, loading/error states, refetching, and post-mutation invalidation come from the library. Query keys follow `[domain, ...scope]`, e.g. `['forum', groupId, moduleId]`.
+- **Live updates:** `useRealtime` (`lib/realtime.ts`), mounted once by `AppShell`, opens one Socket.IO connection at `/api/socket.io` while someone is signed in; the session cookie rides along with the handshake. A server event only marks queries stale (`messages` → every `['messages', ...]` query), so open screens reload through the api; after a reconnect they reload once to catch what was missed. No polling. A socket the server closed (logout, deactivation) stays closed until the next sign-in.
 - **Client state** (open dialogs, form drafts, recording status): local `useState`, plus one context for the authenticated session. No global store until a concrete cross-page need appears; Zustand is the designated escape hatch.
 
 ## 5. Forms & Validation
@@ -140,7 +143,7 @@ One pattern app-wide:
 ## 12. Testing Strategy
 
 - **Vitest + React Testing Library** for components and hooks. Priority targets: permission-dependent UI (who sees which buttons), form validation, audio recorder state machine, i18n rendering.
-- Tests live next to the file they cover and render through `test/render.tsx`, which mounts the element inside the real query client and a memory router with a catch-all route, so navigation is asserted on the router. The api module is mocked per test file; vendored browser-only code (the firefly canvas) is mocked because jsdom has no canvas. Assertions use roles and the Turkish copy, which the setup file forces.
+- Tests live next to the file they cover and render through `test/render.tsx`, which mounts the element inside the real query client and a memory router with a catch-all route, so navigation is asserted on the router. The api module is mocked per test file; `socket.io-client` is mocked for every test in the setup file with a fake (`test/fakeSocket.ts`) that lets a test play the server (`serverSends('messages')`, `reconnects()`); vendored browser-only code (the firefly canvas) is mocked because jsdom has no canvas. Assertions use roles and the Turkish copy, which the setup file forces.
 - Not tested: static rendering with no logic.
 - **Playwright** later, few tests, critical journeys only: login per role, complete a module (text + audio), post and moderate a comment, activate a user.
 

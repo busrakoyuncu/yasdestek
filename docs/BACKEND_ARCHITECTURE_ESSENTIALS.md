@@ -70,6 +70,16 @@ Companion to `BACKEND_ARCHITECTURE.md`. For each decision: what we picked, why, 
 
 **Why not GraphQL:** built for many clients with divergent data needs; one SPA doesn't have that problem, and it adds a query language, resolver layer, and caching complexity. **Why not tRPC:** impressive DX but couples frontend and backend tightly and bypasses the REST knowledge worth learning here.
 
+## Socket.IO as a doorbell, not polling
+
+**Chosen:** a Socket.IO gateway on the api that only announces "messages changed"; the browser reloads through REST.
+
+**Why not polling:** every open screen asked every 30 seconds, so a reply could take half a minute to appear and nearly every request answered "nothing new".
+
+**Why the socket carries no data:** the permission checks (who may read which thread) stay in one place, the REST api. A dropped connection loses nothing: the client reloads once after reconnecting. Private text never travels on a second channel.
+
+**Why Socket.IO, not plain WebSockets or SSE:** Server-Sent Events would be enough for one-way pushes, but Socket.IO brings reconnects, rooms (one per user and per login, which makes "close this login's sockets" one line), and a polling fallback behind strict networks. It is also the common choice in NestJS and room to grow into live forum comments.
+
 ## Shared zod validation
 
 **Chosen:** request schemas live in `packages/shared`; one NestJS validation pipe applies them; the React forms use the identical schemas.
