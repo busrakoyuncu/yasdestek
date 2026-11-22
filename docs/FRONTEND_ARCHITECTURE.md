@@ -34,7 +34,7 @@ apps/web/src/
 │   └── areas/            # one file per role area: its routes, composed from features (lazy chunks)
 ├── features/
 │   ├── welcome/          # landing page: forest image, firefly canvas, Continue
-│   ├── auth/             # login, password change, session query, role home map
+│   ├── auth/             # login, password change, session query, role home and landing maps
 │   ├── pages/            # editable platform pages (general rules)
 │   ├── people/           # accounts: list, create with one-time password, activate, reset, delete
 │   ├── modules/          # module list/detail, text editor, audio recorder, image upload
@@ -67,7 +67,7 @@ Rules:
 ```
 
 - The welcome page is a door, not marketing (public pages are a non-goal in the PRD). It has no copy beyond the greeting.
-- `RequireAuth` is a layout route in front of each area: it shows the loading screen while the session is unknown, sends visitors to login with a `redirect` back, sends a pending password change to that screen, and sends the wrong role to its own home.
+- `RequireAuth` is a layout route in front of each area: it shows the loading screen while the session is unknown, sends visitors to login with a `redirect` back, sends a pending password change to that screen, and sends the wrong role to its own first page.
 - Under the guard, `AppShell` frames every signed-in screen: sidebar and top bar on desktop; for participants a bottom tab bar on phones, for the other roles the sidebar behind a menu button. The user menu holds the theme choice and sign out; the language switch sits beside it.
 - Every menu starts with "Genel Kurallar". Items with a list of links under them (a participant's "Modüller" and "Forumlar", a counselor's "Forumlar") start folded and open with their arrow.
 - Unread messages: `useUnreadCount` (in `features/messages`) adds up the counselor's inbox or counts a participant's unread messages from their counselor. The count shows as a gold badge on "Gelen Kutusu" / "Mesajlar" ("9+" above nine, the full number for screen readers), as a dot on a counselor's phone menu button, and in the tab title: "(3) Yasdestek".
@@ -106,7 +106,7 @@ Two kinds of state, handled differently:
 
 ## 8. Home-Screen App (Manifest)
 
-- `public/manifest.webmanifest` gives the site an app identity: name, icons, night-navy background and theme color, `display: "standalone"` (opens full-screen without browser chrome). `start_url` is `/login`, which sends a signed-in person straight to their home screen.
+- `public/manifest.webmanifest` gives the site an app identity: name, icons, night-navy background and theme color, `display: "standalone"` (opens full-screen without browser chrome). `start_url` is `/login`, which sends a signed-in person straight to their first page.
 - Icons live in `public/` and are linked from `index.html`: `favicon.ico` (16, 32, 48) and `favicon-32.png` for the tab, `apple-touch-icon.png` (180) for iPhone and iPad, `icon-192.png` and `icon-512.png` for Android and desktop, and `icon-maskable-512.png`, which Android may crop to its own shape.
 - The install offer lives in the account menu as "Uygulamayı yükle" and is shown only when it can work (`lib/install.ts`, `useInstall()`):
   - Chrome and Edge: the `beforeinstallprompt` event is caught as soon as the page loads (`main.tsx` imports the module first) and kept; the menu item replays it with `prompt()`. Chrome's own install banner is suppressed so the offer appears only when asked for. Each event can be used once.
@@ -161,7 +161,7 @@ The level below folders: what one feature looks like, so the next one looks the 
 
 **Styling.** Tokens only (`bg-surface`, `text-glow`); no hex in components. shadcn primitives are added with the CLI into `components/ui` and restyled there once, not per usage. A page that needs the night theme puts `dark` on its root and passes `dark` to anything that portals. Participant screens are built phone-first and checked at 390px.
 
-**Navigation and session.** Routes are declared in `app/router.tsx` with `Component`, one line per screen; each role area is one lazily loaded chunk. `homeFor[role]` is the only place that knows where a role lands.
+**Navigation and session.** Routes are declared in `app/router.tsx` with `Component`, one line per screen; each role area is one lazily loaded chunk. `homeFor[role]` is each area's base address and home (the wordmark's link); `landingFor[role]` is the first page after signing in, the general rules for every role. Login, the password change and the wrong-role redirect use `landingFor`.
 
 **Tests.** One test per behaviour that can break: validation refusing bad input, the happy path calling the api with the right body and navigating, a known api error rendering its translated message. Rendering alone is not tested.
 

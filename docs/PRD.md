@@ -64,7 +64,7 @@ The full Turkish prompt texts exist in the thesis (Appendix M) and are used as t
 
 ### 4.2.0 General rules page
 - A platform-wide **"Genel Kurallar"** page (as on the original thesis site) holds the interaction rules: constructive commenting, supportive language, etc.
-- Admin-editable; always reachable from the app's sidebar for all roles, as its first item.
+- Admin-editable; always reachable from the app's sidebar for all roles, as its first item, and the first page every role sees after signing in.
 
 ### 4.2.1 Module assignment
 - Modules are assigned at the **group level**: the psychologist assigns a module to a group and all members receive it together (matching how the thesis ran groups through modules in sync).
@@ -106,6 +106,7 @@ Each module has two switches, images and audio, both off by default. Whoever edi
 ## 7. Analytics (Admin)
 
 - List of psychologists with their users.
+- Psychologists see their own participants' latest step too (the module last saved or shared in), next to who is waiting for their action (activation, first sign-in, a group).
 - Per-user process view: which modules are assigned, completed, in progress.
 
 ## 8. Language & Platform

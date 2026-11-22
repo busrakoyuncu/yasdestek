@@ -70,7 +70,8 @@ export function Thread({ userId, meId, emptyText }: Props) {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
       <div
-        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto"
+        // older messages fade out under the title instead of being cut
+        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pt-3 [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]"
         aria-live="polite"
       >
         {thread.isPending && (
@@ -99,7 +100,7 @@ export function Thread({ userId, meId, emptyText }: Props) {
             aria-label={day.format(new Date(date))}
             className="flex flex-col gap-2"
           >
-            <p className="py-2 text-center text-xs tracking-wide text-muted-foreground uppercase">
+            <p className="py-2 text-center text-sm text-muted-foreground">
               {day.format(new Date(date))}
             </p>
             {items.map((m) => {

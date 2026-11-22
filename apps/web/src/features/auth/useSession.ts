@@ -20,10 +20,19 @@ export const sessionQuery = queryOptions({
   retry: false,
 });
 
+// Each role's area: its base address and its home (the wordmark's link).
 export const homeFor: Record<Role, string> = {
   ADMIN: '/admin',
   PSYCHOLOGIST: '/psychologist',
   USER: '/app',
+};
+
+// The first page after signing in: the general rules, for every role, so
+// everyone starts from how the group treats each other.
+export const landingFor: Record<Role, string> = {
+  ADMIN: '/admin/rules',
+  PSYCHOLOGIST: '/psychologist/rules',
+  USER: '/app/rules',
 };
 
 const setUser = (user: CurrentUser | null) =>

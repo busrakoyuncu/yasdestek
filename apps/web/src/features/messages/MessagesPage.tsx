@@ -8,10 +8,11 @@ export function MessagesPage() {
   const { user } = useSession();
 
   return (
-    <div className="mx-auto flex min-h-[calc(100svh-10rem)] w-full max-w-2xl flex-col gap-4 md:min-h-[calc(100svh-7rem)]">
-      <h1 className="text-2xl font-semibold tracking-tight">
-        {t('messages.myCounselor')}
-      </h1>
+    // Exactly one screen tall (minus the top bar, the page padding and, on a
+    // phone, the tab bar), so only the messages scroll and the text box stays
+    // at the bottom.
+    <div className="mx-auto flex h-[calc(100dvh-12rem)] w-full max-w-2xl flex-col gap-4 md:h-[calc(100dvh-7rem)]">
+      <h1 className="title-page">{t('messages.myCounselor')}</h1>
       {user?.psychologistId ? (
         <Thread meId={user.id} emptyText={t('messages.emptyParticipant')} />
       ) : (

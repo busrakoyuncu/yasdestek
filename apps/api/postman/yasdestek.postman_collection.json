@@ -608,7 +608,7 @@
     },
     {
       "name": "Analytics",
-      "description": "Admin only.",
+      "description": "Admin only, except the participants' latest step, which psychologists may call for their own participants.",
       "item": [
         {
           "name": "Psychologists with participants",
@@ -616,6 +616,14 @@
             "method": "GET",
             "url": "{{baseUrl}}/analytics/psychologists",
             "description": "Every psychologist, their participants, and each participant's group."
+          }
+        },
+        {
+          "name": "Participants' latest step",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/analytics/participants",
+            "description": "Each participant's latest step: the module they last saved or shared in, with in_progress or completed. Admins get everyone; psychologists only their own participants. Participants who wrote nothing yet are left out."
           }
         },
         {

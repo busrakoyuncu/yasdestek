@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { PageLoading } from '@/components/PageLoading';
-import { homeFor, useSession } from '@/features/auth/useSession';
+import { landingFor, useSession } from '@/features/auth/useSession';
 import type { Role } from '@/types/user';
 
 // Layout route in front of one role's area. Decides once, from the session,
@@ -21,6 +21,7 @@ export function RequireAuth({ role }: { role: Role }) {
   }
   if (user.mustChangePassword)
     return <Navigate to="/change-password" replace />;
-  if (user.role !== role) return <Navigate to={homeFor[user.role]} replace />;
+  if (user.role !== role)
+    return <Navigate to={landingFor[user.role]} replace />;
   return <Outlet />;
 }

@@ -142,6 +142,7 @@ POST   /messages                            U: to my psychologist; P: { recipien
 PATCH  /messages/:id/read                   recipient only
 
 GET    /analytics/psychologists             A
+GET    /analytics/participants              A: every participant; P: own participants. Latest step: the module last saved or shared in, with its status
 GET    /analytics/users/:id                 A: assigned modules with status not_started | in_progress | completed
 ```
 

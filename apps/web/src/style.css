@@ -83,6 +83,9 @@
 
   /* cards and modals round at lg/xl; buttons and tags are full pills */
   --radius: 1rem;
+
+  /* a faint grain on the page ground, so it reads as paper, not flat colour */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.106 0 0 0 0 0.145 0 0 0 0 0.251 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 .dark {
@@ -113,6 +116,8 @@
   --muted: var(--surface);
   --accent: var(--surface);
   --accent-foreground: var(--foreground);
+
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.933 0 0 0 0 0.949 0 0 0 0 1 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 @layer base {
@@ -121,5 +126,15 @@
   }
   body {
     @apply bg-background font-sans text-foreground;
+    background-image: var(--grain);
   }
+}
+
+/* A page's own title: large and light, so the app speaks softly. */
+@utility title-page {
+  font-size: clamp(2.125rem, 1.6rem + 1.8vw, 3rem);
+  line-height: 1.08;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }

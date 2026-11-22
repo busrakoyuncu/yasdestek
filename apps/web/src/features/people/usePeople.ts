@@ -18,6 +18,20 @@ export const peopleQuery = queryOptions({
   queryFn: () => api.get<Person[]>('/users'),
 });
 
+// Where each participant is now: the module they last saved or shared in.
+// Participants who wrote nothing yet are not in the list. The api scopes it:
+// a counselor gets only their own participants.
+export type LatestStep = {
+  userId: string;
+  module: { id: string; title: string };
+  status: 'in_progress' | 'completed';
+};
+
+export const latestStepsQuery = queryOptions({
+  queryKey: ['analytics', 'participants'],
+  queryFn: () => api.get<LatestStep[]>('/analytics/participants'),
+});
+
 // The four account actions. Each one changes the list, so each one refetches
 // it rather than patching the cache by hand.
 export function usePeopleActions() {

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { errorMessage } from '@/lib/errors';
+import { CounselorBoard } from './CounselorBoard';
 import { CreatePersonDialog } from './CreatePersonDialog';
 import { PeopleTable } from './PeopleTable';
 import { peopleQuery } from './usePeople';
@@ -25,7 +26,7 @@ export function PeoplePage({ role, admin }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="title-page">
           {t(participants ? 'nav.participants' : 'nav.counselors')}
         </h1>
         <CreatePersonDialog
@@ -50,7 +51,11 @@ export function PeoplePage({ role, admin }: Props) {
           </Button>
         </div>
       )}
-      {people.data && (
+      {/* a counselor's own participants: what needs them, then by group */}
+      {people.data && participants && !admin && rows.length > 0 && (
+        <CounselorBoard people={rows} />
+      )}
+      {people.data && (admin || !participants || rows.length === 0) && (
         <PeopleTable
           people={rows}
           counselors={admin && participants ? counselors : undefined}

@@ -49,14 +49,14 @@ describe('RequireAuth', () => {
     );
   });
 
-  it('sends the wrong role to its own area', async () => {
+  it('sends the wrong role to its own first page, the rules', async () => {
     vi.mocked(api.get).mockResolvedValue({
       ...participant,
       role: 'PSYCHOLOGIST',
     });
     const { router } = renderApp(<RequireAuth role="USER" />, '/app', area);
     await waitFor(() =>
-      expect(router.state.location.pathname).toBe('/psychologist'),
+      expect(router.state.location.pathname).toBe('/psychologist/rules'),
     );
   });
 
