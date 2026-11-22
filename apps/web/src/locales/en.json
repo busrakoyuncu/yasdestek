@@ -98,10 +98,7 @@
   },
   "people": {
     "columns": {
-      "username": "Username",
-      "status": "Status",
-      "counselor": "Counselor",
-      "created": "Created"
+      "username": "Username"
     },
     "status": {
       "active": "Active",
@@ -177,6 +174,21 @@
       "message": "Message",
       "unread_one": "{{name}}: {{count}} unread message",
       "unread_other": "{{name}}: {{count}} unread messages"
+    },
+    "list": {
+      "show": "Show",
+      "all": "All",
+      "search": "Search by name",
+      "counselor": "By counselor",
+      "allCounselors": "All counselors",
+      "noMatch": "Nobody matches this selection.",
+      "created": "Opened {{date}}",
+      "participantOf": "{{counselor}}, {{group}}",
+      "counselorOf": "{{people}}, {{groups}}",
+      "participants_one": "{{count}} participant",
+      "participants_other": "{{count}} participants",
+      "groups_one": "{{count}} group",
+      "groups_other": "{{count}} groups"
     }
   },
   "modules": {

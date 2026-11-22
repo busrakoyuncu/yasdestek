@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { errorMessage } from '@/lib/errors';
 import { CounselorBoard } from './CounselorBoard';
 import { CreatePersonDialog } from './CreatePersonDialog';
-import { PeopleTable } from './PeopleTable';
+import { PeopleList } from './PeopleList';
 import { peopleQuery } from './usePeople';
 
 type Props = {
@@ -14,8 +14,9 @@ type Props = {
   admin?: boolean;
 };
 
-// The people screens: the admin's counselors and participants, the
-// counselor's own participants. Same list, same table, filtered by role.
+// The people screens: the admin's counselors and participants as a quiet
+// list with filters, the counselor's own participants as a board of what
+// needs them and who is in which group.
 export function PeoplePage({ role, admin }: Props) {
   const { t } = useTranslation();
   const people = useQuery(peopleQuery);
@@ -55,11 +56,14 @@ export function PeoplePage({ role, admin }: Props) {
       {people.data && participants && !admin && rows.length > 0 && (
         <CounselorBoard people={rows} />
       )}
-      {people.data && (admin || !participants || rows.length === 0) && (
-        <PeopleTable
+      {people.data && !admin && rows.length === 0 && (
+        <p className="text-text-secondary">{t('people.empty.participants')}</p>
+      )}
+      {people.data && admin && (
+        <PeopleList
           people={rows}
-          counselors={admin && participants ? counselors : undefined}
-          canDelete={admin && participants}
+          everyone={people.data}
+          kind={participants ? 'participants' : 'counselors'}
           emptyMessage={t(
             participants
               ? 'people.empty.participants'
