@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '@/test/render';
@@ -65,18 +65,32 @@ describe('AppShell', () => {
     ).toHaveAttribute('aria-current', 'page');
   });
 
-  it('lists each module under Modüller and Forumlar, and folds them away', async () => {
+  it('puts the general rules first', async () => {
+    mount();
+    const [sidebar] = await screen.findAllByRole('navigation', {
+      name: 'Menü',
+    });
+    expect(within(sidebar).getAllByRole('link')[0]).toHaveAccessibleName(
+      'Genel Kurallar',
+    );
+  });
+
+  it('lists each module under Modüller and Forumlar, folded at first', async () => {
     mount();
     const forums = await screen.findByRole('button', { name: 'Forumlar' });
+    const modules = screen.getByRole('button', { name: 'Modüller' });
     // home stays one click away through the wordmark
     expect(
       screen.getAllByRole('link', { name: 'Yasdestek' })[0],
     ).toHaveAttribute('href', '/app');
-    expect(forums).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('button', { name: 'Modüller' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
+    expect(forums).toHaveAttribute('aria-expanded', 'false');
+    expect(modules).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.queryByRole('link', { name: /Sözcüklerin Gücü/ }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(modules);
+    await userEvent.click(forums);
     // the same module, once to write and once to read the group
     const links = await screen.findAllByRole('link', {
       name: /Sözcüklerin Gücü/,
@@ -115,7 +129,7 @@ describe('AppShell', () => {
       },
     ]);
     const forums = await screen.findByRole('button', { name: 'Forumlar' });
-    expect(forums).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(forums);
     // the group's name, then its modules; a group with none is left out
     expect(await screen.findByText('Salı grubu')).toBeInTheDocument();
     expect(screen.queryByText('Boş grup')).not.toBeInTheDocument();

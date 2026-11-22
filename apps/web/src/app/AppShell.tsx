@@ -211,8 +211,8 @@ function NavGroup({
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(true);
-  // The header shows where you are, even with the list folded away.
+  // Starts folded; the header shows where you are even then.
+  const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const inside = links.some(
     (link) =>
