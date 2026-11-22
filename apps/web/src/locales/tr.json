@@ -155,6 +155,28 @@
       "body": "Yazdıkları, ses kayıtları, görselleri, yorumları ve mesajları geri getirilemez biçimde silinir. Bu işlem yalnızca gizlilik talepleri içindir.",
       "confirm": "Kalıcı olarak sil",
       "done": "Hesap silindi"
+    },
+    "board": {
+      "waiting": "Sizi bekleyenler",
+      "task": {
+        "activate": "Hesabı hazır, henüz etkinleştirilmedi.",
+        "firstLogin": "Geçici şifresiyle henüz giriş yapmadı.",
+        "noGroup": "Henüz bir gruba eklenmedi."
+      },
+      "newPassword": "Yeni geçici şifre",
+      "addToGroup": "Gruba ekle",
+      "ungrouped": "Grupsuz",
+      "members_one": "{{count}} kişi",
+      "members_other": "{{count}} kişi",
+      "noLogin": "Henüz giriş yapmadı",
+      "notStarted": "Henüz yazmaya başlamadı",
+      "step": {
+        "in_progress": "{{module}}: taslak",
+        "completed": "{{module}}: paylaşıldı"
+      },
+      "message": "Mesaj",
+      "unread_one": "{{name}}: {{count}} okunmamış mesaj",
+      "unread_other": "{{name}}: {{count}} okunmamış mesaj"
     }
   },
   "modules": {

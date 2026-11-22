@@ -155,6 +155,28 @@
       "body": "Their writing, recordings, images, comments and messages are erased and cannot be recovered. This is only for privacy requests.",
       "confirm": "Delete permanently",
       "done": "Account deleted"
+    },
+    "board": {
+      "waiting": "Waiting for you",
+      "task": {
+        "activate": "Account ready, not activated yet.",
+        "firstLogin": "Has not signed in with the temporary password yet.",
+        "noGroup": "Not in a group yet."
+      },
+      "newPassword": "New temporary password",
+      "addToGroup": "Add to a group",
+      "ungrouped": "No group",
+      "members_one": "{{count}} person",
+      "members_other": "{{count}} people",
+      "noLogin": "Not signed in yet",
+      "notStarted": "Has not started writing yet",
+      "step": {
+        "in_progress": "{{module}}: draft",
+        "completed": "{{module}}: shared"
+      },
+      "message": "Message",
+      "unread_one": "{{name}}: {{count}} unread message",
+      "unread_other": "{{name}}: {{count}} unread messages"
     }
   },
   "modules": {

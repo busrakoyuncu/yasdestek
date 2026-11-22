@@ -155,6 +155,28 @@
       "body": "Texte, Aufnahmen, Bilder, Kommentare und Nachrichten werden unwiderruflich gelöscht. Nur für Datenschutzanfragen.",
       "confirm": "Endgültig löschen",
       "done": "Konto gelöscht"
+    },
+    "board": {
+      "waiting": "Wartet auf Sie",
+      "task": {
+        "activate": "Konto bereit, noch nicht aktiviert.",
+        "firstLogin": "Hat sich mit dem vorläufigen Passwort noch nicht angemeldet.",
+        "noGroup": "Noch in keiner Gruppe."
+      },
+      "newPassword": "Neues vorläufiges Passwort",
+      "addToGroup": "Einer Gruppe hinzufügen",
+      "ungrouped": "Ohne Gruppe",
+      "members_one": "{{count}} Person",
+      "members_other": "{{count}} Personen",
+      "noLogin": "Noch nicht angemeldet",
+      "notStarted": "Hat noch nicht zu schreiben begonnen",
+      "step": {
+        "in_progress": "{{module}}: Entwurf",
+        "completed": "{{module}}: geteilt"
+      },
+      "message": "Nachricht",
+      "unread_one": "{{name}}: {{count}} ungelesene Nachricht",
+      "unread_other": "{{name}}: {{count}} ungelesene Nachrichten"
     }
   },
   "modules": {
