@@ -37,7 +37,7 @@ apps/web/src/
 │   ├── auth/             # login, password change, session query, role home and landing maps
 │   ├── pages/            # editable platform pages (general rules)
 │   ├── people/           # accounts: list, create with one-time password, activate, reset, delete
-│   ├── modules/          # module list/detail, text editor, audio recorder, image upload
+│   ├── modules/          # participant module list/detail, text editor, audio recorder, image upload; the counselor's and admin's module list with each module's view and form at its own address
 │   ├── forum/            # group forum: posts, comments, moderation actions
 │   ├── groups/           # the counselor's groups: a list, and one group at its own address with members and modules
 │   ├── messages/         # participant thread and counselor inbox
