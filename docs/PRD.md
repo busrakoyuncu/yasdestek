@@ -107,7 +107,7 @@ Each module has two switches, images and audio, both off by default. Whoever edi
 
 - List of psychologists with their users.
 - Psychologists see their own participants' latest step too (the module last saved or shared in), next to who is waiting for their action (activation, first sign-in, a group).
-- Per-user process view: which modules are assigned, completed, in progress.
+- Per-group progress view: for each group, every participant's state in each assigned module (completed, in progress, not started), so a whole group can be compared at a glance.
 
 ## 8. Language & Platform
 

@@ -141,7 +141,7 @@ GET    /messages/:userId                    P: thread with one participant
 POST   /messages                            U: to my psychologist; P: { recipientId } must be an own participant
 PATCH  /messages/:id/read                   recipient only
 
-GET    /analytics/psychologists             A
+GET    /analytics/psychologists             A: every psychologist with their participants; each participant with their group and a status per module of it
 GET    /analytics/participants              A: every participant; P: own participants. Latest step: the module last saved or shared in, with its status
 GET    /analytics/users/:id                 A: assigned modules with status not_started | in_progress | completed
 ```
