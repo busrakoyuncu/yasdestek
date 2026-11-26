@@ -13,6 +13,43 @@ function statusOf(
   return response.published ? 'completed' : 'in_progress';
 }
 
+// What to read for a participant's progress: their group's modules in order,
+// and their responses.
+const progressSelect = {
+  group: {
+    select: {
+      id: true,
+      name: true,
+      modules: {
+        orderBy: { module: { order: 'asc' } },
+        select: { module: { select: { id: true, title: true, order: true } } },
+      },
+    },
+  },
+  responses: { select: { moduleId: true, published: true, deletedAt: true } },
+} as const;
+
+type ProgressRow = {
+  group: {
+    id: string;
+    name: string;
+    modules: { module: { id: string; title: string; order: number } }[];
+  } | null;
+  responses: { moduleId: string; published: boolean; deletedAt: Date | null }[];
+};
+
+// The group without its modules, and each of its modules with a status.
+function progressOf({ group, responses }: ProgressRow) {
+  const byModule = new Map(responses.map((r) => [r.moduleId, r]));
+  return {
+    group: group ? { id: group.id, name: group.name } : null,
+    modules: (group?.modules ?? []).map(({ module }) => ({
+      ...module,
+      status: statusOf(byModule.get(module.id)),
+    })),
+  };
+}
+
 // Mostly admin views, reading across every psychologist; the controller
 // limits the role. latestSteps is also open to psychologists and scopes
 // itself to their own participants.
@@ -20,9 +57,11 @@ function statusOf(
 export class AnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Every psychologist with their participants and each participant's group.
-  psychologists() {
-    return this.prisma.user.findMany({
+  // Every psychologist with their participants, and for each participant
+  // their group and a status per module of it. The whole overview in one
+  // request.
+  async psychologists() {
+    const psychologists = await this.prisma.user.findMany({
       where: { role: 'PSYCHOLOGIST' },
       orderBy: { username: 'asc' },
       select: {
@@ -31,15 +70,17 @@ export class AnalyticsService {
         active: true,
         users: {
           orderBy: { username: 'asc' },
-          select: {
-            id: true,
-            username: true,
-            active: true,
-            group: { select: { id: true, name: true } },
-          },
+          select: { id: true, username: true, active: true, ...progressSelect },
         },
       },
     });
+    return psychologists.map(({ users, ...psychologist }) => ({
+      ...psychologist,
+      users: users.map(({ group, responses, ...user }) => ({
+        ...user,
+        ...progressOf({ group, responses }),
+      })),
+    }));
   }
 
   // Where each participant is now: the module they last saved or shared in,
@@ -79,36 +120,17 @@ export class AnalyticsService {
         username: true,
         active: true,
         psychologist: { select: { id: true, username: true } },
-        group: {
-          select: {
-            id: true,
-            name: true,
-            modules: {
-              orderBy: { module: { order: 'asc' } },
-              select: {
-                module: { select: { id: true, title: true, order: true } },
-              },
-            },
-          },
-        },
-        responses: {
-          select: { moduleId: true, published: true, deletedAt: true },
-        },
+        ...progressSelect,
       },
     });
     if (!user) throw new NotFoundException();
 
-    const byModule = new Map(user.responses.map((r) => [r.moduleId, r]));
     return {
       id: user.id,
       username: user.username,
       active: user.active,
       psychologist: user.psychologist,
-      group: user.group ? { id: user.group.id, name: user.group.name } : null,
-      modules: (user.group?.modules ?? []).map(({ module }) => ({
-        ...module,
-        status: statusOf(byModule.get(module.id)),
-      })),
+      ...progressOf(user),
     };
   }
 }
