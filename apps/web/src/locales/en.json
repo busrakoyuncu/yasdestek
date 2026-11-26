@@ -203,6 +203,14 @@
     "new": "New module",
     "edit": "Edit",
     "delete": "Delete",
+    "attach": {
+      "none": "Writing only",
+      "images": "Writing and images",
+      "audio": "Writing and voice recordings",
+      "both": "Writing, images and voice recordings"
+    },
+    "notFound": "This module was not found. Pick one from the list.",
+    "all": "All modules",
     "form": {
       "createTitle": "New module",
       "editTitle": "Edit module",
@@ -216,6 +224,7 @@
       "question": "Question {{n}}",
       "addQuestion": "Add a question",
       "removeQuestion": "Remove question {{n}}",
+      "removeQuestionShort": "Remove",
       "attachmentsLabel": "Besides the text",
       "allowImages": "Participants may add images",
       "allowAudio": "Participants may add voice recordings",
@@ -234,6 +243,7 @@
       "done": "Module deleted"
     },
     "hide": {
+      "action": "Remove from my list",
       "title": "Remove {{title}} from your list?",
       "body": "The module is removed from your list and your groups only; other counselors keep using it. A module your participants have written on cannot be removed.",
       "confirm": "Remove",

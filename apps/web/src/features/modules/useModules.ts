@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import type { ModuleInput, UpdateModuleInput } from '@yasdestek/shared';
+import type { TFunction } from 'i18next';
 import { api } from '@/lib/api';
 import type { Role } from '@/types/user';
 
@@ -44,6 +45,30 @@ export const scopeOf = (module: Module): Scope =>
     : module.createdBy?.role === 'PSYCHOLOGIST'
       ? 'own'
       : 'global';
+
+// Where a module comes from, in words: "Temel", "Genel", "Kendi modülüm".
+// The admin sees a counselor's module by who made it.
+export function moduleSource(t: TFunction, module: Module, admin: boolean) {
+  const scope = scopeOf(module);
+  if (admin && scope === 'own' && module.createdBy) {
+    return t('modules.by', { name: module.createdBy.username });
+  }
+  return t(`modules.scope.${scope}`);
+}
+
+// What the caller may do with a module. The admin owns the global ones and
+// edits them for everyone; base modules are never deleted. A counselor may
+// change every module they see: editing a shared one makes their own copy,
+// deleting it hides it for them only.
+export function permissionsOf(module: Module, admin: boolean) {
+  const mayEdit = !admin || scopeOf(module) !== 'own';
+  return {
+    mayEdit,
+    mayDelete: !admin || (mayEdit && !module.isBase),
+    // for a counselor, a module that belongs to everyone, not to them
+    shared: !admin && scopeOf(module) !== 'own',
+  };
+}
 
 // Every module the caller may see, in participant order. The api scopes it.
 export const modulesQuery = queryOptions({

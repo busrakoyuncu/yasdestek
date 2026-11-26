@@ -203,6 +203,14 @@
     "new": "Yeni modül",
     "edit": "Düzenle",
     "delete": "Sil",
+    "attach": {
+      "none": "Yalnızca yazı",
+      "images": "Yazı ve görsel",
+      "audio": "Yazı ve ses kaydı",
+      "both": "Yazı, görsel ve ses kaydı"
+    },
+    "notFound": "Bu modül bulunamadı. Listeden bir modül seçin.",
+    "all": "Tüm modüller",
     "form": {
       "createTitle": "Yeni modül",
       "editTitle": "Modülü düzenle",
@@ -216,6 +224,7 @@
       "question": "{{n}}. soru",
       "addQuestion": "Soru ekle",
       "removeQuestion": "{{n}}. soruyu kaldır",
+      "removeQuestionShort": "Kaldır",
       "attachmentsLabel": "Yazıya ek olarak",
       "allowImages": "Katılımcılar görsel ekleyebilsin",
       "allowAudio": "Katılımcılar ses kaydı ekleyebilsin",
@@ -234,6 +243,7 @@
       "done": "Modül silindi"
     },
     "hide": {
+      "action": "Listemden kaldır",
       "title": "{{title}} listenizden kaldırılsın mı?",
       "body": "Modül yalnızca sizin listenizden ve gruplarınızdan kaldırılır; diğer danışmanlar kullanmaya devam eder. Katılımcılarınızın yanıt yazdığı bir modül kaldırılamaz.",
       "confirm": "Kaldır",
