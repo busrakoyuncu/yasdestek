@@ -415,12 +415,14 @@
     }
   },
   "analytics": {
-    "intro": "Each counselor's participants and how far they are in their modules. Open a participant to see their modules.",
+    "intro": "Each counselor's groups, and where every participant is in each module.",
     "participants_one": "{{count}} participant",
     "participants_other": "{{count}} participants",
-    "noGroup": "No group",
-    "notInGroup": "Not in a group yet.",
-    "noModules": "No modules assigned to their group yet.",
+    "participant": "Participant",
+    "shared": "Shared",
+    "moduleShort": "M{{n}}",
+    "ungrouped": "No group: {{names}}",
+    "noModules": "No modules assigned yet: {{names}}",
     "status": {
       "not_started": "Not started",
       "in_progress": "Draft",
