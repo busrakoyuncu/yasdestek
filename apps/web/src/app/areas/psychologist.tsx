@@ -15,6 +15,12 @@ export function Component() {
       <Route path="groups/:groupId" element={<GroupsPage />} />
       <Route path="forums/:groupId/:moduleId" element={<ForumPage />} />
       <Route path="modules" element={<ModulesPage />} />
+      <Route path="modules/new" element={<ModulesPage mode="new" />} />
+      <Route path="modules/:moduleId" element={<ModulesPage />} />
+      <Route
+        path="modules/:moduleId/edit"
+        element={<ModulesPage mode="edit" />}
+      />
       <Route path="inbox" element={<InboxPage />} />
       <Route path="inbox/:userId" element={<InboxPage />} />
       <Route path="rules" element={<RulesPage />} />

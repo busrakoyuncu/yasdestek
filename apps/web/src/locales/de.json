@@ -203,6 +203,14 @@
     "new": "Neues Modul",
     "edit": "Bearbeiten",
     "delete": "Löschen",
+    "attach": {
+      "none": "Nur Text",
+      "images": "Text und Bilder",
+      "audio": "Text und Sprachaufnahmen",
+      "both": "Text, Bilder und Sprachaufnahmen"
+    },
+    "notFound": "Dieses Modul wurde nicht gefunden. Wählen Sie eines aus der Liste.",
+    "all": "Alle Module",
     "form": {
       "createTitle": "Neues Modul",
       "editTitle": "Modul bearbeiten",
@@ -216,6 +224,7 @@
       "question": "Frage {{n}}",
       "addQuestion": "Frage hinzufügen",
       "removeQuestion": "Frage {{n}} entfernen",
+      "removeQuestionShort": "Entfernen",
       "attachmentsLabel": "Zusätzlich zum Text",
       "allowImages": "Teilnehmende dürfen Bilder hinzufügen",
       "allowAudio": "Teilnehmende dürfen Sprachaufnahmen hinzufügen",
@@ -234,6 +243,7 @@
       "done": "Modul gelöscht"
     },
     "hide": {
+      "action": "Aus meiner Liste entfernen",
       "title": "{{title}} aus Ihrer Liste entfernen?",
       "body": "Das Modul wird nur aus Ihrer Liste und Ihren Gruppen entfernt; andere Begleitungen arbeiten weiter damit. Ein Modul, zu dem Ihre Teilnehmenden geschrieben haben, kann nicht entfernt werden.",
       "confirm": "Entfernen",

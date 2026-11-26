@@ -11,6 +11,12 @@ export function Component() {
       <Route index element={<PeoplePage role="PSYCHOLOGIST" admin />} />
       <Route path="participants" element={<PeoplePage role="USER" admin />} />
       <Route path="modules" element={<ModulesPage />} />
+      <Route path="modules/new" element={<ModulesPage mode="new" />} />
+      <Route path="modules/:moduleId" element={<ModulesPage />} />
+      <Route
+        path="modules/:moduleId/edit"
+        element={<ModulesPage mode="edit" />}
+      />
       <Route path="analytics" element={<AnalyticsPage />} />
       <Route path="rules" element={<RulesPage />} />
     </Routes>
