@@ -245,6 +245,13 @@
     "new": "Neue Gruppe",
     "rename": "Umbenennen",
     "delete": "Gruppe löschen",
+    "waiting": "Ohne Gruppe",
+    "all": "Alle Gruppen",
+    "notFound": "Diese Gruppe wurde nicht gefunden. Wählen Sie eine aus der Liste.",
+    "blank": "Noch leer",
+    "summary": "{{people}}, {{modules}}",
+    "moduleCount_one": "{{count}} Modul",
+    "moduleCount_other": "{{count}} Module",
     "form": {
       "createTitle": "Neue Gruppe",
       "renameTitle": "Gruppe umbenennen",
@@ -262,9 +269,14 @@
       "placeholder": "Teilnehmer:in wählen",
       "noneLeft": "Keine freien Teilnehmenden zum Hinzufügen.",
       "remove": "{{name}} aus der Gruppe entfernen",
+      "removeShort": "Entfernen",
+      "leave": {
+        "title": "{{name}} aus der Gruppe entfernen?",
+        "body": "Das Geschriebene bleibt erhalten. Bis zur Aufnahme in eine Gruppe sind keine Module sichtbar.",
+        "confirm": "Aus der Gruppe entfernen"
+      },
       "added": "Mitglied hinzugefügt",
-      "removed": "Mitglied entfernt",
-      "inactive": "inaktiv"
+      "removed": "Mitglied entfernt"
     },
     "modules": {
       "title": "Zugewiesene Module",
@@ -273,6 +285,12 @@
       "placeholder": "Modul wählen",
       "noneLeft": "Keine weiteren Module zum Zuweisen.",
       "unassign": "{{title}} entfernen",
+      "unassignShort": "Entfernen",
+      "leave": {
+        "title": "{{title}} aus dieser Gruppe entfernen?",
+        "body": "Was in diesem Modul und seinem Forum geschrieben wurde, bleibt erhalten. Die Mitglieder sehen es erst wieder, wenn Sie das Modul erneut zuweisen.",
+        "confirm": "Modul entfernen"
+      },
       "assigned": "Modul zugewiesen",
       "unassigned": "Modul entfernt",
       "forum": "Forum für {{title}} öffnen",

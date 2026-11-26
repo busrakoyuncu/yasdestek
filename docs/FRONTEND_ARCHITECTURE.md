@@ -39,7 +39,7 @@ apps/web/src/
 │   ├── people/           # accounts: list, create with one-time password, activate, reset, delete
 │   ├── modules/          # module list/detail, text editor, audio recorder, image upload
 │   ├── forum/            # group forum: posts, comments, moderation actions
-│   ├── groups/           # the counselor's groups and their members
+│   ├── groups/           # the counselor's groups: a list, and one group at its own address with members and modules
 │   ├── messages/         # participant thread and counselor inbox
 │   └── analytics/        # admin overview of counselors, participants and progress
 ├── components/           # shared UI: LanguageSwitch, PageLoading, FireflySpinner, shadcn primitives under ui/

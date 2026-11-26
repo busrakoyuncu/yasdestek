@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import type { GroupInput } from '@yasdestek/shared';
+import type { TFunction } from 'i18next';
 import { api } from '@/lib/api';
 
 // A group as the api lists it: members and assigned modules ride along.
@@ -15,6 +16,17 @@ export type Group = {
   members: { id: string; username: string; active: boolean }[];
   modules: { module: { id: string; title: string; order: number } }[];
 };
+
+// "3 kişi, 2 modül", or "Henüz boş" for a group with neither.
+export function groupSummary(t: TFunction, group: Group) {
+  if (group.members.length === 0 && group.modules.length === 0) {
+    return t('groups.blank');
+  }
+  return t('groups.summary', {
+    people: t('people.board.members', { count: group.members.length }),
+    modules: t('groups.moduleCount', { count: group.modules.length }),
+  });
+}
 
 // The caller's groups (a counselor's own; an admin sees all).
 export const groupsQuery = queryOptions({

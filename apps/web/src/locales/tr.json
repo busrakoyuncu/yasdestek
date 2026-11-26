@@ -245,6 +245,13 @@
     "new": "Yeni grup",
     "rename": "Adı değiştir",
     "delete": "Grubu sil",
+    "waiting": "Grubu olmayanlar",
+    "all": "Tüm gruplar",
+    "notFound": "Bu grup bulunamadı. Listeden bir grup seçin.",
+    "blank": "Henüz boş",
+    "summary": "{{people}}, {{modules}}",
+    "moduleCount_one": "{{count}} modül",
+    "moduleCount_other": "{{count}} modül",
     "form": {
       "createTitle": "Yeni grup",
       "renameTitle": "Grup adını değiştir",
@@ -262,9 +269,14 @@
       "placeholder": "Katılımcı seçin",
       "noneLeft": "Gruba eklenecek boşta katılımcı yok.",
       "remove": "{{name}} üyelikten çıkar",
+      "removeShort": "Çıkar",
+      "leave": {
+        "title": "{{name}} gruptan çıkarılsın mı?",
+        "body": "Yazdıkları silinmez. Bir gruba yeniden eklenene kadar modülleri göremez.",
+        "confirm": "Gruptan çıkar"
+      },
       "added": "Üye eklendi",
-      "removed": "Üye çıkarıldı",
-      "inactive": "etkin değil"
+      "removed": "Üye çıkarıldı"
     },
     "modules": {
       "title": "Atanan modüller",
@@ -273,6 +285,12 @@
       "placeholder": "Modül seçin",
       "noneLeft": "Atanacak başka modül yok.",
       "unassign": "{{title}} modülünü kaldır",
+      "unassignShort": "Kaldır",
+      "leave": {
+        "title": "{{title}} bu gruptan kaldırılsın mı?",
+        "body": "Bu modülde yazılanlar ve forumu silinmez. Modülü yeniden atayana kadar üyeler bunları göremez.",
+        "confirm": "Modülü kaldır"
+      },
       "assigned": "Modül atandı",
       "unassigned": "Modül kaldırıldı",
       "forum": "{{title}} forumunu aç",
