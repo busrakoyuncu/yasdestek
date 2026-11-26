@@ -415,12 +415,14 @@
     }
   },
   "analytics": {
-    "intro": "Die Teilnehmenden jeder Begleitung und ihr Stand in den Modulen. Öffnen Sie eine Person, um ihre Module zu sehen.",
+    "intro": "Die Gruppen jeder Begleitung und der Stand aller Teilnehmenden in jedem Modul.",
     "participants_one": "{{count}} Teilnehmer:in",
     "participants_other": "{{count}} Teilnehmende",
-    "noGroup": "Keine Gruppe",
-    "notInGroup": "Noch in keiner Gruppe.",
-    "noModules": "Der Gruppe sind noch keine Module zugewiesen.",
+    "participant": "Teilnehmer:in",
+    "shared": "Geteilt",
+    "moduleShort": "M{{n}}",
+    "ungrouped": "Ohne Gruppe: {{names}}",
+    "noModules": "Noch keine Module zugewiesen: {{names}}",
     "status": {
       "not_started": "Nicht begonnen",
       "in_progress": "Entwurf",

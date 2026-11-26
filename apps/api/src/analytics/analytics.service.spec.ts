@@ -55,11 +55,48 @@ describe('AnalyticsService', () => {
     );
   });
 
-  it('lists psychologists only', async () => {
-    await service.psychologists();
+  it('lists psychologists with a status per module for each participant', async () => {
+    prisma.user.findMany.mockResolvedValueOnce([
+      {
+        id: 'p1',
+        username: 'dr.ayse',
+        active: true,
+        users: [
+          {
+            id: 'u1',
+            username: 'elif',
+            active: true,
+            group: {
+              id: 'g1',
+              name: 'G1',
+              modules: [
+                { module: { id: 'm1', title: 'Bir', order: 1 } },
+                { module: { id: 'm2', title: 'İki', order: 2 } },
+              ],
+            },
+            responses: [{ moduleId: 'm2', published: false, deletedAt: null }],
+          },
+          {
+            id: 'u2',
+            username: 'kerem',
+            active: true,
+            group: null,
+            responses: [],
+          },
+        ],
+      },
+    ]);
+    const [p1] = await service.psychologists();
     expect(prisma.user.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { role: 'PSYCHOLOGIST' } }),
     );
+    expect(p1.users[0]).not.toHaveProperty('responses');
+    expect(p1.users[0].group).toEqual({ id: 'g1', name: 'G1' });
+    expect(p1.users[0].modules.map((m) => [m.id, m.status])).toEqual([
+      ['m1', 'not_started'],
+      ['m2', 'in_progress'],
+    ]);
+    expect(p1.users[1]).toMatchObject({ group: null, modules: [] });
   });
 
   it('derives a status per assigned module', async () => {

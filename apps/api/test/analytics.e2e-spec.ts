@@ -164,7 +164,7 @@ describe('Analytics (e2e)', () => {
       .expect(403);
   });
 
-  it('lists psychologists with their participants and groups', async () => {
+  it('lists psychologists with their participants, groups and module states', async () => {
     const res = await api()
       .get('/analytics/psychologists')
       .set('Cookie', cookies.admin)
@@ -175,8 +175,15 @@ describe('Analytics (e2e)', () => {
     expect(p1).toMatchObject({
       username: prefix + 'p1',
       users: [
-        { id: ids.u1, group: { name: 'Salı grubu' } },
-        { id: ids.u2, group: null },
+        {
+          id: ids.u1,
+          group: { name: 'Salı grubu' },
+          modules: [
+            { id: ids.base, status: 'not_started' },
+            { id: ids.own, title: 'Özel', status: 'in_progress' },
+          ],
+        },
+        { id: ids.u2, group: null, modules: [] },
       ],
     });
   });

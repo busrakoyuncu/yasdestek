@@ -1,5 +1,4 @@
 import { screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '@/test/render';
 import { AnalyticsPage } from './AnalyticsPage';
@@ -11,8 +10,19 @@ vi.mock('@/lib/api', async () => {
 
 import { api } from '@/lib/api';
 
-const group = { id: 'g1', name: 'Pazartesi grubu' };
+type Status = 'completed' | 'in_progress' | 'not_started';
+const monday = { id: 'g1', name: 'Pazartesi grubu' };
+const thursday = { id: 'g2', name: 'Perşembe grubu' };
+const steps = (...statuses: Status[]) =>
+  statuses.map((status, i) => ({
+    id: `m${i + 1}`,
+    title: ['Sözcüklerin Gücü', 'Anılar', 'Veda'][i],
+    order: i + 1,
+    status,
+  }));
 
+// dr.deniz has two groups (one without modules yet) and a groupless
+// participant; dr.ece is inactive and has nobody.
 const answers: Record<string, unknown> = {
   '/analytics/psychologists': [
     {
@@ -20,81 +30,97 @@ const answers: Record<string, unknown> = {
       username: 'dr.deniz',
       active: true,
       users: [
-        { id: 'u1', username: 'ayse', active: true, group },
-        { id: 'u2', username: 'mehmet', active: false, group: null },
+        {
+          id: 'u1',
+          username: 'ayse',
+          active: true,
+          group: monday,
+          modules: steps('completed', 'in_progress', 'not_started'),
+        },
+        {
+          id: 'u2',
+          username: 'can',
+          active: false,
+          group: monday,
+          modules: steps('completed', 'completed', 'not_started'),
+        },
+        {
+          id: 'u3',
+          username: 'elif',
+          active: true,
+          group: thursday,
+          modules: [],
+        },
+        {
+          id: 'u4',
+          username: 'zeynep',
+          active: true,
+          group: null,
+          modules: [],
+        },
       ],
     },
     { id: 'p2', username: 'dr.ece', active: false, users: [] },
   ],
-  '/analytics/users/u1': {
-    id: 'u1',
-    username: 'ayse',
-    group,
-    modules: [
-      { id: 'm1', title: 'Sözcüklerin Gücü', order: 1, status: 'completed' },
-      { id: 'm2', title: 'Anılar', order: 2, status: 'in_progress' },
-      { id: 'm3', title: 'Veda', order: 3, status: 'not_started' },
-    ],
-  },
-  '/analytics/users/u2': {
-    id: 'u2',
-    username: 'mehmet',
-    group: null,
-    modules: [],
-  },
 };
 
 describe('AnalyticsPage', () => {
   beforeEach(() => {
-    vi.mocked(api.get).mockReset();
-    vi.mocked(api.get).mockImplementation((path: string) =>
-      Promise.resolve(answers[path]),
-    );
+    vi.mocked(api.get)
+      .mockReset()
+      .mockImplementation((path: string) => Promise.resolve(answers[path]));
   });
 
-  it('lists each counselor with their participants', async () => {
+  it("shows one table per group, with each person's state per module", async () => {
     renderApp(<AnalyticsPage />, '/admin/analytics');
-    const deniz = await screen.findByRole('region', { name: 'dr.deniz' });
-    expect(within(deniz).getByText('2 katılımcı')).toBeInTheDocument();
-    expect(
-      within(deniz).getByRole('button', { name: /ayse.*Pazartesi grubu/ }),
-    ).toHaveAttribute('aria-expanded', 'false');
-    expect(
-      within(deniz).getByRole('button', {
-        name: /mehmet.*Grupsuz.*Etkin değil/,
-      }),
-    ).toBeInTheDocument();
+    const table = await screen.findByRole('table', { name: 'Pazartesi grubu' });
 
-    const ece = screen.getByRole('region', { name: 'dr.ece' });
-    expect(within(ece).getByText('Etkin değil')).toBeInTheDocument();
-    expect(within(ece).getByText('Henüz katılımcı yok.')).toBeInTheDocument();
-    // progress loads only for the rows that are opened
+    // the modules across the top, named in full for screen readers
+    const headers = within(table)
+      .getAllByRole('columnheader')
+      .map((th) => th.textContent);
+    expect(headers).toEqual([
+      'Katılımcı',
+      'M1Sözcüklerin Gücü',
+      'M2Anılar',
+      'M3Veda',
+      'Paylaşılan',
+    ]);
+
+    const [, ayse, can] = within(table).getAllByRole('row');
+    expect(
+      within(ayse)
+        .getAllByRole('img')
+        .map((mark) => mark.getAttribute('aria-label')),
+    ).toEqual(['Paylaştı', 'Taslak', 'Başlamadı']);
+    expect(ayse).toHaveTextContent('1 / 3');
+    expect(within(can).getByRole('rowheader')).toHaveTextContent(
+      'canEtkin değil',
+    );
+    expect(can).toHaveTextContent('2 / 3');
+    // only one request for the whole page
     expect(api.get).toHaveBeenCalledTimes(1);
   });
 
-  it('shows where a participant stands in each module once opened', async () => {
+  it('names groups without modules and people without a group', async () => {
     renderApp(<AnalyticsPage />, '/admin/analytics');
-    const row = await screen.findByRole('button', { name: /ayse/ });
-    await userEvent.click(row);
-    expect(row).toHaveAttribute('aria-expanded', 'true');
-
-    const first = await screen.findByText('Sözcüklerin Gücü');
-    const modules = first.closest('ol') as HTMLElement;
-    expect(
-      within(modules)
-        .getAllByRole('listitem')
-        .map((li) => li.textContent),
-    ).toEqual(['Sözcüklerin GücüPaylaştı', 'AnılarTaslak', 'VedaBaşlamadı']);
-    expect(api.get).toHaveBeenCalledWith('/analytics/users/u1');
-  });
-
-  it('says so when the participant is in no group', async () => {
-    renderApp(<AnalyticsPage />, '/admin/analytics');
-    await userEvent.click(
-      await screen.findByRole('button', { name: /mehmet/ }),
+    const deniz = await screen.findByRole('region', { name: /dr\.deniz/ });
+    expect(within(deniz).getByRole('heading', { level: 2 })).toHaveTextContent(
+      'dr.deniz 4 katılımcı, 2 grup',
     );
     expect(
-      await screen.findByText('Henüz bir gruba eklenmedi.'),
+      within(deniz).getByText('Henüz modül atanmadı: elif'),
     ).toBeInTheDocument();
+    expect(within(deniz).getAllByRole('table')).toHaveLength(1);
+    expect(within(deniz).getByText('Grupsuz: zeynep')).toBeInTheDocument();
+  });
+
+  it('says so when a counselor has nobody yet', async () => {
+    renderApp(<AnalyticsPage />, '/admin/analytics');
+    const ece = await screen.findByRole('region', { name: /dr\.ece/ });
+    expect(within(ece).getByRole('heading', { level: 2 })).toHaveTextContent(
+      'dr.ece 0 katılımcı, 0 grup, Etkin değil',
+    );
+    expect(within(ece).getByText('Henüz katılımcı yok.')).toBeInTheDocument();
   });
 });

@@ -415,12 +415,14 @@
     }
   },
   "analytics": {
-    "intro": "Her danışmanın katılımcıları ve modüllerdeki ilerlemeleri. Bir katılımcıyı açın, modüllerini görün.",
+    "intro": "Her danışmanın grupları ve katılımcıların her modüldeki durumu.",
     "participants_one": "{{count}} katılımcı",
     "participants_other": "{{count}} katılımcı",
-    "noGroup": "Grupsuz",
-    "notInGroup": "Henüz bir gruba eklenmedi.",
-    "noModules": "Grubuna henüz modül atanmadı.",
+    "participant": "Katılımcı",
+    "shared": "Paylaşılan",
+    "moduleShort": "M{{n}}",
+    "ungrouped": "Grupsuz: {{names}}",
+    "noModules": "Henüz modül atanmadı: {{names}}",
     "status": {
       "not_started": "Başlamadı",
       "in_progress": "Taslak",
