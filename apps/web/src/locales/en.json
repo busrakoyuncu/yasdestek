@@ -245,6 +245,13 @@
     "new": "New group",
     "rename": "Rename",
     "delete": "Delete group",
+    "waiting": "Not in a group",
+    "all": "All groups",
+    "notFound": "This group was not found. Pick one from the list.",
+    "blank": "Empty so far",
+    "summary": "{{people}}, {{modules}}",
+    "moduleCount_one": "{{count}} module",
+    "moduleCount_other": "{{count}} modules",
     "form": {
       "createTitle": "New group",
       "renameTitle": "Rename group",
@@ -262,9 +269,14 @@
       "placeholder": "Choose a participant",
       "noneLeft": "No unassigned participants to add.",
       "remove": "Remove {{name}} from the group",
+      "removeShort": "Remove",
+      "leave": {
+        "title": "Remove {{name}} from the group?",
+        "body": "Their writing is kept. They will not see any modules until they are added to a group again.",
+        "confirm": "Remove from group"
+      },
       "added": "Member added",
-      "removed": "Member removed",
-      "inactive": "inactive"
+      "removed": "Member removed"
     },
     "modules": {
       "title": "Assigned modules",
@@ -273,6 +285,12 @@
       "placeholder": "Choose a module",
       "noneLeft": "No other modules to assign.",
       "unassign": "Unassign {{title}}",
+      "unassignShort": "Remove",
+      "leave": {
+        "title": "Remove {{title}} from this group?",
+        "body": "What was written in this module and its forum is kept. Members will not see them until you assign the module again.",
+        "confirm": "Remove module"
+      },
       "assigned": "Module assigned",
       "unassigned": "Module unassigned",
       "forum": "Open the forum for {{title}}",

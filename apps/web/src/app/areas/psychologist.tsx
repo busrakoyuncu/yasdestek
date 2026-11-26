@@ -12,6 +12,7 @@ export function Component() {
     <Routes>
       <Route index element={<PeoplePage role="USER" />} />
       <Route path="groups" element={<GroupsPage />} />
+      <Route path="groups/:groupId" element={<GroupsPage />} />
       <Route path="forums/:groupId/:moduleId" element={<ForumPage />} />
       <Route path="modules" element={<ModulesPage />} />
       <Route path="inbox" element={<InboxPage />} />
